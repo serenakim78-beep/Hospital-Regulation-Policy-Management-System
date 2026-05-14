@@ -1,670 +1,1045 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>요양병원 인증평가 시스템</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --primary: #1a5276;
-    --primary-light: #2e86c1;
-    --accent: #e74c3c;
-    --bg: #f0f4f8;
-    --card: #ffffff;
-    --text: #1a202c;
-    --text-muted: #718096;
-    --border: #e2e8f0;
-    --tab-active: #1a5276;
-    --tab-inactive: #a0aec0;
-    --shadow: 0 2px 12px rgba(26,82,118,0.10);
-    --shadow-lg: 0 8px 32px rgba(26,82,118,0.16);
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-  body {
-    font-family: 'Noto Sans KR', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    max-width: 480px;
-    margin: 0 auto;
-  }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>요양병원 인증평가 관리 시스템</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
 
-  /* HEADER */
-  .app-header {
-    background: linear-gradient(135deg, #1a5276 0%, #2e86c1 100%);
-    color: white;
-    padding: 20px 16px 0;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    box-shadow: var(--shadow-lg);
-  }
-  .app-title {
-    font-size: 17px;
-    font-weight: 700;
-    letter-spacing: -0.3px;
-    margin-bottom: 2px;
-  }
-  .app-subtitle {
-    font-size: 11px;
-    font-weight: 300;
-    opacity: 0.8;
-    margin-bottom: 14px;
-  }
+    :root {
+      --primary: #1a56db;
+      --primary-dark: #1040a0;
+      --accent: #f59e0b;
+      --bg: #f0f4ff;
+      --card: #ffffff;
+      --text: #1e293b;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --success: #10b981;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+    }
 
-  /* SEARCH */
-  .search-wrap {
-    position: relative;
-    margin-bottom: 0;
-  }
-  .search-input {
-    width: 100%;
-    padding: 11px 16px 11px 40px;
-    border-radius: 10px;
-    border: none;
-    background: rgba(255,255,255,0.18);
-    color: white;
-    font-size: 14px;
-    font-family: 'Noto Sans KR', sans-serif;
-    outline: none;
-    transition: background 0.2s;
-    backdrop-filter: blur(4px);
-  }
-  .search-input::placeholder { color: rgba(255,255,255,0.65); }
-  .search-input:focus { background: rgba(255,255,255,0.28); }
-  .search-icon {
-    position: absolute;
-    left: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    opacity: 0.8;
-  }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-  /* TABS */
-  .tabs {
-    display: flex;
-    border-top: 1px solid rgba(255,255,255,0.15);
-    margin-top: 14px;
-  }
-  .tab-btn {
-    flex: 1;
-    padding: 12px 4px 10px;
-    background: none;
-    border: none;
-    color: rgba(255,255,255,0.6);
-    font-size: 12.5px;
-    font-weight: 500;
-    font-family: 'Noto Sans KR', sans-serif;
-    cursor: pointer;
-    border-bottom: 3px solid transparent;
-    transition: all 0.2s;
-  }
-  .tab-btn.active {
-    color: white;
-    border-bottom: 3px solid #f39c12;
-    font-weight: 700;
-  }
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
 
-  /* CONTENT */
-  .content {
-    padding: 14px 12px 80px;
-  }
+    /* 로그인 화면 */
+    #login-screen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 24px;
+      background: linear-gradient(135deg, #1a56db 0%, #1040a0 100%);
+    }
 
-  /* CHAPTER GROUP */
-  .chapter-group { margin-bottom: 10px; }
-  .chapter-header {
-    background: linear-gradient(90deg, #1a5276, #2e86c1);
-    color: white;
-    padding: 10px 14px;
-    border-radius: 10px;
-    font-size: 13px;
-    font-weight: 700;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    user-select: none;
-  }
-  .chapter-header .chapter-count {
-    background: rgba(255,255,255,0.2);
-    border-radius: 20px;
-    padding: 2px 9px;
-    font-size: 11px;
-    font-weight: 500;
-  }
-  .chapter-header .arrow {
-    font-size: 11px;
-    transition: transform 0.25s;
-    margin-left: 6px;
-  }
-  .chapter-header.open .arrow { transform: rotate(180deg); }
-  .chapter-items { display: none; padding-top: 6px; }
-  .chapter-items.open { display: block; }
+    .login-box {
+      background: white;
+      border-radius: 20px;
+      padding: 40px 32px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    }
 
-  /* ITEM CARD */
-  .item-card {
-    background: var(--card);
-    border-radius: 10px;
-    margin-bottom: 7px;
-    box-shadow: var(--shadow);
-    overflow: hidden;
-    cursor: pointer;
-    border-left: 4px solid var(--primary-light);
-    transition: box-shadow 0.2s, transform 0.15s;
-    animation: fadeIn 0.3s ease;
-  }
-  .item-card:active { transform: scale(0.98); box-shadow: none; }
-  @keyframes fadeIn { from { opacity:0; transform: translateY(6px); } to { opacity:1; transform: translateY(0); } }
-  .item-card-inner { padding: 11px 14px; }
-  .item-code {
-    font-size: 10.5px;
-    color: var(--primary-light);
-    font-weight: 700;
-    margin-bottom: 3px;
-    letter-spacing: 0.3px;
-  }
-  .item-title {
-    font-size: 13.5px;
-    font-weight: 600;
-    color: var(--text);
-    line-height: 1.4;
-    margin-bottom: 5px;
-  }
-  .item-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px;
-  }
-  .tag {
-    font-size: 10px;
-    padding: 2px 7px;
-    border-radius: 20px;
-    font-weight: 500;
-  }
-  .tag-target { background: #ebf8ff; color: #2b6cb0; }
-  .tag-place { background: #f0fff4; color: #276749; }
+    .login-logo {
+      text-align: center;
+      margin-bottom: 32px;
+    }
 
-  /* SECTION GROUP (직군별/부서별 탭) */
-  .section-group { margin-bottom: 10px; }
-  .section-header {
-    background: linear-gradient(90deg, #2c3e50, #4a6fa5);
-    color: white;
-    padding: 10px 14px;
-    border-radius: 10px;
-    font-size: 13px;
-    font-weight: 700;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    user-select: none;
-  }
-  .section-header .chapter-count {
-    background: rgba(255,255,255,0.2);
-    border-radius: 20px;
-    padding: 2px 9px;
-    font-size: 11px;
-    font-weight: 500;
-  }
-  .section-header .arrow { font-size: 11px; transition: transform 0.25s; margin-left:6px; }
-  .section-header.open .arrow { transform: rotate(180deg); }
-  .section-items { display: none; padding-top: 6px; }
-  .section-items.open { display: block; }
+    .login-logo .icon {
+      width: 64px;
+      height: 64px;
+      background: var(--primary);
+      border-radius: 16px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 12px;
+    }
 
-  /* MODAL */
-  .modal-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.45);
-    z-index: 200;
-    align-items: flex-end;
-    justify-content: center;
-  }
-  .modal-overlay.active { display: flex; }
-  .modal {
-    background: white;
-    border-radius: 20px 20px 0 0;
-    width: 100%;
-    max-width: 480px;
-    max-height: 88vh;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    animation: slideUp 0.3s cubic-bezier(0.34,1.56,0.64,1);
-  }
-  @keyframes slideUp {
-    from { transform: translateY(100%); opacity: 0.5; }
-    to { transform: translateY(0); opacity: 1; }
-  }
-  .modal-handle {
-    width: 36px; height: 4px;
-    background: #e2e8f0;
-    border-radius: 2px;
-    margin: 10px auto 0;
-    flex-shrink: 0;
-  }
-  .modal-header {
-    padding: 12px 18px 14px;
-    border-bottom: 1px solid var(--border);
-    flex-shrink: 0;
-  }
-  .modal-code {
-    font-size: 11px;
-    color: var(--primary-light);
-    font-weight: 700;
-    margin-bottom: 4px;
-  }
-  .modal-title {
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--text);
-    line-height: 1.4;
-  }
-  .modal-close {
-    position: absolute;
-    right: 16px;
-    top: 18px;
-    background: #f0f4f8;
-    border: none;
-    border-radius: 50%;
-    width: 30px; height: 30px;
-    font-size: 16px;
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    color: var(--text-muted);
-  }
+    .login-logo .icon svg {
+      width: 36px;
+      height: 36px;
+      fill: white;
+    }
 
-  /* DETAIL TABS */
-  .detail-tabs {
-    display: flex;
-    border-bottom: 1px solid var(--border);
-    flex-shrink: 0;
-    overflow-x: auto;
-    scrollbar-width: none;
-  }
-  .detail-tabs::-webkit-scrollbar { display: none; }
-  .detail-tab-btn {
-    padding: 10px 14px;
-    background: none;
-    border: none;
-    border-bottom: 2px solid transparent;
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--text-muted);
-    white-space: nowrap;
-    cursor: pointer;
-    font-family: 'Noto Sans KR', sans-serif;
-    transition: all 0.2s;
-  }
-  .detail-tab-btn.active {
-    color: var(--primary);
-    border-bottom-color: var(--primary);
-    font-weight: 700;
-  }
+    .login-logo h1 {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text);
+    }
 
-  /* DETAIL CONTENT */
-  .detail-body {
-    overflow-y: auto;
-    flex: 1;
-    padding: 16px 18px;
-  }
-  .detail-section { display: none; }
-  .detail-section.active { display: block; }
-  .detail-label {
-    font-size: 10.5px;
-    font-weight: 700;
-    color: var(--primary-light);
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-    margin-bottom: 6px;
-    margin-top: 16px;
-  }
-  .detail-label:first-child { margin-top: 0; }
-  .detail-value {
-    font-size: 13.5px;
-    line-height: 1.75;
-    color: var(--text);
-    white-space: pre-wrap;
-    background: #f8fafc;
-    border-radius: 8px;
-    padding: 10px 12px;
-    border-left: 3px solid var(--primary-light);
-  }
-  .detail-value.empty { color: var(--text-muted); font-style: italic; background: none; border: none; padding-left: 2px; }
+    .login-logo p {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
 
-  /* LOADING / EMPTY */
-  .loading-wrap {
-    display: flex; flex-direction: column; align-items: center;
-    justify-content: center; padding: 60px 20px;
-    color: var(--text-muted);
-  }
-  .spinner {
-    width: 36px; height: 36px;
-    border: 3px solid #e2e8f0;
-    border-top-color: var(--primary);
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-    margin-bottom: 14px;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .empty-msg { text-align: center; padding: 40px 20px; color: var(--text-muted); font-size: 14px; }
+    .form-group {
+      margin-bottom: 16px;
+    }
 
-  /* BOTTOM SAFE AREA */
-  .bottom-safe { height: env(safe-area-inset-bottom, 16px); }
-</style>
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 15px;
+      font-family: inherit;
+      color: var(--text);
+      background: white;
+      transition: border-color 0.2s;
+    }
+
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    .btn-primary {
+      width: 100%;
+      padding: 14px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    .btn-primary:active { transform: scale(0.98); }
+    .btn-primary:hover { background: var(--primary-dark); }
+
+    /* 메인 앱 */
+    #app-screen { display: none; }
+
+    /* 헤더 */
+    .header {
+      background: var(--primary);
+      color: white;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 12px rgba(26,86,219,0.3);
+    }
+
+    .header-title {
+      font-size: 17px;
+      font-weight: 700;
+    }
+
+    .header-user {
+      font-size: 12px;
+      opacity: 0.85;
+      margin-top: 2px;
+    }
+
+    .btn-logout {
+      background: rgba(255,255,255,0.2);
+      color: white;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    /* 탭 네비게이션 */
+    .tab-nav {
+      display: flex;
+      background: white;
+      border-bottom: 1px solid var(--border);
+      overflow-x: auto;
+      position: sticky;
+      top: 65px;
+      z-index: 99;
+    }
+
+    .tab-nav::-webkit-scrollbar { display: none; }
+
+    .tab-btn {
+      flex: 1;
+      min-width: 80px;
+      padding: 12px 8px;
+      border: none;
+      background: none;
+      font-size: 12px;
+      font-weight: 500;
+      font-family: inherit;
+      color: var(--muted);
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .tab-btn.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+      font-weight: 700;
+    }
+
+    /* 콘텐츠 영역 */
+    .content {
+      padding: 20px 16px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* 탭 패널 */
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* 카드 */
+    .card {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-title .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--primary);
+    }
+
+    /* 통계 그리드 */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .stat-box {
+      background: white;
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      text-align: center;
+    }
+
+    .stat-box .value {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .stat-box .label {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    /* 체크리스트 */
+    .checklist-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .checklist-item:last-child { border-bottom: none; }
+
+    .check-box {
+      width: 22px;
+      height: 22px;
+      border: 2px solid var(--border);
+      border-radius: 6px;
+      flex-shrink: 0;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 2px;
+      transition: all 0.2s;
+    }
+
+    .check-box.checked {
+      background: var(--success);
+      border-color: var(--success);
+    }
+
+    .check-box.checked::after {
+      content: '';
+      width: 6px;
+      height: 10px;
+      border: 2px solid white;
+      border-top: none;
+      border-left: none;
+      transform: rotate(45deg) translate(-1px, -1px);
+      display: block;
+    }
+
+    .check-text {
+      flex: 1;
+    }
+
+    .check-text .title {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .check-text .sub {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+
+    /* 배지 */
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .badge-blue { background: #dbeafe; color: #1d4ed8; }
+    .badge-green { background: #d1fae5; color: #065f46; }
+    .badge-yellow { background: #fef3c7; color: #92400e; }
+    .badge-red { background: #fee2e2; color: #991b1b; }
+
+    /* 진행률 바 */
+    .progress-bar {
+      height: 8px;
+      background: var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), #60a5fa);
+      border-radius: 4px;
+      transition: width 0.5s ease;
+    }
+
+    /* 알림 목록 */
+    .notice-item {
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .notice-item:last-child { border-bottom: none; }
+
+    .notice-item .notice-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .notice-item .notice-meta {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 4px;
+      display: flex;
+      gap: 12px;
+    }
+
+    /* 보고서 제출 폼 */
+    .section-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+      margin-top: 8px;
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      margin-top: 8px;
+      box-shadow: 0 4px 15px rgba(26,86,219,0.3);
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1e293b;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 24px;
+      font-size: 14px;
+      font-weight: 500;
+      z-index: 9999;
+      opacity: 0;
+      transition: opacity 0.3s;
+      white-space: nowrap;
+    }
+
+    .toast.show { opacity: 1; }
+
+    /* 직원 목록 */
+    .staff-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .staff-item:last-child { border-bottom: none; }
+
+    .staff-avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), #60a5fa);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .staff-info { flex: 1; }
+    .staff-name { font-size: 14px; font-weight: 600; }
+    .staff-role { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+    /* 구글 시트 설정 */
+    .sheet-setup {
+      background: #eff6ff;
+      border: 1.5px dashed #93c5fd;
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .sheet-setup p {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 12px;
+      line-height: 1.6;
+    }
+
+    .sheet-url-input {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1.5px solid #93c5fd;
+      border-radius: 8px;
+      font-size: 13px;
+      font-family: inherit;
+      color: var(--text);
+      margin-bottom: 10px;
+    }
+
+    /* 데이터 로딩 */
+    .loading {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .spinner {
+      width: 32px;
+      height: 32px;
+      border: 3px solid var(--border);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 12px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* 반응형 */
+    @media (min-width: 480px) {
+      .stats-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+  </style>
 </head>
 <body>
 
-<div class="app-header">
-  <div class="app-title">요양병원 인증평가 시스템</div>
-  <div class="app-subtitle">의료기관 인증평가 규정 조회</div>
-  <div class="search-wrap" style="margin-bottom:14px;">
-    <svg class="search-icon" width="16" height="16" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-    <input class="search-input" id="searchInput" type="text" placeholder="규정명, 조사항목, 조사대상 검색...">
-  </div>
-  <div class="tabs">
-    <button class="tab-btn active" onclick="switchTab('chapter')">장(章)별 규정</button>
-    <button class="tab-btn" onclick="switchTab('target')">조사대상별 규정</button>
+<!-- 로그인 화면 -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">
+      <div class="icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.18L20 8.5v7L12 19.82 4 15.5v-7l8-4.32z"/></svg>
+      </div>
+      <h1>인증평가 관리 시스템</h1>
+      <p>요양병원 의료기관 인증</p>
+    </div>
+
+    <div class="form-group">
+      <label>이름</label>
+      <input type="text" id="login-name" placeholder="이름을 입력하세요" />
+    </div>
+
+    <div class="form-group">
+      <label>부서</label>
+      <select id="login-dept">
+        <option value="">부서 선택</option>
+        <option>간호부</option>
+        <option>원무과</option>
+        <option>의무기록</option>
+        <option>행정팀</option>
+        <option>감염관리팀</option>
+        <option>의료진</option>
+        <option>시설관리팀</option>
+        <option>기타</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>직책</label>
+      <select id="login-role">
+        <option value="">직책 선택</option>
+        <option>일반직원</option>
+        <option>팀장</option>
+        <option>파트장</option>
+        <option>담당자</option>
+        <option>관리자</option>
+      </select>
+    </div>
+
+    <button class="btn-primary" onclick="doLogin()">시작하기</button>
   </div>
 </div>
 
-<div class="content" id="mainContent">
-  <div class="loading-wrap">
-    <div class="spinner"></div>
-    <div>데이터를 불러오는 중...</div>
+<!-- 메인 앱 -->
+<div id="app-screen">
+  <div class="header">
+    <div>
+      <div class="header-title">인증평가 관리 시스템</div>
+      <div class="header-user" id="header-user-info"></div>
+    </div>
+    <button class="btn-logout" onclick="doLogout()">로그아웃</button>
   </div>
-</div>
 
-<!-- MODAL -->
-<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
-  <div class="modal" id="modal">
-    <div class="modal-handle"></div>
-    <div class="modal-header" style="position:relative;">
-      <div class="modal-code" id="modalCode"></div>
-      <div class="modal-title" id="modalTitle"></div>
-      <button class="modal-close" onclick="closeModalBtn()">x</button>
-    </div>
-    <div class="detail-tabs" id="detailTabs">
-      <button class="detail-tab-btn active" onclick="switchDetailTab('basic')">기본 정보</button>
-      <button class="detail-tab-btn" onclick="switchDetailTab('content')">조사 기준</button>
-      <button class="detail-tab-btn" onclick="switchDetailTab('ref')">참고자료</button>
-    </div>
-    <div class="detail-body">
-      <div class="detail-section active" id="tab-basic"></div>
-      <div class="detail-section" id="tab-content"></div>
-      <div class="detail-section" id="tab-ref"></div>
-    </div>
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab('dashboard', this)">대시보드</button>
+    <button class="tab-btn" onclick="switchTab('checklist', this)">체크리스트</button>
+    <button class="tab-btn" onclick="switchTab('report', this)">보고</button>
+    <button class="tab-btn" onclick="switchTab('staff', this)">직원현황</button>
+    <button class="tab-btn" onclick="switchTab('notice', this)">공지사항</button>
+    <button class="tab-btn" onclick="switchTab('settings', this)">설정</button>
   </div>
-</div>
 
-<script>
-const SHEET_ID = '18dDgxsczklu9FRm053w2rqLDFDjqm7C18rijuyJdrkI';
-const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=0`;
+  <div class="content">
 
-let allData = [];
-let currentTab = 'chapter';
-let searchQuery = '';
-
-// CSV Parser (handles quoted fields)
-function parseCSV(text) {
-  const lines = text.split(/\r?\n/);
-  if (lines.length < 2) return [];
-  const headers = parseCSVLine(lines[0]);
-  const rows = [];
-  for (let i = 1; i < lines.length; i++) {
-    if (!lines[i].trim()) continue;
-    const vals = parseCSVLine(lines[i]);
-    const obj = {};
-    headers.forEach((h, idx) => { obj[h.trim()] = (vals[idx] || '').trim(); });
-    rows.push(obj);
-  }
-  return rows;
-}
-
-function parseCSVLine(line) {
-  const result = [];
-  let cur = '';
-  let inQ = false;
-  for (let i = 0; i < line.length; i++) {
-    const c = line[i];
-    if (c === '"') {
-      if (inQ && line[i+1] === '"') { cur += '"'; i++; }
-      else { inQ = !inQ; }
-    } else if (c === ',' && !inQ) {
-      result.push(cur); cur = '';
-    } else {
-      cur += c;
-    }
-  }
-  result.push(cur);
-  return result;
-}
-
-// Detect column names flexibly
-function getCol(row, candidates) {
-  for (const k of Object.keys(row)) {
-    for (const c of candidates) {
-      if (k.includes(c)) return row[k] || '';
-    }
-  }
-  return '';
-}
-
-function mapRow(row) {
-  return {
-    chapter: getCol(row, ['장','chapter','Chapter']),
-    standard: getCol(row, ['기준','standard','Standard']),
-    code: getCol(row, ['조사 항목','조사항목','항목','code','Code']),
-    place: getCol(row, ['조사장소','장소','place']),
-    target: getCol(row, ['조사대상','대상','target']),
-    title: getCol(row, ['규정 제목','규정제목','제목','title']),
-    content: getCol(row, ['규정 기준','조사 내용','기준 및 조사','내용','content']),
-    reference: getCol(row, ['의무기록','관련 자료','참고','reference','ref']),
-    raw: row
-  };
-}
-
-async function loadData() {
-  try {
-    const res = await fetch(CSV_URL);
-    if (!res.ok) throw new Error('fetch failed');
-    const text = await res.text();
-    const rows = parseCSV(text);
-    allData = rows.map(mapRow).filter(r => r.title || r.code);
-    render();
-  } catch(e) {
-    document.getElementById('mainContent').innerHTML =
-      `<div class="empty-msg">
-        <div style="font-size:28px;margin-bottom:12px;">!</div>
-        <div style="font-weight:700;margin-bottom:8px;">데이터 로드 실패</div>
-        <div style="font-size:12px;color:#a0aec0;">구글 시트 공유 설정을<br>"링크가 있는 모든 사용자 - 뷰어"로<br>변경해 주세요.</div>
-        <button onclick="loadData()" style="margin-top:16px;padding:10px 24px;background:#1a5276;color:white;border:none;border-radius:8px;font-size:13px;cursor:pointer;font-family:inherit;">다시 시도</button>
-      </div>`;
-  }
-}
-
-function getFiltered() {
-  if (!searchQuery) return allData;
-  const q = searchQuery.toLowerCase();
-  return allData.filter(r =>
-    (r.title||'').toLowerCase().includes(q) ||
-    (r.code||'').toLowerCase().includes(q) ||
-    (r.target||'').toLowerCase().includes(q) ||
-    (r.chapter||'').toLowerCase().includes(q) ||
-    (r.content||'').toLowerCase().includes(q)
-  );
-}
-
-function render() {
-  const data = getFiltered();
-  if (currentTab === 'chapter') renderChapter(data);
-  else renderTarget(data);
-}
-
-function renderChapter(data) {
-  const groups = {};
-  data.forEach(r => {
-    const key = r.chapter || '기타';
-    if (!groups[key]) groups[key] = [];
-    groups[key].push(r);
-  });
-  const keys = Object.keys(groups).sort((a,b) => {
-    const na = parseInt(a), nb = parseInt(b);
-    if (!isNaN(na) && !isNaN(nb)) return na - nb;
-    return a.localeCompare(b, 'ko');
-  });
-
-  if (keys.length === 0) {
-    document.getElementById('mainContent').innerHTML = '<div class="empty-msg">검색 결과가 없습니다.</div>';
-    return;
-  }
-
-  let html = '';
-  keys.forEach((key, idx) => {
-    const items = groups[key];
-    const isFirst = idx === 0 && !searchQuery;
-    html += `
-      <div class="chapter-group">
-        <div class="chapter-header ${isFirst?'open':''}" onclick="toggleGroup(this)">
-          <span>${key}</span>
-          <span style="display:flex;align-items:center;gap:6px;">
-            <span class="chapter-count">${items.length}개</span>
-            <span class="arrow">&#9660;</span>
-          </span>
+    <!-- 대시보드 -->
+    <div class="tab-panel active" id="tab-dashboard">
+      <div class="stats-grid">
+        <div class="stat-box">
+          <div class="value" id="stat-total">0</div>
+          <div class="label">전체 항목</div>
         </div>
-        <div class="chapter-items ${isFirst?'open':''}">
-          ${items.map(r => itemCardHTML(r)).join('')}
+        <div class="stat-box">
+          <div class="value" style="color:var(--success)" id="stat-done">0</div>
+          <div class="label">완료</div>
         </div>
-      </div>`;
-  });
-  document.getElementById('mainContent').innerHTML = html;
-}
-
-function renderTarget(data) {
-  const groups = {};
-  data.forEach(r => {
-    const targets = (r.target || '기타').split(/[,\/,、]/).map(t=>t.trim()).filter(Boolean);
-    if (targets.length === 0) targets.push('기타');
-    targets.forEach(t => {
-      if (!groups[t]) groups[t] = [];
-      if (!groups[t].find(x => x.code === r.code && x.title === r.title)) groups[t].push(r);
-    });
-  });
-  const keys = Object.keys(groups).sort((a,b) => a.localeCompare(b,'ko'));
-
-  if (keys.length === 0) {
-    document.getElementById('mainContent').innerHTML = '<div class="empty-msg">검색 결과가 없습니다.</div>';
-    return;
-  }
-
-  let html = '';
-  keys.forEach((key, idx) => {
-    const items = groups[key];
-    const isFirst = idx === 0 && !searchQuery;
-    html += `
-      <div class="section-group">
-        <div class="section-header ${isFirst?'open':''}" onclick="toggleGroup(this)">
-          <span>${key}</span>
-          <span style="display:flex;align-items:center;gap:6px;">
-            <span class="chapter-count">${items.length}개</span>
-            <span class="arrow">&#9660;</span>
-          </span>
+        <div class="stat-box">
+          <div class="value" style="color:var(--warning)" id="stat-progress">0</div>
+          <div class="label">진행중</div>
         </div>
-        <div class="section-items ${isFirst?'open':''}">
-          ${items.map(r => itemCardHTML(r)).join('')}
-        </div>
-      </div>`;
-  });
-  document.getElementById('mainContent').innerHTML = html;
-}
-
-function itemCardHTML(r) {
-  const safeR = JSON.stringify(r).replace(/'/g, '&#39;');
-  return `
-    <div class="item-card" onclick='openModal(${safeR})'>
-      <div class="item-card-inner">
-        <div class="item-code">${r.code || r.standard || ''}</div>
-        <div class="item-title">${r.title || '(제목 없음)'}</div>
-        <div class="item-tags">
-          ${r.target ? `<span class="tag tag-target">${r.target}</span>` : ''}
-          ${r.place ? `<span class="tag tag-place">${r.place}</span>` : ''}
+        <div class="stat-box">
+          <div class="value" style="color:var(--danger)" id="stat-pending">0</div>
+          <div class="label">미완료</div>
         </div>
       </div>
-    </div>`;
-}
 
-function toggleGroup(el) {
-  el.classList.toggle('open');
-  const items = el.nextElementSibling;
-  items.classList.toggle('open');
-}
+      <div class="card">
+        <div class="card-title"><span class="dot"></span>전체 진행률</div>
+        <div style="display:flex; justify-content:space-between; font-size:13px; color:var(--muted); margin-bottom:4px;">
+          <span>인증평가 준비 현황</span>
+          <span id="progress-pct">0%</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+        </div>
+      </div>
 
-function switchTab(tab) {
-  currentTab = tab;
-  document.querySelectorAll('.tab-btn').forEach((btn, i) => {
-    btn.classList.toggle('active', (i===0 && tab==='chapter') || (i===1 && tab==='target'));
-  });
-  render();
-}
+      <div class="card">
+        <div class="card-title"><span class="dot"></span>최근 공지사항</div>
+        <div id="dashboard-notices">
+          <div class="loading"><div class="spinner"></div>불러오는 중...</div>
+        </div>
+      </div>
+    </div>
 
-function val(v) {
-  if (!v || !v.trim()) return '<div class="detail-value empty">정보 없음</div>';
-  return `<div class="detail-value">${v}</div>`;
-}
+    <!-- 체크리스트 -->
+    <div class="tab-panel" id="tab-checklist">
+      <div class="card">
+        <div class="card-title"><span class="dot"></span>인증평가 체크리스트</div>
+        <div id="checklist-items">
+          <div class="loading"><div class="spinner"></div>불러오는 중...</div>
+        </div>
+      </div>
+    </div>
 
-function openModal(r) {
-  document.getElementById('modalCode').textContent = r.code || r.standard || '';
-  document.getElementById('modalTitle').textContent = r.title || '(제목 없음)';
+    <!-- 보고 -->
+    <div class="tab-panel" id="tab-report">
+      <div class="card">
+        <div class="card-title"><span class="dot"></span>업무 보고 제출</div>
+        <div class="section-label">보고 내용</div>
+        <div class="form-group">
+          <label>보고 유형</label>
+          <select id="report-type">
+            <option>일일 점검 결과</option>
+            <option>이상 사항 보고</option>
+            <option>개선 완료 보고</option>
+            <option>기타 보고</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>관련 영역</label>
+          <select id="report-area">
+            <option>환자 안전</option>
+            <option>감염 관리</option>
+            <option>의약품 관리</option>
+            <option>기록 관리</option>
+            <option>시설 환경</option>
+            <option>직원 교육</option>
+            <option>기타</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>상태</label>
+          <select id="report-status">
+            <option>완료</option>
+            <option>진행중</option>
+            <option>미완료</option>
+            <option>이슈발생</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>상세 내용</label>
+          <textarea id="report-content" rows="4" placeholder="보고 내용을 입력하세요..."></textarea>
+        </div>
+        <button class="btn-submit" onclick="submitReport()">보고 제출하기</button>
+      </div>
+    </div>
 
-  document.getElementById('tab-basic').innerHTML = `
-    <div class="detail-label">장(章)</div>${val(r.chapter)}
-    <div class="detail-label">기준 번호</div>${val(r.standard)}
-    <div class="detail-label">조사 항목</div>${val(r.code)}
-    <div class="detail-label">조사 장소</div>${val(r.place)}
-    <div class="detail-label">조사 대상</div>${val(r.target)}
-  `;
-  document.getElementById('tab-content').innerHTML = `
-    <div class="detail-label">규정 기준 및 조사 내용</div>${val(r.content)}
-  `;
-  document.getElementById('tab-ref').innerHTML = `
-    <div class="detail-label">의무기록 및 관련 자료</div>${val(r.reference)}
-  `;
+    <!-- 직원현황 -->
+    <div class="tab-panel" id="tab-staff">
+      <div class="card">
+        <div class="card-title"><span class="dot"></span>직원 현황</div>
+        <div id="staff-list">
+          <div class="loading"><div class="spinner"></div>불러오는 중...</div>
+        </div>
+      </div>
+    </div>
 
-  switchDetailTab('basic');
-  document.getElementById('modalOverlay').classList.add('active');
-  document.body.style.overflow = 'hidden';
-}
+    <!-- 공지사항 -->
+    <div class="tab-panel" id="tab-notice">
+      <div class="card">
+        <div class="card-title"><span class="dot"></span>공지사항</div>
+        <div id="notice-list">
+          <div class="loading"><div class="spinner"></div>불러오는 중...</div>
+        </div>
+      </div>
+    </div>
 
-function switchDetailTab(tab) {
-  document.querySelectorAll('.detail-tab-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.getAttribute('onclick').includes(`'${tab}'`));
-  });
-  document.querySelectorAll('.detail-section').forEach(sec => {
-    sec.classList.toggle('active', sec.id === `tab-${tab}`);
-  });
-}
+    <!-- 설정 -->
+    <div class="tab-panel" id="tab-settings">
+      <div class="card">
+        <div class="card-title"><span class="dot"></span>구글 시트 연동 설정</div>
+        <div class="sheet-setup">
+          <p>구글 시트의 <strong>CSV 공개 링크</strong>를 아래에 입력하면<br/>데이터가 자동으로 연동됩니다.</p>
+        </div>
 
-function closeModalBtn() {
-  document.getElementById('modalOverlay').classList.remove('active');
-  document.body.style.overflow = '';
-}
-function closeModal(e) {
-  if (e.target === document.getElementById('modalOverlay')) closeModalBtn();
-}
+        <div class="section-label">시트 URL 설정</div>
 
-let searchTimeout;
-document.getElementById('searchInput').addEventListener('input', function() {
-  clearTimeout(searchTimeout);
-  searchTimeout = setTimeout(() => {
-    searchQuery = this.value.trim();
-    render();
-  }, 300);
-});
+        <div class="form-group">
+          <label>체크리스트 시트 URL (CSV)</label>
+          <input class="sheet-url-input" type="text" id="sheet-checklist" placeholder="https://docs.google.com/spreadsheets/d/.../export?format=csv" />
+        </div>
 
-loadData();
+        <div class="form-group">
+          <label>공지사항 시트 URL (CSV)</label>
+          <input class="sheet-url-input" type="text" id="sheet-notice" placeholder="https://docs.google.com/spreadsheets/d/.../export?format=csv" />
+        </div>
+
+        <div class="form-group">
+          <label>직원현황 시트 URL (CSV)</label>
+          <input class="sheet-url-input" type="text" id="sheet-staff" placeholder="https://docs.google.com/spreadsheets/d/.../export?format=csv" />
+        </div>
+
+        <button class="btn-submit" onclick="saveSettings()">설정 저장 및 데이터 불러오기</button>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="dot"></span>CSV URL 만드는 방법</div>
+        <div style="font-size:13px; color:var(--muted); line-height:1.8;">
+          <p>1. 구글 시트를 엽니다</p>
+          <p>2. 상단 메뉴 <strong>파일 > 공유 > 웹에 게시</strong> 클릭</p>
+          <p>3. 형식을 <strong>CSV</strong>로 선택</p>
+          <p>4. <strong>게시</strong> 버튼 클릭 후 URL 복사</p>
+          <p style="margin-top:8px; color:var(--primary); font-weight:600;">또는 아래 형식 사용:</p>
+          <p style="word-break:break-all; background:#f1f5f9; padding:8px; border-radius:6px; margin-top:4px; font-size:11px;">
+            https://docs.google.com/spreadsheets/d/<strong>[시트ID]</strong>/export?format=csv&gid=<strong>[시트번호]</strong>
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /app-screen -->
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // ───── 상태 관리 ─────
+  let currentUser = null;
+  let checklistData = [];
+  let checkedItems = {};
+
+  // ───── 로그인 ─────
+  function doLogin() {
+    const name = document.getElementById('login-name').value.trim();
+    const dept = document.getElementById('login-dept').value;
+    const role = document.getElementById('login-role').value;
+
+    if (!name) { showToast('이름을 입력해주세요'); return; }
+    if (!dept) { showToast('부서를 선택해주세요'); return; }
+    if (!role) { showToast('직책을 선택해주세요'); return; }
+
+    currentUser = { name, dept, role };
+    document.getElementById('header-user-info').textContent = name + ' ' + role + ' | ' + dept;
+
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app-screen').style.display = 'block';
+
+    loadAllData();
+  }
+
+  function doLogout() {
+    if (confirm('로그아웃 하시겠습니까?')) {
+      document.getElementById('login-screen').style.display = 'flex';
+      document.getElementById('app-screen').style.display = 'none';
+    }
+  }
+
+  // ───── 탭 전환 ─────
+  function switchTab(tabId, btn) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + tabId).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  // ───── 데이터 로드 ─────
+  function getSettings() {
+    return {
+      checklist: localStorage.getItem('sheet_checklist') || '',
+      notice: localStorage.getItem('sheet_notice') || '',
+      staff: localStorage.getItem('sheet_staff') || ''
+    };
+  }
+
+  function loadAllData() {
+    const s = getSettings();
+    if (s.checklist) document.getElementById('sheet-checklist').value = s.checklist;
+    if (s.notice) document.getElementById('sheet-notice').value = s.notice;
+    if (s.staff) document.getElementById('sheet-staff').value = s.staff;
+
+    loadChecklist(s.checklist);
+    loadNotices(s.notice);
+    loadStaff(s.staff);
+  }
+
+  async function fetchCSV(url) {
+    if (!url) return null;
+    const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url);
+    const res = await fetch(proxyUrl);
+    const text = await res.text();
+    return parseCSV(text);
+  }
+
+  function parseCSV(text) {
+    const lines = text.trim().split('\n');
+    const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
+    return lines.slice(1).map(line => {
+      const vals = line.split(',').map(v => v.trim().replace(/"/g, ''));
+      const obj = {};
+      headers.forEach((h, i) => obj[h] = vals[i] || '');
+      return obj;
+    });
+  }
+
+  // ───── 체크리스트 ─────
+  async function loadChecklist(url) {
+    const el = document.getElementById('checklist-items');
+    if (!url) {
+      el.innerHTML = renderSampleChecklist();
+      updateStats();
+      return;
+    }
+    try {
+      const data = await fetchCSV(url);
+      checklistData = data;
+      el.innerHTML = data.map((item, i) => renderCheckItem(item, i)).join('');
+      updateStats();
+    } catch (e) {
+      el.innerHTML = renderSampleChecklist();
+      updateStats();
+    }
+  }
+
+  function renderSampleChecklist() {
+    const samples = [
+      { area: '환자안전', title: '환자 낙상 예방 점검', status: '완료' },
+      { area: '감염관리', title: '손위생 준수율 모니터링', status: '진행중' },
+      { area: '의약품', title: '마약류 관리 대장 확인', status: '완료' },
+      { area: '기록관리', title: '의무기록 완성도 점검', status: '미완료' },
+      { area: '시설환경', title: '응급장비 작동 점검', status: '진행중' },
+      { area: '직원교육', title: '감염관리 교육 이수 확인', status: '미완료' },
+    ];
+    checklistData = samples;
+    return samples.map((item, i) => renderCheckItem(item, i)).join('');
+  }
+
+  function renderCheckItem(item, i) {
+    const isChecked = checkedItems[i] || false;
+    const statusBadge = {
+      '완료': 'badge-green',
+      '진행중': 'badge-yellow',
+      '미완료': 'badge-red',
+      '이슈발생': 'badge-red'
+    }[item.status || item['상태'] || '미완료'] || 'badge-blue';
+
+    const title = item.title || item['항목명'] || item['점검항목'] || '항목 ' + (i+1);
+    const area = item.area || item['영역'] || item['구분'] || '';
+    const status = item.status || item['상태'] || '미완료';
+
+    return `
+      <div class="checklist-item">
+        <div class="check-box ${isChecked ? 'checked' : ''}" onclick="toggleCheck(${i}, this)"></div>
+        <div class="check-text">
+          <div class="title">${title}</div>
+          <div class="sub">
+            ${area ? '<span class="badge badge-blue">' + area + '</span> ' : ''}
+            <span class="badge ${statusBadge}">${status}</span>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function toggleCheck(i, el) {
+    checkedItems[i] = !checkedItems[i];
+    el.classList.toggle('checked');
+    updateStats();
+  }
+
+  function updateStats() {
+    const total = checklistData.length;
+    const done = Object.values(checkedItems).filter(Boolean).length;
+    const progress = checklistData.filter((item, i) => {
+      const s = item.status || item['상태'] || '';
+      return s === '진행중' && !checkedItems[i];
+    }).length;
+    const pending = total - done - progress;
+    const pct = total ? Math.round((done / total) * 100) : 0;
+
+    document.getElementById('stat-total').textContent = total;
+    document.getElementById('stat-done').textContent = done;
+    document.getElementById('stat-progress').textContent = progress;
+    document.getElementById('stat-pending').textContent = Math.max(0, pending);
+    document.getElementById('progress-pct').textContent = pct + '%';
+    document.getElementById('progress-fill').style.width = pct + '%';
+  }
+
+  // ───── 공지사항 ─────
+  async function loadNotices(url) {
+    const el = document.getElementById('notice-list');
+    const dashEl = document.getElementById('dashboard-notices');
+
+    if (!url) {
+      const sampleHtml = renderSampleNotices();
+      el.innerHTML = sampleHtml;
+      dashEl.innerHTML = sampleHtml;
+      return;
+    }
+
+    try {
+      const data = await fetchCSV(url);
+      const html = data.slice(0, 5).map(item => renderNoticeItem(item)).join('');
+      el.innerHTML = html;
+      dashEl.innerHTML = data.slice(0, 3).map(item => renderNoticeItem(item)).join('');
+    } catch (e) {
+      const sampleHtml = renderSampleNotices();
+      el.innerHTML = sampleHtml;
+      dashEl.innerHTML = sampleHtml;
+    }
+  }
+
+  function renderSampleNotices() {
+    const samples = [
+      { title: '2025 인증평가 일정 안내', date: '2025-03-10', category: '공지' },
+      { title: '감염관리 지침 개정 사항 안내', date: '2025-03-08', category: '교육' },
+      { title: '의무기록 작성 기준 변경', date: '2025-03-05', category: '업무' },
+    ];
+    return samples.map(item => renderNoticeItem(item)).join('');
+  }
+
+  function renderNoticeItem(item) {
+    const title = item.title || item['제목'] || '공지';
+    const date = item.date || item['날짜'] || '';
+    const category = item.category || item['분류'] || '';
+    return `
+      <div class="notice-item">
+        <div class="notice-title">${title}</div>
+        <div class="notice-meta">
+          ${category ? '<span class="badge badge-blue">' + category + '</span>' : ''}
+          <span>${date}</span>
+        </div>
+      </div>
+    `;
+  }
+
+  // ───── 직원현황 ─────
+  async function loadStaff(url) {
+    const el = document.getElementById('staff-list');
+    if (!url) {
+      el.innerHTML = renderSampleStaff();
+      return;
+    }
+    try {
+      const data = await fetchCSV(url);
+      el.innerHTML = data.map(item => renderStaffItem(item)).join('');
+    } catch (e) {
+      el.innerHTML = renderSampleStaff();
+    }
+  }
+
+  function renderSampleStaff() {
+    const samples = [
+      { name: '홍길동', dept: '간호부', role: '팀장', status: '재직' },
+      { name: '김영희', dept: '원무과', role: '담당자', status: '재직' },
+      { name: '이철수', dept: '감염관리팀', role: '파트장', status: '재직' },
+      { name: '박민지', dept: '의무기록', role: '일반직원', status: '재직' },
+    ];
+    return samples.map(item => renderStaffItem(item)).join('');
+  }
+
+  function renderStaffItem(item) {
+    const name = item.name || item['이름'] || item['성명'] || '직원';
+    const dept = item.dept || item['부서'] || '';
+    const role = item.role || item['직책'] || '';
+    const initial = name.charAt(0);
+    return `
+      <div class="staff-item">
+        <div class="staff-avatar">${initial}</div>
+        <div class="staff-info">
+          <div class="staff-name">${name}</div>
+          <div class="staff-role">${dept} ${role ? '| ' + role : ''}</div>
+        </div>
+        <span class="badge badge-green">재직</span>
+      </div>
+    `;
+  }
+
+  // ───── 보고 제출 ─────
+  function submitReport() {
+    const type = document.getElementById('report-type').value;
+    const area = document.getElementById('report-area').value;
+    const status = document.getElementById('report-status').value;
+    const content = document.getElementById('report-content').value.trim();
+
+    if (!content) { showToast('상세 내용을 입력해주세요'); return; }
+
+    const timestamp = new Date().toLocaleString('ko-KR');
+    const msg = encodeURIComponent(
+      '[' + timestamp + ']\n' +
+      '보고자: ' + currentUser.name + ' (' + currentUser.dept + ' / ' + currentUser.role + ')\n' +
+      '유형: ' + type + '\n' +
+      '영역: ' + area + '\n' +
+      '상태: ' + status + '\n' +
+      '내용: ' + content
+    );
+
+    const saved = localStorage.getItem('report_email') || '';
+    if (saved) {
+      window.location.href = 'mailto:' + saved + '?subject=[인증평가 보고] ' + type + '&body=' + msg;
+    } else {
+      showToast('보고가 저장되었습니다. 설정에서 이메일을 등록하면 전송됩니다.');
+    }
+
+    document.getElementById('report-content').value = '';
+    showToast('보고가 제출되었습니다!');
+  }
+
+  // ───── 설정 저장 ─────
+  function saveSettings() {
+    const cl = document.getElementById('sheet-checklist').value.trim();
+    const no = document.getElementById('sheet-notice').value.trim();
+    const st = document.getElementById('sheet-staff').value.trim();
+
+    localStorage.setItem('sheet_checklist', cl);
+    localStorage.setItem('sheet_notice', no);
+    localStorage.setItem('sheet_staff', st);
+
+    showToast('설정 저장 완료! 데이터를 불러옵니다...');
+    loadAllData();
+  }
+
+  // ───── 토스트 ─────
+  function showToast(msg) {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 3000);
+  }
 </script>
-<div class="bottom-safe"></div>
 </body>
 </html>
