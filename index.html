@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yoyang Hospital Certification</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            text-align: center;
+        }
+        .regulation {
+            margin: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Yoyang Hospital Regulations</h1>
+    <div id="regulation-list"></div>
+    <script>
+        const sheetID = '18dDgxsczklu9FRm053w2rqLDFDjqm7C18rijuyJdrkI';
+        const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json`;
+
+        fetch(url)
+            .then(response => response.text())
+            .then(data => {
+                const json = JSON.parse(data.substr(47).slice(0, -2));
+                const regulations = json.table.rows;
+
+                regulations.forEach(row => {
+                    const regulationDiv = document.createElement('div');
+                    regulationDiv.classList.add('regulation');
+                    regulationDiv.textContent = row.c[0].v; // Assuming the first column holds the regulation title
+                    document.getElementById('regulation-list').appendChild(regulationDiv);
+                });
+            })
+            .catch(error => console.error('Error fetching data:', error));
+    </script>
+</body>
+</html>
+```
+
+### 4단계: 변경사항 커밋하기
+
+1. 아래쪽에 **"Commit new file"** 버튼 클릭
+2. **커밋 메시지** 입력 (예: "Add index.html")
+3. **"Commit new file"** 클릭
+
+### 5단계: GitHub Pages 설정
+
+1. **Settings** 탭 클릭
+2. 왼쪽 메뉴에서 **Pages** 선택
+3. Source: **main** 브랜치 선택 후 **Save** 클릭
+
+### 6단계: 웹앱 확인하기
+
+- 몇 분 후, 아래 주소 형식으로 웹앱에 접근할 수 있습니다:
