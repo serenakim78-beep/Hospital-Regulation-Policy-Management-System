@@ -1,62 +1,670 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yoyang Hospital Certification</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-        h1 {
-            text-align: center;
-        }
-        .regulation {
-            margin: 20px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>요양병원 인증평가 시스템</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #1a5276;
+    --primary-light: #2e86c1;
+    --accent: #e74c3c;
+    --bg: #f0f4f8;
+    --card: #ffffff;
+    --text: #1a202c;
+    --text-muted: #718096;
+    --border: #e2e8f0;
+    --tab-active: #1a5276;
+    --tab-inactive: #a0aec0;
+    --shadow: 0 2px 12px rgba(26,82,118,0.10);
+    --shadow-lg: 0 8px 32px rgba(26,82,118,0.16);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  /* HEADER */
+  .app-header {
+    background: linear-gradient(135deg, #1a5276 0%, #2e86c1 100%);
+    color: white;
+    padding: 20px 16px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: var(--shadow-lg);
+  }
+  .app-title {
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    margin-bottom: 2px;
+  }
+  .app-subtitle {
+    font-size: 11px;
+    font-weight: 300;
+    opacity: 0.8;
+    margin-bottom: 14px;
+  }
+
+  /* SEARCH */
+  .search-wrap {
+    position: relative;
+    margin-bottom: 0;
+  }
+  .search-input {
+    width: 100%;
+    padding: 11px 16px 11px 40px;
+    border-radius: 10px;
+    border: none;
+    background: rgba(255,255,255,0.18);
+    color: white;
+    font-size: 14px;
+    font-family: 'Noto Sans KR', sans-serif;
+    outline: none;
+    transition: background 0.2s;
+    backdrop-filter: blur(4px);
+  }
+  .search-input::placeholder { color: rgba(255,255,255,0.65); }
+  .search-input:focus { background: rgba(255,255,255,0.28); }
+  .search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.8;
+  }
+
+  /* TABS */
+  .tabs {
+    display: flex;
+    border-top: 1px solid rgba(255,255,255,0.15);
+    margin-top: 14px;
+  }
+  .tab-btn {
+    flex: 1;
+    padding: 12px 4px 10px;
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.6);
+    font-size: 12.5px;
+    font-weight: 500;
+    font-family: 'Noto Sans KR', sans-serif;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+  }
+  .tab-btn.active {
+    color: white;
+    border-bottom: 3px solid #f39c12;
+    font-weight: 700;
+  }
+
+  /* CONTENT */
+  .content {
+    padding: 14px 12px 80px;
+  }
+
+  /* CHAPTER GROUP */
+  .chapter-group { margin-bottom: 10px; }
+  .chapter-header {
+    background: linear-gradient(90deg, #1a5276, #2e86c1);
+    color: white;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    user-select: none;
+  }
+  .chapter-header .chapter-count {
+    background: rgba(255,255,255,0.2);
+    border-radius: 20px;
+    padding: 2px 9px;
+    font-size: 11px;
+    font-weight: 500;
+  }
+  .chapter-header .arrow {
+    font-size: 11px;
+    transition: transform 0.25s;
+    margin-left: 6px;
+  }
+  .chapter-header.open .arrow { transform: rotate(180deg); }
+  .chapter-items { display: none; padding-top: 6px; }
+  .chapter-items.open { display: block; }
+
+  /* ITEM CARD */
+  .item-card {
+    background: var(--card);
+    border-radius: 10px;
+    margin-bottom: 7px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    cursor: pointer;
+    border-left: 4px solid var(--primary-light);
+    transition: box-shadow 0.2s, transform 0.15s;
+    animation: fadeIn 0.3s ease;
+  }
+  .item-card:active { transform: scale(0.98); box-shadow: none; }
+  @keyframes fadeIn { from { opacity:0; transform: translateY(6px); } to { opacity:1; transform: translateY(0); } }
+  .item-card-inner { padding: 11px 14px; }
+  .item-code {
+    font-size: 10.5px;
+    color: var(--primary-light);
+    font-weight: 700;
+    margin-bottom: 3px;
+    letter-spacing: 0.3px;
+  }
+  .item-title {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.4;
+    margin-bottom: 5px;
+  }
+  .item-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  .tag {
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 20px;
+    font-weight: 500;
+  }
+  .tag-target { background: #ebf8ff; color: #2b6cb0; }
+  .tag-place { background: #f0fff4; color: #276749; }
+
+  /* SECTION GROUP (직군별/부서별 탭) */
+  .section-group { margin-bottom: 10px; }
+  .section-header {
+    background: linear-gradient(90deg, #2c3e50, #4a6fa5);
+    color: white;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    user-select: none;
+  }
+  .section-header .chapter-count {
+    background: rgba(255,255,255,0.2);
+    border-radius: 20px;
+    padding: 2px 9px;
+    font-size: 11px;
+    font-weight: 500;
+  }
+  .section-header .arrow { font-size: 11px; transition: transform 0.25s; margin-left:6px; }
+  .section-header.open .arrow { transform: rotate(180deg); }
+  .section-items { display: none; padding-top: 6px; }
+  .section-items.open { display: block; }
+
+  /* MODAL */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 200;
+    align-items: flex-end;
+    justify-content: center;
+  }
+  .modal-overlay.active { display: flex; }
+  .modal {
+    background: white;
+    border-radius: 20px 20px 0 0;
+    width: 100%;
+    max-width: 480px;
+    max-height: 88vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    animation: slideUp 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  @keyframes slideUp {
+    from { transform: translateY(100%); opacity: 0.5; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  .modal-handle {
+    width: 36px; height: 4px;
+    background: #e2e8f0;
+    border-radius: 2px;
+    margin: 10px auto 0;
+    flex-shrink: 0;
+  }
+  .modal-header {
+    padding: 12px 18px 14px;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .modal-code {
+    font-size: 11px;
+    color: var(--primary-light);
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .modal-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.4;
+  }
+  .modal-close {
+    position: absolute;
+    right: 16px;
+    top: 18px;
+    background: #f0f4f8;
+    border: none;
+    border-radius: 50%;
+    width: 30px; height: 30px;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text-muted);
+  }
+
+  /* DETAIL TABS */
+  .detail-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .detail-tabs::-webkit-scrollbar { display: none; }
+  .detail-tab-btn {
+    padding: 10px 14px;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-muted);
+    white-space: nowrap;
+    cursor: pointer;
+    font-family: 'Noto Sans KR', sans-serif;
+    transition: all 0.2s;
+  }
+  .detail-tab-btn.active {
+    color: var(--primary);
+    border-bottom-color: var(--primary);
+    font-weight: 700;
+  }
+
+  /* DETAIL CONTENT */
+  .detail-body {
+    overflow-y: auto;
+    flex: 1;
+    padding: 16px 18px;
+  }
+  .detail-section { display: none; }
+  .detail-section.active { display: block; }
+  .detail-label {
+    font-size: 10.5px;
+    font-weight: 700;
+    color: var(--primary-light);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    margin-top: 16px;
+  }
+  .detail-label:first-child { margin-top: 0; }
+  .detail-value {
+    font-size: 13.5px;
+    line-height: 1.75;
+    color: var(--text);
+    white-space: pre-wrap;
+    background: #f8fafc;
+    border-radius: 8px;
+    padding: 10px 12px;
+    border-left: 3px solid var(--primary-light);
+  }
+  .detail-value.empty { color: var(--text-muted); font-style: italic; background: none; border: none; padding-left: 2px; }
+
+  /* LOADING / EMPTY */
+  .loading-wrap {
+    display: flex; flex-direction: column; align-items: center;
+    justify-content: center; padding: 60px 20px;
+    color: var(--text-muted);
+  }
+  .spinner {
+    width: 36px; height: 36px;
+    border: 3px solid #e2e8f0;
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-bottom: 14px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .empty-msg { text-align: center; padding: 40px 20px; color: var(--text-muted); font-size: 14px; }
+
+  /* BOTTOM SAFE AREA */
+  .bottom-safe { height: env(safe-area-inset-bottom, 16px); }
+</style>
 </head>
 <body>
-    <h1>Yoyang Hospital Regulations</h1>
-    <div id="regulation-list"></div>
-    <script>
-        const sheetID = '18dDgxsczklu9FRm053w2rqLDFDjqm7C18rijuyJdrkI';
-        const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json`;
 
-        fetch(url)
-            .then(response => response.text())
-            .then(data => {
-                const json = JSON.parse(data.substr(47).slice(0, -2));
-                const regulations = json.table.rows;
+<div class="app-header">
+  <div class="app-title">요양병원 인증평가 시스템</div>
+  <div class="app-subtitle">의료기관 인증평가 규정 조회</div>
+  <div class="search-wrap" style="margin-bottom:14px;">
+    <svg class="search-icon" width="16" height="16" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+    <input class="search-input" id="searchInput" type="text" placeholder="규정명, 조사항목, 조사대상 검색...">
+  </div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('chapter')">장(章)별 규정</button>
+    <button class="tab-btn" onclick="switchTab('target')">조사대상별 규정</button>
+  </div>
+</div>
 
-                regulations.forEach(row => {
-                    const regulationDiv = document.createElement('div');
-                    regulationDiv.classList.add('regulation');
-                    regulationDiv.textContent = row.c[0].v; // Assuming the first column holds the regulation title
-                    document.getElementById('regulation-list').appendChild(regulationDiv);
-                });
-            })
-            .catch(error => console.error('Error fetching data:', error));
-    </script>
+<div class="content" id="mainContent">
+  <div class="loading-wrap">
+    <div class="spinner"></div>
+    <div>데이터를 불러오는 중...</div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal" id="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-header" style="position:relative;">
+      <div class="modal-code" id="modalCode"></div>
+      <div class="modal-title" id="modalTitle"></div>
+      <button class="modal-close" onclick="closeModalBtn()">x</button>
+    </div>
+    <div class="detail-tabs" id="detailTabs">
+      <button class="detail-tab-btn active" onclick="switchDetailTab('basic')">기본 정보</button>
+      <button class="detail-tab-btn" onclick="switchDetailTab('content')">조사 기준</button>
+      <button class="detail-tab-btn" onclick="switchDetailTab('ref')">참고자료</button>
+    </div>
+    <div class="detail-body">
+      <div class="detail-section active" id="tab-basic"></div>
+      <div class="detail-section" id="tab-content"></div>
+      <div class="detail-section" id="tab-ref"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const SHEET_ID = '18dDgxsczklu9FRm053w2rqLDFDjqm7C18rijuyJdrkI';
+const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=0`;
+
+let allData = [];
+let currentTab = 'chapter';
+let searchQuery = '';
+
+// CSV Parser (handles quoted fields)
+function parseCSV(text) {
+  const lines = text.split(/\r?\n/);
+  if (lines.length < 2) return [];
+  const headers = parseCSVLine(lines[0]);
+  const rows = [];
+  for (let i = 1; i < lines.length; i++) {
+    if (!lines[i].trim()) continue;
+    const vals = parseCSVLine(lines[i]);
+    const obj = {};
+    headers.forEach((h, idx) => { obj[h.trim()] = (vals[idx] || '').trim(); });
+    rows.push(obj);
+  }
+  return rows;
+}
+
+function parseCSVLine(line) {
+  const result = [];
+  let cur = '';
+  let inQ = false;
+  for (let i = 0; i < line.length; i++) {
+    const c = line[i];
+    if (c === '"') {
+      if (inQ && line[i+1] === '"') { cur += '"'; i++; }
+      else { inQ = !inQ; }
+    } else if (c === ',' && !inQ) {
+      result.push(cur); cur = '';
+    } else {
+      cur += c;
+    }
+  }
+  result.push(cur);
+  return result;
+}
+
+// Detect column names flexibly
+function getCol(row, candidates) {
+  for (const k of Object.keys(row)) {
+    for (const c of candidates) {
+      if (k.includes(c)) return row[k] || '';
+    }
+  }
+  return '';
+}
+
+function mapRow(row) {
+  return {
+    chapter: getCol(row, ['장','chapter','Chapter']),
+    standard: getCol(row, ['기준','standard','Standard']),
+    code: getCol(row, ['조사 항목','조사항목','항목','code','Code']),
+    place: getCol(row, ['조사장소','장소','place']),
+    target: getCol(row, ['조사대상','대상','target']),
+    title: getCol(row, ['규정 제목','규정제목','제목','title']),
+    content: getCol(row, ['규정 기준','조사 내용','기준 및 조사','내용','content']),
+    reference: getCol(row, ['의무기록','관련 자료','참고','reference','ref']),
+    raw: row
+  };
+}
+
+async function loadData() {
+  try {
+    const res = await fetch(CSV_URL);
+    if (!res.ok) throw new Error('fetch failed');
+    const text = await res.text();
+    const rows = parseCSV(text);
+    allData = rows.map(mapRow).filter(r => r.title || r.code);
+    render();
+  } catch(e) {
+    document.getElementById('mainContent').innerHTML =
+      `<div class="empty-msg">
+        <div style="font-size:28px;margin-bottom:12px;">!</div>
+        <div style="font-weight:700;margin-bottom:8px;">데이터 로드 실패</div>
+        <div style="font-size:12px;color:#a0aec0;">구글 시트 공유 설정을<br>"링크가 있는 모든 사용자 - 뷰어"로<br>변경해 주세요.</div>
+        <button onclick="loadData()" style="margin-top:16px;padding:10px 24px;background:#1a5276;color:white;border:none;border-radius:8px;font-size:13px;cursor:pointer;font-family:inherit;">다시 시도</button>
+      </div>`;
+  }
+}
+
+function getFiltered() {
+  if (!searchQuery) return allData;
+  const q = searchQuery.toLowerCase();
+  return allData.filter(r =>
+    (r.title||'').toLowerCase().includes(q) ||
+    (r.code||'').toLowerCase().includes(q) ||
+    (r.target||'').toLowerCase().includes(q) ||
+    (r.chapter||'').toLowerCase().includes(q) ||
+    (r.content||'').toLowerCase().includes(q)
+  );
+}
+
+function render() {
+  const data = getFiltered();
+  if (currentTab === 'chapter') renderChapter(data);
+  else renderTarget(data);
+}
+
+function renderChapter(data) {
+  const groups = {};
+  data.forEach(r => {
+    const key = r.chapter || '기타';
+    if (!groups[key]) groups[key] = [];
+    groups[key].push(r);
+  });
+  const keys = Object.keys(groups).sort((a,b) => {
+    const na = parseInt(a), nb = parseInt(b);
+    if (!isNaN(na) && !isNaN(nb)) return na - nb;
+    return a.localeCompare(b, 'ko');
+  });
+
+  if (keys.length === 0) {
+    document.getElementById('mainContent').innerHTML = '<div class="empty-msg">검색 결과가 없습니다.</div>';
+    return;
+  }
+
+  let html = '';
+  keys.forEach((key, idx) => {
+    const items = groups[key];
+    const isFirst = idx === 0 && !searchQuery;
+    html += `
+      <div class="chapter-group">
+        <div class="chapter-header ${isFirst?'open':''}" onclick="toggleGroup(this)">
+          <span>${key}</span>
+          <span style="display:flex;align-items:center;gap:6px;">
+            <span class="chapter-count">${items.length}개</span>
+            <span class="arrow">&#9660;</span>
+          </span>
+        </div>
+        <div class="chapter-items ${isFirst?'open':''}">
+          ${items.map(r => itemCardHTML(r)).join('')}
+        </div>
+      </div>`;
+  });
+  document.getElementById('mainContent').innerHTML = html;
+}
+
+function renderTarget(data) {
+  const groups = {};
+  data.forEach(r => {
+    const targets = (r.target || '기타').split(/[,\/,、]/).map(t=>t.trim()).filter(Boolean);
+    if (targets.length === 0) targets.push('기타');
+    targets.forEach(t => {
+      if (!groups[t]) groups[t] = [];
+      if (!groups[t].find(x => x.code === r.code && x.title === r.title)) groups[t].push(r);
+    });
+  });
+  const keys = Object.keys(groups).sort((a,b) => a.localeCompare(b,'ko'));
+
+  if (keys.length === 0) {
+    document.getElementById('mainContent').innerHTML = '<div class="empty-msg">검색 결과가 없습니다.</div>';
+    return;
+  }
+
+  let html = '';
+  keys.forEach((key, idx) => {
+    const items = groups[key];
+    const isFirst = idx === 0 && !searchQuery;
+    html += `
+      <div class="section-group">
+        <div class="section-header ${isFirst?'open':''}" onclick="toggleGroup(this)">
+          <span>${key}</span>
+          <span style="display:flex;align-items:center;gap:6px;">
+            <span class="chapter-count">${items.length}개</span>
+            <span class="arrow">&#9660;</span>
+          </span>
+        </div>
+        <div class="section-items ${isFirst?'open':''}">
+          ${items.map(r => itemCardHTML(r)).join('')}
+        </div>
+      </div>`;
+  });
+  document.getElementById('mainContent').innerHTML = html;
+}
+
+function itemCardHTML(r) {
+  const safeR = JSON.stringify(r).replace(/'/g, '&#39;');
+  return `
+    <div class="item-card" onclick='openModal(${safeR})'>
+      <div class="item-card-inner">
+        <div class="item-code">${r.code || r.standard || ''}</div>
+        <div class="item-title">${r.title || '(제목 없음)'}</div>
+        <div class="item-tags">
+          ${r.target ? `<span class="tag tag-target">${r.target}</span>` : ''}
+          ${r.place ? `<span class="tag tag-place">${r.place}</span>` : ''}
+        </div>
+      </div>
+    </div>`;
+}
+
+function toggleGroup(el) {
+  el.classList.toggle('open');
+  const items = el.nextElementSibling;
+  items.classList.toggle('open');
+}
+
+function switchTab(tab) {
+  currentTab = tab;
+  document.querySelectorAll('.tab-btn').forEach((btn, i) => {
+    btn.classList.toggle('active', (i===0 && tab==='chapter') || (i===1 && tab==='target'));
+  });
+  render();
+}
+
+function val(v) {
+  if (!v || !v.trim()) return '<div class="detail-value empty">정보 없음</div>';
+  return `<div class="detail-value">${v}</div>`;
+}
+
+function openModal(r) {
+  document.getElementById('modalCode').textContent = r.code || r.standard || '';
+  document.getElementById('modalTitle').textContent = r.title || '(제목 없음)';
+
+  document.getElementById('tab-basic').innerHTML = `
+    <div class="detail-label">장(章)</div>${val(r.chapter)}
+    <div class="detail-label">기준 번호</div>${val(r.standard)}
+    <div class="detail-label">조사 항목</div>${val(r.code)}
+    <div class="detail-label">조사 장소</div>${val(r.place)}
+    <div class="detail-label">조사 대상</div>${val(r.target)}
+  `;
+  document.getElementById('tab-content').innerHTML = `
+    <div class="detail-label">규정 기준 및 조사 내용</div>${val(r.content)}
+  `;
+  document.getElementById('tab-ref').innerHTML = `
+    <div class="detail-label">의무기록 및 관련 자료</div>${val(r.reference)}
+  `;
+
+  switchDetailTab('basic');
+  document.getElementById('modalOverlay').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function switchDetailTab(tab) {
+  document.querySelectorAll('.detail-tab-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.getAttribute('onclick').includes(`'${tab}'`));
+  });
+  document.querySelectorAll('.detail-section').forEach(sec => {
+    sec.classList.toggle('active', sec.id === `tab-${tab}`);
+  });
+}
+
+function closeModalBtn() {
+  document.getElementById('modalOverlay').classList.remove('active');
+  document.body.style.overflow = '';
+}
+function closeModal(e) {
+  if (e.target === document.getElementById('modalOverlay')) closeModalBtn();
+}
+
+let searchTimeout;
+document.getElementById('searchInput').addEventListener('input', function() {
+  clearTimeout(searchTimeout);
+  searchTimeout = setTimeout(() => {
+    searchQuery = this.value.trim();
+    render();
+  }, 300);
+});
+
+loadData();
+</script>
+<div class="bottom-safe"></div>
 </body>
 </html>
-```
-
-### 4단계: 변경사항 커밋하기
-
-1. 아래쪽에 **"Commit new file"** 버튼 클릭
-2. **커밋 메시지** 입력 (예: "Add index.html")
-3. **"Commit new file"** 클릭
-
-### 5단계: GitHub Pages 설정
-
-1. **Settings** 탭 클릭
-2. 왼쪽 메뉴에서 **Pages** 선택
-3. Source: **main** 브랜치 선택 후 **Save** 클릭
-
-### 6단계: 웹앱 확인하기
-
-- 몇 분 후, 아래 주소 형식으로 웹앱에 접근할 수 있습니다:
