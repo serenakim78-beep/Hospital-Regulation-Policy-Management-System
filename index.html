@@ -28,11 +28,15 @@
       --blue-dim: rgba(122,159,201,0.15);
       --teal: #6db9b0;
       --teal-dim: rgba(109,185,176,0.15);
-      --purple: #a07ac9;
-      --purple-dim: rgba(160,122,201,0.15);
-      --rose: #c97a9f;
-      --rose-dim: rgba(201,122,159,0.15);
-      --sidebar-width: 220px;
+      --purple: #a87ac9;
+      --purple-dim: rgba(168,122,201,0.15);
+      --pink: #c97aa0;
+      --pink-dim: rgba(201,122,160,0.15);
+      --green: #7ac9a0;
+      --green-dim: rgba(122,201,160,0.15);
+      --orange: #c9a07a;
+      --orange-dim: rgba(201,160,122,0.15);
+      --sidebar-w: 220px;
     }
 
     body {
@@ -40,6 +44,8 @@
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
 
     body::before {
@@ -52,16 +58,18 @@
       opacity: 0.35;
     }
 
+    /* ── HEADER ── */
     header {
       background: var(--surface);
       border-bottom: 1px solid var(--border);
-      padding: 16px 28px;
+      padding: 16px 24px;
       display: flex;
       align-items: center;
       gap: 14px;
       position: sticky;
       top: 0;
       z-index: 200;
+      flex-shrink: 0;
     }
 
     .logo-grid {
@@ -99,81 +107,76 @@
     }
     @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
-    /* ── Layout: sidebar + content ── */
-    .app-layout {
+    /* ── LAYOUT ── */
+    .app-body {
       display: flex;
-      min-height: calc(100vh - 61px);
+      flex: 1;
+      min-height: 0;
     }
 
-    /* ── Sidebar ── */
+    /* ── SIDEBAR ── */
     .sidebar {
-      width: var(--sidebar-width);
+      width: var(--sidebar-w);
       flex-shrink: 0;
       background: var(--surface);
       border-right: 1px solid var(--border);
       position: sticky;
-      top: 61px;
-      height: calc(100vh - 61px);
+      top: 57px;
+      height: calc(100vh - 57px);
       overflow-y: auto;
+      padding: 20px 0;
       display: flex;
       flex-direction: column;
-      padding: 20px 0;
-      scrollbar-width: thin;
-      scrollbar-color: var(--border2) transparent;
+      gap: 4px;
     }
+
     .sidebar::-webkit-scrollbar { width: 4px; }
     .sidebar::-webkit-scrollbar-track { background: transparent; }
     .sidebar::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
 
     .sidebar-section-label {
       font-family: 'DM Mono', monospace;
-      font-size: 8px;
-      letter-spacing: 2.5px;
+      font-size: 9px;
+      letter-spacing: 2px;
       color: var(--text-muted);
       text-transform: uppercase;
-      padding: 0 18px 8px;
-      margin-top: 8px;
+      padding: 10px 18px 4px;
     }
-    .sidebar-section-label:first-child { margin-top: 0; }
 
-    .sidebar-divider {
+    .sidebar-sep {
       height: 1px;
       background: var(--border);
-      margin: 12px 18px;
+      margin: 8px 18px;
     }
 
     .tab-btn {
       display: flex;
       align-items: center;
-      gap: 10px;
-      padding: 10px 18px;
-      width: 100%;
-      background: none;
-      border: none;
-      cursor: pointer;
+      justify-content: space-between;
+      padding: 9px 18px;
       font-size: 13px;
       font-family: 'Noto Sans KR', sans-serif;
       font-weight: 500;
       color: var(--text-muted);
-      transition: all 0.18s;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      width: 100%;
       text-align: left;
-      border-left: 2px solid transparent;
-      position: relative;
+      transition: all 0.18s;
+      border-radius: 0;
+      gap: 8px;
     }
-    .tab-btn:hover { color: var(--text); background: var(--surface2); }
+    .tab-btn:hover { background: var(--surface2); color: var(--text); }
 
-    .tab-btn.active {
-      color: var(--gold);
-      background: var(--gold-dim);
-      border-left-color: var(--gold);
-    }
-    .tab-btn.active.blue-tab   { color: var(--blue);   background: var(--blue-dim);   border-left-color: var(--blue); }
-    .tab-btn.active.teal-tab   { color: var(--teal);   background: var(--teal-dim);   border-left-color: var(--teal); }
-    .tab-btn.active.purple-tab { color: var(--purple); background: var(--purple-dim); border-left-color: var(--purple); }
-    .tab-btn.active.rose-tab   { color: var(--rose);   background: var(--rose-dim);   border-left-color: var(--rose); }
-    .tab-btn.active.green-tab  { color: var(--success);background: rgba(109,185,138,0.12); border-left-color: var(--success); }
-    .tab-btn.active.orange-tab { color: #c9906d;       background: rgba(201,144,109,0.12); border-left-color: #c9906d; }
-    .tab-btn.active.gray-tab   { color: var(--text-mid);background: rgba(168,152,128,0.12); border-left-color: var(--text-mid); }
+    .tab-btn.active { color: var(--gold); background: var(--gold-dim); }
+    .tab-btn.active.purple-tab { color: var(--purple); background: var(--purple-dim); }
+    .tab-btn.active.pink-tab   { color: var(--pink);   background: var(--pink-dim); }
+    .tab-btn.active.green-tab  { color: var(--green);  background: var(--green-dim); }
+    .tab-btn.active.orange-tab { color: var(--orange); background: var(--orange-dim); }
+    .tab-btn.active.gray-tab   { color: var(--text-mid); background: var(--surface3); }
+    .tab-btn.active.blue-tab   { color: var(--blue);   background: var(--blue-dim); }
+    .tab-btn.active.teal-tab   { color: var(--teal);   background: var(--teal-dim); }
 
     .tab-dot {
       width: 6px; height: 6px;
@@ -181,50 +184,97 @@
       flex-shrink: 0;
       background: var(--text-muted);
     }
-    .tab-btn.active      .tab-dot { background: var(--gold); }
+    .tab-btn.active .tab-dot { background: var(--gold); }
+    .tab-btn.active.purple-tab .tab-dot { background: var(--purple); }
+    .tab-btn.active.pink-tab   .tab-dot { background: var(--pink); }
+    .tab-btn.active.green-tab  .tab-dot { background: var(--green); }
+    .tab-btn.active.orange-tab .tab-dot { background: var(--orange); }
+    .tab-btn.active.gray-tab   .tab-dot { background: var(--text-mid); }
     .tab-btn.active.blue-tab   .tab-dot { background: var(--blue); }
     .tab-btn.active.teal-tab   .tab-dot { background: var(--teal); }
-    .tab-btn.active.purple-tab .tab-dot { background: var(--purple); }
-    .tab-btn.active.rose-tab   .tab-dot { background: var(--rose); }
-    .tab-btn.active.green-tab  .tab-dot { background: var(--success); }
-    .tab-btn.active.orange-tab .tab-dot { background: #c9906d; }
-    .tab-btn.active.gray-tab   .tab-dot { background: var(--text-mid); }
 
     .tab-label { flex: 1; }
 
     .tab-badge {
       font-family: 'DM Mono', monospace;
       font-size: 10px;
-      padding: 1px 7px;
-      border-radius: 20px;
-      background: var(--surface3);
+      background: var(--surface2);
+      border: 1px solid var(--border);
       color: var(--text-muted);
-      min-width: 24px;
+      border-radius: 20px;
+      padding: 1px 7px;
+      flex-shrink: 0;
+      min-width: 28px;
       text-align: center;
     }
-    .tab-btn.active      .tab-badge { background: var(--gold-dim);                        color: var(--gold); }
-    .tab-btn.active.blue-tab   .tab-badge { background: var(--blue-dim);                  color: var(--blue); }
-    .tab-btn.active.teal-tab   .tab-badge { background: var(--teal-dim);                  color: var(--teal); }
-    .tab-btn.active.purple-tab .tab-badge { background: var(--purple-dim);                color: var(--purple); }
-    .tab-btn.active.rose-tab   .tab-badge { background: var(--rose-dim);                  color: var(--rose); }
-    .tab-btn.active.green-tab  .tab-badge { background: rgba(109,185,138,0.15);           color: var(--success); }
-    .tab-btn.active.orange-tab .tab-badge { background: rgba(201,144,109,0.15);           color: #c9906d; }
-    .tab-btn.active.gray-tab   .tab-badge { background: rgba(168,152,128,0.15);           color: var(--text-mid); }
+    .tab-btn.active .tab-badge { border-color: var(--gold); color: var(--gold); background: var(--gold-dim); }
+    .tab-btn.active.purple-tab .tab-badge { border-color: var(--purple); color: var(--purple); background: var(--purple-dim); }
+    .tab-btn.active.pink-tab   .tab-badge { border-color: var(--pink);   color: var(--pink);   background: var(--pink-dim); }
+    .tab-btn.active.green-tab  .tab-badge { border-color: var(--green);  color: var(--green);  background: var(--green-dim); }
+    .tab-btn.active.orange-tab .tab-badge { border-color: var(--orange); color: var(--orange); background: var(--orange-dim); }
+    .tab-btn.active.gray-tab   .tab-badge { border-color: var(--text-mid); color: var(--text-mid); background: var(--surface3); }
+    .tab-btn.active.blue-tab   .tab-badge { border-color: var(--blue);   color: var(--blue);   background: var(--blue-dim); }
+    .tab-btn.active.teal-tab   .tab-badge { border-color: var(--teal);   color: var(--teal);   background: var(--teal-dim); }
 
-    /* ── Main content area ── */
-    .main-content {
-      flex: 1;
-      min-width: 0;
-      padding: 28px 32px;
-      overflow-x: hidden;
+    /* ── MOBILE TOP TABS ── */
+    .mobile-tabs {
+      display: none;
+      overflow-x: auto;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 8px 12px;
+      gap: 6px;
+      position: sticky;
+      top: 57px;
+      z-index: 150;
+    }
+    .mobile-tabs::-webkit-scrollbar { display: none; }
+
+    .mobile-tab-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      white-space: nowrap;
+      padding: 6px 12px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: var(--surface2);
+      color: var(--text-muted);
+      font-size: 12px;
+      font-family: 'Noto Sans KR', sans-serif;
+      font-weight: 500;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: all 0.18s;
+    }
+    .mobile-tab-btn.active { background: var(--gold-dim); border-color: var(--gold); color: var(--gold); }
+    .mobile-tab-btn.active.purple-tab { background: var(--purple-dim); border-color: var(--purple); color: var(--purple); }
+    .mobile-tab-btn.active.pink-tab   { background: var(--pink-dim);   border-color: var(--pink);   color: var(--pink); }
+    .mobile-tab-btn.active.green-tab  { background: var(--green-dim);  border-color: var(--green);  color: var(--green); }
+    .mobile-tab-btn.active.orange-tab { background: var(--orange-dim); border-color: var(--orange); color: var(--orange); }
+    .mobile-tab-btn.active.gray-tab   { background: var(--surface3);   border-color: var(--text-mid); color: var(--text-mid); }
+    .mobile-tab-btn.active.blue-tab   { background: var(--blue-dim);   border-color: var(--blue);   color: var(--blue); }
+    .mobile-tab-btn.active.teal-tab   { background: var(--teal-dim);   border-color: var(--teal);   color: var(--teal); }
+
+    .mobile-badge {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
     }
 
-    /* ── Stats bar ── */
+    /* ── MAIN CONTENT ── */
+    .main-area {
+      flex: 1;
+      min-width: 0;
+      padding: 28px;
+      overflow-y: auto;
+    }
+
+    /* ── STATS ── */
     .stats-bar {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-      margin-bottom: 28px;
+      gap: 10px;
+      margin-bottom: 24px;
     }
 
     .stat-card {
@@ -242,17 +292,28 @@
       height: 2px;
       background: linear-gradient(90deg, var(--gold), transparent);
     }
-    .stat-card.blue-accent::after  { background: linear-gradient(90deg, var(--blue), transparent); }
-    .stat-card.teal-accent::after  { background: linear-gradient(90deg, var(--teal), transparent); }
-    .stat-card.green-accent::after { background: linear-gradient(90deg, var(--success), transparent); }
+    .stat-card.blue-accent::after { background: linear-gradient(90deg, var(--blue), transparent); }
+    .stat-card.teal-accent::after { background: linear-gradient(90deg, var(--teal), transparent); }
 
-    .stat-label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; }
-    .stat-value { font-family: 'Noto Serif KR', serif; font-size: 26px; font-weight: 700; color: var(--gold); line-height: 1; }
-    .stat-value.blue  { color: var(--blue); }
-    .stat-value.teal  { color: var(--teal); }
-    .stat-value.green { color: var(--success); }
+    .stat-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 2px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .stat-value {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1;
+    }
+    .stat-value.blue { color: var(--blue); }
+    .stat-value.teal { color: var(--teal); }
 
-    /* ── Toolbar ── */
+    /* ── TOOLBAR ── */
     .toolbar {
       display: flex;
       align-items: center;
@@ -260,17 +321,25 @@
       margin-bottom: 20px;
       flex-wrap: wrap;
     }
-    .search-wrap { position: relative; flex: 1; min-width: 200px; }
+    .search-wrap {
+      position: relative;
+      flex: 1;
+      min-width: 180px;
+    }
     .search-icon {
-      position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
-      color: var(--text-muted); font-size: 13px; pointer-events: none;
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      pointer-events: none;
     }
     .search-wrap input {
       width: 100%;
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 10px 16px 10px 38px;
+      padding: 10px 14px 10px 36px;
       font-size: 13px;
       font-family: 'Noto Sans KR', sans-serif;
       color: var(--text);
@@ -280,12 +349,24 @@
     .search-wrap input::placeholder { color: var(--text-muted); }
     .search-wrap input:focus { border-color: var(--gold); }
 
-    .grade-filter { display: flex; gap: 6px; align-items: center; }
-    .grade-filter-label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 1.5px; color: var(--text-muted); text-transform: uppercase; }
+    .grade-filter { display: flex; gap: 5px; align-items: center; }
+    .grade-filter-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 1.5px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
     .grade-btn {
-      font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500;
-      padding: 5px 12px; border-radius: 6px; border: 1px solid var(--border);
-      background: var(--surface); color: var(--text-muted); cursor: pointer; transition: all 0.15s;
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      padding: 5px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.15s;
     }
     .grade-btn:hover { border-color: var(--border2); color: var(--text); }
     .grade-btn.active-ALL { background: var(--gold-dim); color: var(--gold); border-color: rgba(201,168,76,0.5); }
@@ -293,144 +374,156 @@
     .grade-btn.active-B   { background: rgba(201,168,76,0.15);  color: var(--warning); border-color: rgba(201,168,76,0.5); }
     .grade-btn.active-C   { background: rgba(201,122,109,0.15); color: var(--danger);  border-color: rgba(201,122,109,0.5); }
 
-    /* ── Top bar (result + expand) ── */
-    .topbar {
+    /* ── RESULT ROW ── */
+    .result-row {
       display: flex;
       align-items: center;
-      gap: 10px;
+      justify-content: space-between;
       margin-bottom: 16px;
     }
-    .result-info { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-muted); flex: 1; }
+    .result-info {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
     .result-info strong { color: var(--gold); }
     .expand-all-btn {
-      font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 1px; text-transform: uppercase;
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 6px; padding: 6px 12px; color: var(--text-muted); cursor: pointer; transition: all 0.15s;
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 6px 12px;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.15s;
     }
     .expand-all-btn:hover { border-color: var(--border2); color: var(--text); }
 
-    /* ── Info banner ── */
-    .tab-info-banner {
-      display: flex; align-items: center; gap: 10px;
-      padding: 10px 16px; border-radius: 8px;
-      margin-bottom: 16px; font-size: 12px; font-family: 'DM Mono', monospace;
-    }
-    .tab-info-banner.blue   { background: rgba(122,159,201,0.08); border: 1px solid rgba(122,159,201,0.25); color: var(--blue); }
-    .tab-info-banner.teal   { background: rgba(109,185,176,0.08); border: 1px solid rgba(109,185,176,0.25); color: var(--teal); }
-    .tab-info-banner.purple { background: rgba(160,122,201,0.08); border: 1px solid rgba(160,122,201,0.25); color: var(--purple); }
-    .tab-info-banner.rose   { background: rgba(201,122,159,0.08); border: 1px solid rgba(201,122,159,0.25); color: var(--rose); }
-    .tab-info-banner.green  { background: rgba(109,185,138,0.08); border: 1px solid rgba(109,185,138,0.25); color: var(--success); }
-    .tab-info-banner.orange { background: rgba(201,144,109,0.08); border: 1px solid rgba(201,144,109,0.25); color: #c9906d; }
-    .tab-info-banner.gray   { background: rgba(168,152,128,0.08); border: 1px solid rgba(168,152,128,0.25); color: var(--text-mid); }
-
-    .tab-info-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
-    .tab-info-dot.blue   { background: var(--blue); }
-    .tab-info-dot.teal   { background: var(--teal); }
-    .tab-info-dot.purple { background: var(--purple); }
-    .tab-info-dot.rose   { background: var(--rose); }
-    .tab-info-dot.green  { background: var(--success); }
-    .tab-info-dot.orange { background: #c9906d; }
-    .tab-info-dot.gray   { background: var(--text-mid); }
-
-    /* ── Cards ── */
-    .reg-list { display: flex; flex-direction: column; gap: 10px; }
+    /* ── ACCORDION CARDS ── */
+    .reg-list, .jobgroup-list { display: flex; flex-direction: column; gap: 10px; }
 
     .reg-card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 12px; overflow: hidden; transition: border-color 0.2s;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: border-color 0.2s;
     }
     .reg-card:hover { border-color: var(--border2); }
-    .reg-card.expanded           { border-color: var(--gold); }
+    .reg-card.expanded { border-color: var(--gold); }
     .reg-card.blue-card.expanded   { border-color: var(--blue); }
     .reg-card.teal-card.expanded   { border-color: var(--teal); }
     .reg-card.purple-card.expanded { border-color: var(--purple); }
-    .reg-card.rose-card.expanded   { border-color: var(--rose); }
-    .reg-card.green-card.expanded  { border-color: var(--success); }
-    .reg-card.orange-card.expanded { border-color: #c9906d; }
+    .reg-card.pink-card.expanded   { border-color: var(--pink); }
+    .reg-card.green-card.expanded  { border-color: var(--green); }
+    .reg-card.orange-card.expanded { border-color: var(--orange); }
     .reg-card.gray-card.expanded   { border-color: var(--text-mid); }
 
     .reg-card-header {
-      display: flex; align-items: center; gap: 16px;
-      padding: 16px 20px; cursor: pointer; user-select: none;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 18px;
+      cursor: pointer;
+      user-select: none;
     }
-    .reg-num { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-muted); width: 24px; flex-shrink: 0; }
-    .reg-title { font-family: 'Noto Serif KR', serif; font-size: 15px; font-weight: 700; color: var(--text); flex: 1; }
+    .reg-num {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--text-muted);
+      width: 22px;
+      flex-shrink: 0;
+    }
+    .reg-title {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      flex: 1;
+    }
     .reg-count-badge {
-      font-family: 'DM Mono', monospace; font-size: 11px;
-      background: var(--surface2); border: 1px solid var(--border);
-      color: var(--text-muted); border-radius: 6px; padding: 3px 10px;
-      white-space: nowrap; flex-shrink: 0;
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      border-radius: 6px;
+      padding: 3px 9px;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
-    .reg-card.expanded .reg-count-badge           { border-color: var(--gold);       color: var(--gold);       background: var(--gold-dim); }
-    .reg-card.blue-card.expanded .reg-count-badge   { border-color: var(--blue);       color: var(--blue);       background: var(--blue-dim); }
-    .reg-card.teal-card.expanded .reg-count-badge   { border-color: var(--teal);       color: var(--teal);       background: var(--teal-dim); }
-    .reg-card.purple-card.expanded .reg-count-badge { border-color: var(--purple);     color: var(--purple);     background: var(--purple-dim); }
-    .reg-card.rose-card.expanded .reg-count-badge   { border-color: var(--rose);       color: var(--rose);       background: var(--rose-dim); }
-    .reg-card.green-card.expanded .reg-count-badge  { border-color: var(--success);    color: var(--success);    background: rgba(109,185,138,0.12); }
-    .reg-card.orange-card.expanded .reg-count-badge { border-color: #c9906d;           color: #c9906d;           background: rgba(201,144,109,0.12); }
-    .reg-card.gray-card.expanded .reg-count-badge   { border-color: var(--text-mid);   color: var(--text-mid);   background: rgba(168,152,128,0.12); }
+    .reg-card.expanded .reg-count-badge { border-color: var(--gold); color: var(--gold); background: var(--gold-dim); }
+    .reg-card.blue-card.expanded   .reg-count-badge { border-color: var(--blue);     color: var(--blue);     background: var(--blue-dim); }
+    .reg-card.teal-card.expanded   .reg-count-badge { border-color: var(--teal);     color: var(--teal);     background: var(--teal-dim); }
+    .reg-card.purple-card.expanded .reg-count-badge { border-color: var(--purple);   color: var(--purple);   background: var(--purple-dim); }
+    .reg-card.pink-card.expanded   .reg-count-badge { border-color: var(--pink);     color: var(--pink);     background: var(--pink-dim); }
+    .reg-card.green-card.expanded  .reg-count-badge { border-color: var(--green);    color: var(--green);    background: var(--green-dim); }
+    .reg-card.orange-card.expanded .reg-count-badge { border-color: var(--orange);   color: var(--orange);   background: var(--orange-dim); }
+    .reg-card.gray-card.expanded   .reg-count-badge { border-color: var(--text-mid); color: var(--text-mid); background: var(--surface3); }
 
     .toggle-arrow {
-      width: 20px; height: 20px; display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0; transition: transform 0.25s;
+      width: 18px; height: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: transform 0.25s;
     }
-    .reg-card.expanded .toggle-arrow { transform: rotate(180deg); }
+    .reg-card.expanded .toggle-arrow,
+    .jg-card.expanded  .toggle-arrow { transform: rotate(180deg); }
 
-    .reg-card-body { max-height: 0; overflow: hidden; transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1); }
-    .reg-card-body-inner { padding: 0 20px 20px; border-top: 1px solid var(--border); }
-
-    /* ── Item cards ── */
-    .item-list { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
-    .item-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
-    .item-card-header {
-      display: flex; align-items: center; gap: 10px;
-      padding: 10px 14px; background: var(--surface3); border-bottom: 1px solid var(--border);
+    .reg-card-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1);
     }
-    .item-idx { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-muted); }
-    .grade-badge { font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500; padding: 2px 8px; border-radius: 4px; }
-    .grade-A       { background: rgba(109,185,138,0.15); color: var(--success); border: 1px solid rgba(109,185,138,0.3); }
-    .grade-B       { background: rgba(201,168,76,0.15);  color: var(--warning); border: 1px solid rgba(201,168,76,0.3); }
-    .grade-C       { background: rgba(201,122,109,0.15); color: var(--danger);  border: 1px solid rgba(201,122,109,0.3); }
-    .grade-default { background: var(--surface2); color: var(--text-muted); border: 1px solid var(--border); }
-    .item-division { font-size: 11px; color: var(--text-muted); font-weight: 400; }
-
-    .field-rows { padding: 14px; display: flex; flex-direction: column; gap: 0; }
-    .field-row {
-      display: grid; grid-template-columns: 100px 1fr; gap: 0;
-      border-bottom: 1px solid var(--border); min-height: 36px;
+    .reg-card-body-inner {
+      padding: 0 18px 18px;
+      border-top: 1px solid var(--border);
     }
-    .field-row:last-child { border-bottom: none; }
-    .field-label {
-      font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-muted);
-      letter-spacing: 0.5px; padding: 10px 12px 10px 0;
-      border-right: 1px solid var(--border);
-      display: flex; align-items: flex-start; text-transform: uppercase;
-    }
-    .field-value { font-size: 13px; color: var(--text); padding: 10px 0 10px 14px; line-height: 1.6; word-break: break-word; }
-    .field-value.empty { color: var(--text-muted); font-style: italic; }
 
-    /* ── Jobgroup view ── */
-    .jobgroup-list { display: flex; flex-direction: column; gap: 10px; }
+    /* ── JOB GROUP CARDS ── */
     .jg-card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 12px; overflow: hidden; transition: border-color 0.2s;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: border-color 0.2s;
     }
     .jg-card:hover { border-color: var(--border2); }
     .jg-card.expanded { border-color: var(--gold); }
+
     .jg-card-header {
-      display: flex; align-items: center; gap: 14px;
-      padding: 16px 20px; cursor: pointer; user-select: none;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 18px;
+      cursor: pointer;
+      user-select: none;
     }
-    .jg-num  { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-muted); width: 24px; flex-shrink: 0; }
-    .jg-name { font-family: 'Noto Serif KR', serif; font-size: 15px; font-weight: 700; color: var(--text); flex: 1; }
+    .jg-num  { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-muted); width: 22px; flex-shrink: 0; }
+    .jg-name { font-family: 'Noto Serif KR', serif; font-size: 14px; font-weight: 700; color: var(--text); flex: 1; }
     .jg-count {
       font-family: 'DM Mono', monospace; font-size: 11px;
       background: var(--surface2); border: 1px solid var(--border);
-      color: var(--text-muted); border-radius: 6px; padding: 3px 10px; white-space: nowrap; flex-shrink: 0;
+      color: var(--text-muted); border-radius: 6px;
+      padding: 3px 9px; white-space: nowrap; flex-shrink: 0;
     }
     .jg-card.expanded .jg-count { border-color: var(--gold); color: var(--gold); background: var(--gold-dim); }
-    .jg-card-body { max-height: 0; overflow: hidden; transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1); }
-    .jg-card-body-inner { padding: 0 20px 20px; border-top: 1px solid var(--border); }
+
+    .jg-card-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1);
+    }
+    .jg-card-body-inner {
+      padding: 0 18px 18px;
+      border-top: 1px solid var(--border);
+    }
+
     .jg-reg-group { margin-top: 14px; }
     .jg-reg-title {
       font-size: 12px; font-weight: 700; color: var(--gold);
@@ -439,67 +532,115 @@
       font-family: 'Noto Serif KR', serif;
     }
 
-    /* ── Loading / Error ── */
+    /* ── ITEM CARDS ── */
+    .item-list { display: flex; flex-direction: column; gap: 10px; margin-top: 14px; }
+
+    .item-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .item-card-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: var(--surface3);
+      border-bottom: 1px solid var(--border);
+    }
+    .item-idx { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-muted); }
+    .grade-badge {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      font-weight: 500;
+      padding: 2px 7px;
+      border-radius: 4px;
+    }
+    .grade-A { background: rgba(109,185,138,0.15); color: var(--success); border: 1px solid rgba(109,185,138,0.3); }
+    .grade-B { background: rgba(201,168,76,0.15);  color: var(--warning); border: 1px solid rgba(201,168,76,0.3); }
+    .grade-C { background: rgba(201,122,109,0.15); color: var(--danger);  border: 1px solid rgba(201,122,109,0.3); }
+    .grade-default { background: var(--surface2); color: var(--text-muted); border: 1px solid var(--border); }
+
+    .item-division { font-size: 11px; color: var(--text-muted); }
+
+    .field-rows { padding: 12px; display: flex; flex-direction: column; gap: 0; }
+    .field-row {
+      display: grid;
+      grid-template-columns: 90px 1fr;
+      gap: 0;
+      border-bottom: 1px solid var(--border);
+      min-height: 34px;
+    }
+    .field-row:last-child { border-bottom: none; }
+    .field-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+      padding: 8px 10px 8px 0;
+      border-right: 1px solid var(--border);
+      display: flex;
+      align-items: flex-start;
+      text-transform: uppercase;
+    }
+    .field-value {
+      font-size: 12px;
+      color: var(--text);
+      padding: 8px 0 8px 12px;
+      line-height: 1.6;
+      word-break: break-word;
+    }
+    .field-value.empty { color: var(--text-muted); font-style: italic; }
+
+    /* ── LOADING / ERROR ── */
     .loading-screen, .error-screen {
       display: flex; flex-direction: column;
       align-items: center; justify-content: center;
       min-height: 60vh; gap: 16px; text-align: center;
-      width: 100%;
     }
     .spinner {
-      width: 40px; height: 40px;
+      width: 36px; height: 36px;
       border: 2px solid var(--border);
       border-top-color: var(--gold);
       border-radius: 50%;
       animation: spin 0.9s linear infinite;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
-    .loading-text { color: var(--text-muted); font-size: 13px; font-family: 'DM Mono', monospace; letter-spacing: 1px; }
+    .loading-text { color: var(--text-muted); font-size: 12px; font-family: 'DM Mono', monospace; letter-spacing: 1px; }
+
     .error-box {
       background: rgba(201,122,109,0.08);
       border: 1px solid rgba(201,122,109,0.3);
-      border-radius: 12px; padding: 24px 32px;
-      color: var(--danger); font-size: 13px; max-width: 480px; line-height: 1.7;
+      border-radius: 12px;
+      padding: 24px 32px;
+      color: var(--danger);
+      font-size: 13px;
+      max-width: 480px;
+      line-height: 1.7;
     }
     .empty-state {
-      text-align: center; padding: 48px;
-      color: var(--text-muted); font-size: 13px; font-family: 'DM Mono', monospace;
+      text-align: center;
+      padding: 48px;
+      color: var(--text-muted);
+      font-size: 13px;
+      font-family: 'DM Mono', monospace;
     }
 
-    /* ── Mobile ── */
-    @media (max-width: 860px) {
-      .app-layout { flex-direction: column; }
-      .sidebar {
-        width: 100%; position: static; height: auto;
-        flex-direction: row; overflow-x: auto; overflow-y: hidden;
-        padding: 0; border-right: none; border-bottom: 1px solid var(--border);
-        scrollbar-width: none;
-      }
-      .sidebar::-webkit-scrollbar { display: none; }
-      .sidebar-section-label { display: none; }
-      .sidebar-divider { display: none; }
-      .tab-btn {
-        flex-shrink: 0; white-space: nowrap;
-        border-left: none; border-bottom: 2px solid transparent;
-        padding: 12px 16px;
-      }
-      .tab-btn.active            { border-bottom-color: var(--gold); }
-      .tab-btn.active.blue-tab   { border-bottom-color: var(--blue); }
-      .tab-btn.active.teal-tab   { border-bottom-color: var(--teal); }
-      .tab-btn.active.purple-tab { border-bottom-color: var(--purple); }
-      .tab-btn.active.rose-tab   { border-bottom-color: var(--rose); }
-      .tab-btn.active.green-tab  { border-bottom-color: var(--success); }
-      .tab-btn.active.orange-tab { border-bottom-color: #c9906d; }
-      .tab-btn.active.gray-tab   { border-bottom-color: var(--text-mid); }
-      .tab-dot { display: none; }
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .sidebar { display: none !important; }
+      .mobile-tabs { display: flex !important; }
+      .main-area { padding: 16px; }
       .stats-bar { grid-template-columns: repeat(2, 1fr); }
-      .main-content { padding: 16px; }
-    }
-    @media (max-width: 480px) {
-      header { padding: 12px 16px; }
-      .header-status .status-text { display: none; }
-      .field-row { grid-template-columns: 72px 1fr; }
+      .field-row { grid-template-columns: 70px 1fr; }
       .grade-filter-label { display: none; }
+      .header-status .status-text { display: none; }
+    }
+
+    @media (min-width: 769px) {
+      .mobile-tabs { display: none !important; }
+      .sidebar { display: flex !important; }
     }
   </style>
 </head>
@@ -520,141 +661,110 @@
   </div>
 </header>
 
-<div id="loadingScreen" class="loading-screen" style="min-height:calc(100vh - 61px);">
-  <div class="spinner"></div>
-  <div class="loading-text">loading data...</div>
+<!-- 모바일 가로 스크롤 탭 -->
+<div class="mobile-tabs" id="mobileTabs">
+  <button class="mobile-tab-btn active"        data-tab="all">       전체 <span class="mobile-badge" id="mb-all">0</span></button>
+  <button class="mobile-tab-btn"               data-tab="jobgroup">  직군별 <span class="mobile-badge" id="mb-jobgroup">0</span></button>
+  <button class="mobile-tab-btn purple-tab"    data-tab="doctor">    의사 <span class="mobile-badge" id="mb-doctor">0</span></button>
+  <button class="mobile-tab-btn pink-tab"      data-tab="nurse">     간호사 <span class="mobile-badge" id="mb-nurse">0</span></button>
+  <button class="mobile-tab-btn green-tab"     data-tab="pharm">     약사 <span class="mobile-badge" id="mb-pharm">0</span></button>
+  <button class="mobile-tab-btn orange-tab"    data-tab="guardian">  보호자 <span class="mobile-badge" id="mb-guardian">0</span></button>
+  <button class="mobile-tab-btn gray-tab"      data-tab="etc">       기타 직군 <span class="mobile-badge" id="mb-etc">0</span></button>
+  <button class="mobile-tab-btn blue-tab"      data-tab="question">  질문 <span class="mobile-badge" id="mb-question">0</span></button>
+  <button class="mobile-tab-btn teal-tab"      data-tab="review">    규정 검토 <span class="mobile-badge" id="mb-review">0</span></button>
 </div>
 
-<div id="errorScreen" class="error-screen" style="display:none; min-height:calc(100vh - 61px);">
-  <div class="error-box" id="errorMsg"></div>
-</div>
+<div class="app-body">
 
-<div id="mainContent" class="app-layout" style="display:none;">
-
-  <!-- ── Sidebar ── -->
+  <!-- 데스크탑 사이드바 -->
   <nav class="sidebar" id="sidebar">
-    <div class="sidebar-section-label">전체 보기</div>
-    <button class="tab-btn active"       data-tab="all"       id="tabAll">      <span class="tab-dot"></span><span class="tab-label">전체</span>      <span class="tab-badge" id="badgeAll">0</span></button>
-    <button class="tab-btn"              data-tab="jobgroup"  id="tabJobgroup"> <span class="tab-dot"></span><span class="tab-label">직군별</span>    <span class="tab-badge" id="badgeJobgroup">0</span></button>
+    <div class="sidebar-section-label">기본 보기</div>
+    <button class="tab-btn active"     data-tab="all">       <span class="tab-dot"></span><span class="tab-label">전체</span>      <span class="tab-badge" id="sb-all">0</span></button>
+    <button class="tab-btn"            data-tab="jobgroup">  <span class="tab-dot"></span><span class="tab-label">직군별</span>    <span class="tab-badge" id="sb-jobgroup">0</span></button>
 
-    <div class="sidebar-divider"></div>
+    <div class="sidebar-sep"></div>
     <div class="sidebar-section-label">직군 필터</div>
-    <button class="tab-btn purple-tab"   data-tab="doc"       id="tabDoc">      <span class="tab-dot"></span><span class="tab-label">의사</span>      <span class="tab-badge" id="badgeDoc">0</span></button>
-    <button class="tab-btn rose-tab"     data-tab="nurse"     id="tabNurse">    <span class="tab-dot"></span><span class="tab-label">간호사</span>    <span class="tab-badge" id="badgeNurse">0</span></button>
-    <button class="tab-btn green-tab"    data-tab="pharm"     id="tabPharm">    <span class="tab-dot"></span><span class="tab-label">약사</span>      <span class="tab-badge" id="badgePharm">0</span></button>
-    <button class="tab-btn orange-tab"   data-tab="guardian"  id="tabGuardian"> <span class="tab-dot"></span><span class="tab-label">보호자</span>    <span class="tab-badge" id="badgeGuardian">0</span></button>
-    <button class="tab-btn gray-tab"     data-tab="other"     id="tabOther">    <span class="tab-dot"></span><span class="tab-label">기타 직군</span><span class="tab-badge" id="badgeOther">0</span></button>
+    <button class="tab-btn purple-tab" data-tab="doctor">    <span class="tab-dot"></span><span class="tab-label">의사</span>      <span class="tab-badge" id="sb-doctor">0</span></button>
+    <button class="tab-btn pink-tab"   data-tab="nurse">     <span class="tab-dot"></span><span class="tab-label">간호사</span>    <span class="tab-badge" id="sb-nurse">0</span></button>
+    <button class="tab-btn green-tab"  data-tab="pharm">     <span class="tab-dot"></span><span class="tab-label">약사</span>      <span class="tab-badge" id="sb-pharm">0</span></button>
+    <button class="tab-btn orange-tab" data-tab="guardian">  <span class="tab-dot"></span><span class="tab-label">보호자</span>    <span class="tab-badge" id="sb-guardian">0</span></button>
+    <button class="tab-btn gray-tab"   data-tab="etc">       <span class="tab-dot"></span><span class="tab-label">기타 직군</span> <span class="tab-badge" id="sb-etc">0</span></button>
 
-    <div class="sidebar-divider"></div>
+    <div class="sidebar-sep"></div>
     <div class="sidebar-section-label">특수 분류</div>
-    <button class="tab-btn blue-tab"     data-tab="question"  id="tabQuestion"> <span class="tab-dot"></span><span class="tab-label">질문</span>      <span class="tab-badge" id="badgeQuestion">0</span></button>
-    <button class="tab-btn teal-tab"     data-tab="review"    id="tabReview">   <span class="tab-dot"></span><span class="tab-label">규정 검토</span><span class="tab-badge" id="badgeReview">0</span></button>
+    <button class="tab-btn blue-tab"   data-tab="question">  <span class="tab-dot"></span><span class="tab-label">질문</span>      <span class="tab-badge" id="sb-question">0</span></button>
+    <button class="tab-btn teal-tab"   data-tab="review">    <span class="tab-dot"></span><span class="tab-label">규정 검토</span> <span class="tab-badge" id="sb-review">0</span></button>
   </nav>
 
-  <!-- ── Main ── -->
-  <div class="main-content">
+  <!-- 메인 콘텐츠 -->
+  <div class="main-area">
 
-    <div class="stats-bar">
-      <div class="stat-card">
-        <div class="stat-label">Total Items</div>
-        <div class="stat-value" id="statTotal">0</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Regulations</div>
-        <div class="stat-value" id="statRegs">0</div>
-      </div>
-      <div class="stat-card blue-accent">
-        <div class="stat-label">Questions</div>
-        <div class="stat-value blue" id="statQuestions">0</div>
-      </div>
-      <div class="stat-card teal-accent">
-        <div class="stat-label">Reviews</div>
-        <div class="stat-value teal" id="statReviews">0</div>
-      </div>
+    <div class="loading-screen" id="loadingScreen">
+      <div class="spinner"></div>
+      <div class="loading-text">loading data...</div>
+    </div>
+    <div class="error-screen" id="errorScreen" style="display:none;">
+      <div class="error-box" id="errorMsg"></div>
     </div>
 
-    <div class="toolbar">
-      <div class="search-wrap">
-        <span class="search-icon">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-          </svg>
-        </span>
-        <input type="text" id="searchInput" placeholder="규정 제목, 조사 항목, 기준 제목으로 검색..."/>
-      </div>
-      <div class="grade-filter">
-        <span class="grade-filter-label">Grade</span>
-        <button class="grade-btn active-ALL" data-grade="">ALL</button>
-        <button class="grade-btn" data-grade="A">A</button>
-        <button class="grade-btn" data-grade="B">B</button>
-        <button class="grade-btn" data-grade="C">C</button>
-      </div>
-    </div>
+    <div id="mainContent" style="display:none;">
 
-    <div class="topbar">
-      <span class="result-info" id="resultInfo"></span>
-      <button class="expand-all-btn" id="expandAllBtn">모두 펼치기</button>
-    </div>
+      <div class="stats-bar">
+        <div class="stat-card">
+          <div class="stat-label">Total Items</div>
+          <div class="stat-value" id="statTotal">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Regulations</div>
+          <div class="stat-value" id="statRegs">0</div>
+        </div>
+        <div class="stat-card blue-accent">
+          <div class="stat-label">Questions</div>
+          <div class="stat-value blue" id="statQuestions">0</div>
+        </div>
+        <div class="stat-card teal-accent">
+          <div class="stat-label">Reviews</div>
+          <div class="stat-value teal" id="statReviews">0</div>
+        </div>
+      </div>
 
-    <!-- Views -->
-    <div id="view-all">
-      <div class="reg-list" id="regList"></div>
-    </div>
-    <div id="view-jobgroup" style="display:none;">
-      <div class="jobgroup-list" id="jobgroupList"></div>
-    </div>
-    <div id="view-question" style="display:none;">
-      <div class="tab-info-banner blue">
-        <div class="tab-info-dot blue"></div>
-        <span>A열(규정제목)에 "질문"이 포함된 항목들만 표시됩니다.</span>
+      <div class="toolbar">
+        <div class="search-wrap">
+          <span class="search-icon">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+          </span>
+          <input type="text" id="searchInput" placeholder="규정 제목, 조사 항목, 기준 제목으로 검색..."/>
+        </div>
+        <div class="grade-filter">
+          <span class="grade-filter-label">Grade</span>
+          <button class="grade-btn active-ALL" data-grade="">ALL</button>
+          <button class="grade-btn" data-grade="A">A</button>
+          <button class="grade-btn" data-grade="B">B</button>
+          <button class="grade-btn" data-grade="C">C</button>
+        </div>
       </div>
-      <div class="reg-list" id="questionList"></div>
-    </div>
-    <div id="view-review" style="display:none;">
-      <div class="tab-info-banner teal">
-        <div class="tab-info-dot teal"></div>
-        <span>B열(직군)에 "규정 검토"가 포함된 항목들만 표시됩니다.</span>
-      </div>
-      <div class="reg-list" id="reviewList"></div>
-    </div>
-    <div id="view-doc" style="display:none;">
-      <div class="tab-info-banner purple">
-        <div class="tab-info-dot purple"></div>
-        <span>B열(직군)에 "의사"가 포함된 항목들만 표시됩니다.</span>
-      </div>
-      <div class="reg-list" id="docList"></div>
-    </div>
-    <div id="view-nurse" style="display:none;">
-      <div class="tab-info-banner rose">
-        <div class="tab-info-dot rose"></div>
-        <span>B열(직군)에 "간호사"가 포함된 항목들만 표시됩니다.</span>
-      </div>
-      <div class="reg-list" id="nurseList"></div>
-    </div>
-    <div id="view-pharm" style="display:none;">
-      <div class="tab-info-banner green">
-        <div class="tab-info-dot green"></div>
-        <span>B열(직군)에 "약사"가 포함된 항목들만 표시됩니다.</span>
-      </div>
-      <div class="reg-list" id="pharmList"></div>
-    </div>
-    <div id="view-guardian" style="display:none;">
-      <div class="tab-info-banner orange">
-        <div class="tab-info-dot orange"></div>
-        <span>B열(직군)에 "보호자"가 포함된 항목들만 표시됩니다.</span>
-      </div>
-      <div class="reg-list" id="guardianList"></div>
-    </div>
-    <div id="view-other" style="display:none;">
-      <div class="tab-info-banner gray">
-        <div class="tab-info-dot gray"></div>
-        <span>의사 / 간호사 / 약사 / 보호자 / 질문 / 규정검토 외 기타 직군 항목들입니다.</span>
-      </div>
-      <div class="reg-list" id="otherList"></div>
-    </div>
 
-  </div><!-- /main-content -->
-</div><!-- /mainContent -->
+      <div class="result-row">
+        <span class="result-info" id="resultInfo"></span>
+        <button class="expand-all-btn" id="expandAllBtn">모두 펼치기</button>
+      </div>
+
+      <!-- 뷰 컨테이너 -->
+      <div id="view-all">       <div class="reg-list"      id="regList"></div></div>
+      <div id="view-jobgroup"   style="display:none;"><div class="jobgroup-list" id="jobgroupList"></div></div>
+      <div id="view-doctor"     style="display:none;"><div class="reg-list"      id="doctorList"></div></div>
+      <div id="view-nurse"      style="display:none;"><div class="reg-list"      id="nurseList"></div></div>
+      <div id="view-pharm"      style="display:none;"><div class="reg-list"      id="pharmList"></div></div>
+      <div id="view-guardian"   style="display:none;"><div class="reg-list"      id="guardianList"></div></div>
+      <div id="view-etc"        style="display:none;"><div class="reg-list"      id="etcList"></div></div>
+      <div id="view-question"   style="display:none;"><div class="reg-list"      id="questionList"></div></div>
+      <div id="view-review"     style="display:none;"><div class="reg-list"      id="reviewList"></div></div>
+
+    </div>
+  </div>
+</div>
 
 <script>
 (function () {
@@ -670,59 +780,38 @@
     기준이해: 8, 조사내용: 9, 조사목적: 10, 참고자료: 11,
   };
 
+  /* 특수 직군 탭 키워드 */
+  const JOB_TABS = {
+    doctor:   '의사',
+    nurse:    '간호사',
+    pharm:    '약사',
+    guardian: '보호자',
+  };
+  const SPECIAL_JOBS = Object.values(JOB_TABS);
+
   let allRows     = [];
   let currentView = 'all';
   let searchQuery = '';
   let gradeFilter = '';
   let allExpanded = false;
 
-  /* ── 정규화 ── */
-  function norm(str) {
-    return (str || '')
-      .replace(/\uFEFF/g, '')
-      .replace(/\u00A0/g, ' ')
+  /* ── 문자열 정규화 ── */
+  function norm(s) {
+    if (!s) return '';
+    return s
+      .replace(/\ufeff/g, '')
+      .replace(/\u00a0/g, ' ')
       .replace(/\u3000/g, ' ')
       .trim()
       .toLowerCase();
   }
 
-  /* ── 행 분류 ── */
-  function isQuestion(r)  { return norm(r[COL.규정제목]).indexOf('질문') !== -1; }
-  function isReview(r)    { return norm(r[COL.직군]).indexOf('규정 검토') !== -1 || norm(r[COL.직군]).indexOf('규정검토') !== -1; }
-  function isDoc(r)       { return norm(r[COL.직군]).indexOf('의사') !== -1; }
-  function isNurse(r)     { return norm(r[COL.직군]).indexOf('간호사') !== -1; }
-  function isPharm(r)     { return norm(r[COL.직군]).indexOf('약사') !== -1; }
-  function isGuardian(r)  { return norm(r[COL.직군]).indexOf('보호자') !== -1; }
-  function isOther(r) {
-    return !isQuestion(r) && !isReview(r) && !isDoc(r) && !isNurse(r) && !isPharm(r) && !isGuardian(r);
-  }
-
-  /* 탭별 필터 함수 맵 */
-  const TAB_FILTER = {
-    all:      function() { return true; },
-    jobgroup: function() { return true; },
-    question: isQuestion,
-    review:   isReview,
-    doc:      isDoc,
-    nurse:    isNurse,
-    pharm:    isPharm,
-    guardian: isGuardian,
-    other:    isOther,
-  };
-
-  /* 탭별 카드 색상 맵 */
-  const TAB_CARD_CLASS = {
-    all: '', jobgroup: '',
-    question: 'blue-card', review: 'teal-card',
-    doc: 'purple-card', nurse: 'rose-card',
-    pharm: 'green-card', guardian: 'orange-card', other: 'gray-card',
-  };
-
   /* ── CSV 파서 ── */
   function parseCSV(text) {
-    var lines = [], cur = '', inQ = false, row = [];
-    for (var i = 0; i < text.length; i++) {
-      var ch = text[i];
+    const lines = [];
+    let cur = '', inQ = false, row = [];
+    for (let i = 0; i < text.length; i++) {
+      const ch = text[i];
       if (ch === '"') {
         if (inQ && text[i+1] === '"') { cur += '"'; i++; }
         else { inQ = !inQ; }
@@ -738,15 +827,42 @@
     return lines;
   }
 
+  /* ── 분류 함수 ── */
+  function isQuestion(r) {
+    return norm(r[COL.규정제목]).indexOf('질문') !== -1;
+  }
+  function isReview(r) {
+    var v = norm(r[COL.직군]);
+    return v.indexOf('규정검토') !== -1 || v.indexOf('규정 검토') !== -1;
+  }
+  function isDoctor(r)   { return !isQuestion(r) && !isReview(r) && norm(r[COL.직군]).indexOf(norm(JOB_TABS.doctor))   !== -1; }
+  function isNurse(r)    { return !isQuestion(r) && !isReview(r) && norm(r[COL.직군]).indexOf(norm(JOB_TABS.nurse))    !== -1; }
+  function isPharm(r)    { return !isQuestion(r) && !isReview(r) && norm(r[COL.직군]).indexOf(norm(JOB_TABS.pharm))    !== -1; }
+  function isGuardian(r) { return !isQuestion(r) && !isReview(r) && norm(r[COL.직군]).indexOf(norm(JOB_TABS.guardian)) !== -1; }
+  function isEtc(r) {
+    if (isQuestion(r) || isReview(r)) return false;
+    var v = norm(r[COL.직군]);
+    for (var i = 0; i < SPECIAL_JOBS.length; i++) {
+      if (v.indexOf(norm(SPECIAL_JOBS[i])) !== -1) return false;
+    }
+    return true;
+  }
+  function isGeneral(r)  { return !isQuestion(r) && !isReview(r); }
+
   /* ── HTML 이스케이프 ── */
   function esc(str) {
     if (!str) return '-';
     return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   }
 
+  /* ── 유틸 ── */
+  function el(id)          { return document.getElementById(id); }
+  function setText(id, v)  { var e = el(id); if (e) e.textContent = v; }
+  function pad(n)          { return String(n).padStart(2, '0'); }
+
   /* ── 데이터 로드 ── */
   async function loadData() {
-    var text = null;
+    let text = null;
     try {
       var res = await fetch(DIRECT_URL);
       if (res.ok) text = await res.text();
@@ -764,40 +880,16 @@
     var rows = parseCSV(text);
     if (rows.length < 2) { showError('시트에 데이터가 없습니다.'); return; }
 
-    allRows = rows.slice(1).filter(function(r){ return r.some(function(c){ return c !== ''; }); });
+    allRows = rows.slice(1).filter(function(r) { return r.some(function(c) { return c !== ''; }); });
     if (!allRows.length) { showError('유효한 데이터 행이 없습니다.'); return; }
 
-    /* 통계 계산 */
-    var qRows  = allRows.filter(isQuestion);
-    var rvRows = allRows.filter(isReview);
-    var regSet = new Set(allRows.map(function(r){ return r[COL.규정제목]; }).filter(Boolean));
-
-    setText('statTotal',     allRows.length.toLocaleString());
-    setText('statRegs',      regSet.size.toLocaleString());
-    setText('statQuestions', qRows.length.toLocaleString());
-    setText('statReviews',   rvRows.length.toLocaleString());
-
-    /* 배지 업데이트 */
-    function badgeCount(filterFn) {
-      var set = new Set(allRows.filter(filterFn).map(function(r){ return r[COL.규정제목]; }).filter(Boolean));
-      return set.size;
-    }
-
-    setText('badgeAll',      regSet.size);
-    setText('badgeJobgroup', new Set(allRows.map(function(r){ return r[COL.직군]; }).filter(Boolean)).size);
-    setText('badgeQuestion', badgeCount(isQuestion));
-    setText('badgeReview',   badgeCount(isReview));
-    setText('badgeDoc',      badgeCount(isDoc));
-    setText('badgeNurse',    badgeCount(isNurse));
-    setText('badgePharm',    badgeCount(isPharm));
-    setText('badgeGuardian', badgeCount(isGuardian));
-    setText('badgeOther',    badgeCount(isOther));
+    updateBadges();
 
     el('statusDot').style.background = '#6db98a';
     el('statusDot').style.animation  = 'none';
     setText('statusText', allRows.length + '개 항목 로드 완료');
     el('loadingScreen').style.display = 'none';
-    el('mainContent').style.display   = 'flex';
+    el('mainContent').style.display   = 'block';
 
     rerender();
   }
@@ -810,25 +902,62 @@
     setText('statusText', '로드 실패');
   }
 
+  /* ── 배지 업데이트 ── */
+  function updateBadges() {
+    var genRows  = allRows.filter(isGeneral);
+    var qRows    = allRows.filter(isQuestion);
+    var rvRows   = allRows.filter(isReview);
+    var drRows   = allRows.filter(isDoctor);
+    var nuRows   = allRows.filter(isNurse);
+    var phRows   = allRows.filter(isPharm);
+    var guRows   = allRows.filter(isGuardian);
+    var etRows   = allRows.filter(isEtc);
+
+    var regSet   = new Set(genRows.map(function(r)  { return r[COL.규정제목]; }).filter(Boolean));
+    var grpSet   = new Set(genRows.map(function(r)  { return r[COL.직군]; }).filter(Boolean));
+
+    setText('statTotal',     allRows.length.toLocaleString());
+    setText('statRegs',      regSet.size.toLocaleString());
+    setText('statQuestions', qRows.length.toLocaleString());
+    setText('statReviews',   rvRows.length.toLocaleString());
+
+    var counts = {
+      all:      regSet.size,
+      jobgroup: grpSet.size,
+      doctor:   drRows.length,
+      nurse:    nuRows.length,
+      pharm:    phRows.length,
+      guardian: guRows.length,
+      etc:      etRows.length,
+      question: qRows.length,
+      review:   rvRows.length,
+    };
+
+    Object.keys(counts).forEach(function(k) {
+      setText('sb-' + k, counts[k]);
+      setText('mb-' + k, counts[k]);
+    });
+  }
+
   /* ── 필터 헬퍼 ── */
   function getFiltered(filterFn) {
     var rows = allRows.filter(filterFn);
     if (gradeFilter) {
-      rows = rows.filter(function(r){ return norm(r[COL.조사항목등급]) === gradeFilter.toLowerCase(); });
+      rows = rows.filter(function(r) { return (r[COL.조사항목등급] || '').toUpperCase() === gradeFilter; });
     }
     if (searchQuery) {
       var q = searchQuery.toLowerCase();
-      rows = rows.filter(function(r){
-        return (r[COL.규정제목]  || '').toLowerCase().indexOf(q) !== -1 ||
-               (r[COL.기준제목]  || '').toLowerCase().indexOf(q) !== -1 ||
-               (r[COL.조사항목]  || '').toLowerCase().indexOf(q) !== -1 ||
-               (r[COL.직군]      || '').toLowerCase().indexOf(q) !== -1;
+      rows = rows.filter(function(r) {
+        return (r[COL.규정제목] || '').toLowerCase().indexOf(q) !== -1 ||
+               (r[COL.기준제목] || '').toLowerCase().indexOf(q) !== -1 ||
+               (r[COL.조사항목] || '').toLowerCase().indexOf(q) !== -1 ||
+               (r[COL.직군]     || '').toLowerCase().indexOf(q) !== -1;
       });
     }
     return rows;
   }
 
-  /* ── 아코디언 렌더 ── */
+  /* ── 규정제목 그룹 아코디언 렌더 ── */
   function renderAccordion(containerId, rows, cardClass) {
     var container = el(containerId);
     container.innerHTML = '';
@@ -836,14 +965,17 @@
       container.innerHTML = '<div class="empty-state">표시할 데이터가 없습니다.</div>';
       updateResultInfo(0); return;
     }
+
     var order = [], groups = {};
-    rows.forEach(function(r){
+    rows.forEach(function(r) {
       var t = r[COL.규정제목] || '(제목 없음)';
       if (!groups[t]) { groups[t] = []; order.push(t); }
       groups[t].push(r);
     });
+
     updateResultInfo(order.length);
-    order.forEach(function(title, idx){
+
+    order.forEach(function(title, idx) {
       var rowSet = groups[title];
       var card = document.createElement('div');
       card.className = 'reg-card' + (cardClass ? ' ' + cardClass : '');
@@ -855,34 +987,37 @@
           '<span class="toggle-arrow"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>' +
         '</div>' +
         '<div class="reg-card-body"><div class="reg-card-body-inner"><div class="item-list">' +
-          rowSet.map(function(r,i){ return itemCardHtml(r,i); }).join('') +
+          rowSet.map(function(r, i) { return itemCardHtml(r, i); }).join('') +
         '</div></div></div>';
-      card.querySelector('.reg-card-header').addEventListener('click', function(){ toggleCard(card); });
+      card.querySelector('.reg-card-header').addEventListener('click', function() { toggleCard(card); });
       container.appendChild(card);
     });
   }
 
-  /* ── 직군별 렌더 ── */
+  /* ── 직군별 아코디언 렌더 ── */
   function renderJobGroup() {
     var container = el('jobgroupList');
     container.innerHTML = '';
-    var filtered = getFiltered(function(){ return true; });
+    var filtered = getFiltered(isGeneral);
     if (!filtered.length) { container.innerHTML = '<div class="empty-state">표시할 데이터가 없습니다.</div>'; return; }
+
     var order = [], byGroup = {};
-    filtered.forEach(function(r){
+    filtered.forEach(function(r) {
       var g = r[COL.직군] || '(직군 없음)';
       if (!byGroup[g]) { byGroup[g] = []; order.push(g); }
       byGroup[g].push(r);
     });
-    order.sort(function(a,b){ return a.localeCompare(b); });
-    order.forEach(function(group, idx){
+    order.sort(function(a,b) { return a.localeCompare(b); });
+
+    order.forEach(function(group, idx) {
       var rows = byGroup[group];
       var regOrder = [], byReg = {};
-      rows.forEach(function(r){
+      rows.forEach(function(r) {
         var t = r[COL.규정제목] || '(제목 없음)';
         if (!byReg[t]) { byReg[t] = []; regOrder.push(t); }
         byReg[t].push(r);
       });
+
       var card = document.createElement('div');
       card.className = 'jg-card';
       card.innerHTML =
@@ -893,12 +1028,12 @@
           '<span class="toggle-arrow"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>' +
         '</div>' +
         '<div class="jg-card-body"><div class="jg-card-body-inner">' +
-          regOrder.map(function(regTitle){
+          regOrder.map(function(regTitle) {
             return '<div class="jg-reg-group"><div class="jg-reg-title">' + esc(regTitle) + '</div>' +
-              '<div class="item-list">' + byReg[regTitle].map(function(r,i){ return itemCardHtml(r,i); }).join('') + '</div></div>';
+              '<div class="item-list">' + byReg[regTitle].map(function(r,i) { return itemCardHtml(r,i); }).join('') + '</div></div>';
           }).join('') +
         '</div></div>';
-      card.querySelector('.jg-card-header').addEventListener('click', function(){ toggleCard(card); });
+      card.querySelector('.jg-card-header').addEventListener('click', function() { toggleCard(card); });
       container.appendChild(card);
     });
   }
@@ -926,7 +1061,7 @@
         '<span class="item-division">' + esc(r[COL.조사항목구분]) + '</span>' +
       '</div>' +
       '<div class="field-rows">' +
-        fields.map(function(f){
+        fields.map(function(f) {
           return '<div class="field-row">' +
             '<div class="field-label">' + f.label + '</div>' +
             '<div class="field-value' + (f.val ? '' : ' empty') + '">' + esc(f.val) + '</div>' +
@@ -935,7 +1070,7 @@
       '</div></div>';
   }
 
-  /* ── 토글 ── */
+  /* ── 아코디언 토글 ── */
   function toggleCard(card) {
     var body  = card.querySelector('.reg-card-body, .jg-card-body');
     var inner = card.querySelector('.reg-card-body-inner, .jg-card-body-inner');
@@ -951,40 +1086,24 @@
   /* ── 탭 전환 ── */
   function switchTab(tab) {
     currentView = tab;
-    var views = ['all','jobgroup','question','review','doc','nurse','pharm','guardian','other'];
-    views.forEach(function(v){
-      el('view-' + v).style.display = v === tab ? 'block' : 'none';
-    });
-    document.querySelectorAll('.tab-btn').forEach(function(btn){
+
+    /* 사이드바 버튼 */
+    document.querySelectorAll('.tab-btn').forEach(function(btn) {
       btn.classList.toggle('active', btn.dataset.tab === tab);
     });
+    /* 모바일 버튼 */
+    document.querySelectorAll('.mobile-tab-btn').forEach(function(btn) {
+      btn.classList.toggle('active', btn.dataset.tab === tab);
+    });
+
+    var views = ['all','jobgroup','doctor','nurse','pharm','guardian','etc','question','review'];
+    views.forEach(function(v) {
+      var viewEl = el('view-' + v);
+      if (viewEl) viewEl.style.display = v === tab ? 'block' : 'none';
+    });
+
     allExpanded = false;
     setText('expandAllBtn', '모두 펼치기');
-  }
-
-  /* ── 전체 재렌더 ── */
-  function rerender() {
-    allExpanded = false;
-    setText('expandAllBtn', '모두 펼치기');
-    renderAccordion('regList',      getFiltered(TAB_FILTER.all),      TAB_CARD_CLASS.all);
-    renderJobGroup();
-    renderAccordion('questionList', getFiltered(TAB_FILTER.question), TAB_CARD_CLASS.question);
-    renderAccordion('reviewList',   getFiltered(TAB_FILTER.review),   TAB_CARD_CLASS.review);
-    renderAccordion('docList',      getFiltered(TAB_FILTER.doc),      TAB_CARD_CLASS.doc);
-    renderAccordion('nurseList',    getFiltered(TAB_FILTER.nurse),    TAB_CARD_CLASS.nurse);
-    renderAccordion('pharmList',    getFiltered(TAB_FILTER.pharm),    TAB_CARD_CLASS.pharm);
-    renderAccordion('guardianList', getFiltered(TAB_FILTER.guardian), TAB_CARD_CLASS.guardian);
-    renderAccordion('otherList',    getFiltered(TAB_FILTER.other),    TAB_CARD_CLASS.other);
-  }
-
-  /* ── 결과 카운트 ── */
-  function updateResultInfo(count) {
-    var infoEl = el('resultInfo');
-    if (searchQuery || gradeFilter) {
-      infoEl.innerHTML = '<strong>' + count + '</strong> 규정 검색됨';
-    } else {
-      infoEl.innerHTML = '<strong>' + count + '</strong> 규정';
-    }
   }
 
   /* ── 모두 펼치기/접기 ── */
@@ -992,12 +1111,14 @@
     allExpanded = !allExpanded;
     setText('expandAllBtn', allExpanded ? '모두 접기' : '모두 펼치기');
     var listMap = {
-      all:'regList', jobgroup:'jobgroupList', question:'questionList',
-      review:'reviewList', doc:'docList', nurse:'nurseList',
-      pharm:'pharmList', guardian:'guardianList', other:'otherList'
+      all: 'regList', jobgroup: 'jobgroupList',
+      doctor: 'doctorList', nurse: 'nurseList',
+      pharm: 'pharmList', guardian: 'guardianList',
+      etc: 'etcList', question: 'questionList', review: 'reviewList',
     };
     var container = el(listMap[currentView]);
-    container.querySelectorAll('.reg-card, .jg-card').forEach(function(card){
+    if (!container) return;
+    container.querySelectorAll('.reg-card, .jg-card').forEach(function(card) {
       var body  = card.querySelector('.reg-card-body, .jg-card-body');
       var inner = card.querySelector('.reg-card-body-inner, .jg-card-body-inner');
       if (allExpanded) {
@@ -1010,38 +1131,58 @@
     });
   }
 
+  /* ── 전체 재렌더 ── */
+  function rerender() {
+    allExpanded = false;
+    setText('expandAllBtn', '모두 펼치기');
+    renderAccordion('regList',      getFiltered(isGeneral),  '');
+    renderAccordion('doctorList',   getFiltered(isDoctor),   'purple-card');
+    renderAccordion('nurseList',    getFiltered(isNurse),    'pink-card');
+    renderAccordion('pharmList',    getFiltered(isPharm),    'green-card');
+    renderAccordion('guardianList', getFiltered(isGuardian), 'orange-card');
+    renderAccordion('etcList',      getFiltered(isEtc),      'gray-card');
+    renderAccordion('questionList', getFiltered(isQuestion), 'blue-card');
+    renderAccordion('reviewList',   getFiltered(isReview),   'teal-card');
+    renderJobGroup();
+  }
+
+  /* ── 결과 정보 ── */
+  function updateResultInfo(count) {
+    var infoEl = el('resultInfo');
+    if (searchQuery || gradeFilter) {
+      infoEl.innerHTML = '<strong>' + count + '</strong> 규정 검색됨';
+    } else {
+      infoEl.innerHTML = '<strong>' + count + '</strong> 규정';
+    }
+  }
+
   /* ── 등급 필터 ── */
   function setGradeFilter(g) {
     gradeFilter = g;
-    document.querySelectorAll('.grade-btn').forEach(function(btn){ btn.className = 'grade-btn'; });
+    document.querySelectorAll('.grade-btn').forEach(function(btn) {
+      btn.className = 'grade-btn';
+    });
     var key = g === '' ? 'ALL' : g;
-    var activeBtn = document.querySelector('.grade-btn[data-grade="' + g + '"]');
-    if (activeBtn) activeBtn.classList.add('active-' + key);
+    document.querySelectorAll('.grade-btn').forEach(function(btn) {
+      if (btn.dataset.grade === g) btn.classList.add('active-' + key);
+    });
     rerender();
   }
 
-  /* ── 유틸 ── */
-  function el(id)         { return document.getElementById(id); }
-  function setText(id, v) { var e = el(id); if(e) e.textContent = v; }
-  function pad(n)         { return String(n).padStart(2, '0'); }
-
-  /* ── 이벤트 ── */
-  el('searchInput').addEventListener('input', function(e){
+  /* ── 이벤트 바인딩 ── */
+  el('searchInput').addEventListener('input', function(e) {
     searchQuery = e.target.value;
     rerender();
   });
 
   el('expandAllBtn').addEventListener('click', toggleExpandAll);
 
-  document.querySelectorAll('.tab-btn').forEach(function(btn){
-    btn.addEventListener('click', function(){
-      switchTab(btn.dataset.tab);
-      rerender();
-    });
+  document.querySelectorAll('.tab-btn, .mobile-tab-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() { switchTab(btn.dataset.tab); });
   });
 
-  document.querySelectorAll('.grade-btn').forEach(function(btn){
-    btn.addEventListener('click', function(){ setGradeFilter(btn.dataset.grade); });
+  document.querySelectorAll('.grade-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() { setGradeFilter(btn.dataset.grade); });
   });
 
   /* ── 시작 ── */
