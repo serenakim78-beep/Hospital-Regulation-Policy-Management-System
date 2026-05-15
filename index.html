@@ -57,16 +57,21 @@
     letter-spacing: 2px;
     text-transform: uppercase;
   }
-  .logo-title { font-size: 16px; font-weight: 700; color: var(--gold); }
-  .topbar-right { display: flex; align-items: center; gap: 16px; }
+  .logo-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--gold);
+  }
+  .topbar-right { display: flex; align-items: center; gap: 12px; }
   #status-dot {
     width: 8px; height: 8px;
     border-radius: 50%;
     background: var(--text3);
     display: inline-block;
     transition: background 0.3s;
+    flex-shrink: 0;
   }
-  #status-dot.ok  { background: #6dbe6d; }
+  #status-dot.ok { background: #6dbe6d; }
   #status-dot.err { background: var(--red); }
   #status-text { font-size: 12px; color: var(--text2); }
   .print-btn {
@@ -79,31 +84,17 @@
     font-size: 12px;
     font-family: inherit;
     transition: all 0.2s;
+    white-space: nowrap;
   }
   .print-btn:hover { border-color: var(--gold); color: var(--gold); }
 
-  /* Debug bar */
-  #debug-bar {
-    background: #1e1408;
-    border-bottom: 2px solid #6a3a00;
-    padding: 10px 24px;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    color: #e8a050;
-    display: none;
-    word-break: break-all;
-    white-space: pre-wrap;
-    max-height: 160px;
-    overflow-y: auto;
-  }
-  #debug-bar.show { display: block; }
-  .debug-line { padding: 2px 0; border-bottom: 1px solid #3a2a10; }
-  .debug-line:last-child { border-bottom: none; }
+  /* ★ debug-bar 완전 숨김 */
+  #debug-bar { display: none !important; }
 
   .layout { display: flex; min-height: calc(100vh - 53px); }
 
   .sidebar {
-    width: 210px;
+    width: 200px;
     flex-shrink: 0;
     background: var(--bg2);
     border-right: 1px solid var(--border);
@@ -114,7 +105,7 @@
     overflow-y: auto;
   }
   .sidebar-section {
-    padding: 0 16px 6px;
+    padding: 0 16px 8px;
     font-size: 10px;
     font-weight: 700;
     letter-spacing: 2px;
@@ -126,13 +117,12 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 8px 16px;
+    padding: 7px 16px;
     cursor: pointer;
     border-left: 3px solid transparent;
     transition: all 0.15s;
     color: var(--text2);
     font-size: 13px;
-    user-select: none;
   }
   .sidebar-item:hover { background: var(--bg3); color: var(--text); }
   .sidebar-item.active {
@@ -148,8 +138,6 @@
     border-radius: 10px;
     font-size: 10px;
     font-family: 'IBM Plex Mono', monospace;
-    min-width: 24px;
-    text-align: center;
   }
   .sidebar-item.active .sidebar-badge { background: var(--gold); color: var(--bg); }
   .sidebar-dot {
@@ -160,18 +148,17 @@
     flex-shrink: 0;
   }
 
-  .main { flex: 1; padding: 24px; overflow-x: hidden; }
+  .main { flex: 1; padding: 24px; overflow-x: hidden; min-width: 0; }
 
   .search-wrap { position: relative; margin-bottom: 20px; }
-  .search-label {
+  .search-icon {
     position: absolute;
     left: 14px;
     top: 50%;
     transform: translateY(-50%);
     color: var(--text3);
-    font-size: 13px;
+    font-size: 14px;
     pointer-events: none;
-    font-family: 'IBM Plex Mono', monospace;
   }
   #search-input {
     width: 100%;
@@ -188,6 +175,7 @@
   #search-input:focus { border-color: var(--gold); }
   #search-input::placeholder { color: var(--text3); }
 
+  /* ★ stat-grid: 데스크탑만 표시 */
   .stat-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -203,7 +191,6 @@
     transition: all 0.2s;
     position: relative;
     overflow: hidden;
-    user-select: none;
   }
   .stat-card:hover { border-color: var(--gold); transform: translateY(-1px); }
   .stat-card.active { border-color: var(--gold); background: var(--bg3); }
@@ -245,6 +232,7 @@
     font-size: 11px;
     font-family: inherit;
     transition: all 0.15s;
+    white-space: nowrap;
   }
   .expand-all-btn:hover { border-color: var(--gold); color: var(--gold); }
 
@@ -266,7 +254,7 @@
     user-select: none;
     gap: 12px;
   }
-  .reg-card-left { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; flex-wrap: wrap; }
+  .reg-card-left { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; }
   .reg-num {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 11px;
@@ -279,7 +267,10 @@
     font-weight: 500;
     color: var(--text);
     flex: 1;
-    min-width: 120px;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   .reg-count-badge {
     background: var(--bg4);
@@ -289,13 +280,13 @@
     font-size: 10px;
     font-family: 'IBM Plex Mono', monospace;
     flex-shrink: 0;
-    white-space: nowrap;
   }
   .reg-chevron {
     color: var(--text3);
-    font-size: 11px;
+    font-size: 10px;
     transition: transform 0.25s;
     flex-shrink: 0;
+    pointer-events: none;
   }
   .reg-card.open .reg-chevron { transform: rotate(180deg); }
   .reg-card-body {
@@ -326,7 +317,7 @@
     font-size: 10px;
     color: var(--text3);
     flex-shrink: 0;
-    width: 30px;
+    width: 28px;
   }
   .grade-badge {
     padding: 2px 8px;
@@ -351,38 +342,42 @@
   }
   .item-chevron {
     color: var(--text3);
-    font-size: 10px;
+    font-size: 9px;
     transition: transform 0.2s;
     flex-shrink: 0;
+    pointer-events: none;
   }
   .item-card.open .item-chevron { transform: rotate(180deg); }
-  .item-body { display: none; padding: 0 14px 12px; }
+  .item-body {
+    display: none;
+    padding: 0 14px 12px;
+  }
   .item-card.open .item-body { display: block; }
 
   .field-rows { display: flex; flex-direction: column; gap: 6px; }
   .field-row {
     display: grid;
-    grid-template-columns: 140px 1fr;
+    grid-template-columns: 130px 1fr;
     border-radius: 6px;
     overflow: hidden;
     border: 1px solid var(--border);
   }
   .field-key {
     background: var(--bg4);
-    padding: 8px 10px;
+    padding: 7px 10px;
     font-size: 11px;
     color: var(--text3);
     font-weight: 500;
-    border-right: 1px solid var(--border);
     display: flex;
     align-items: flex-start;
+    border-right: 1px solid var(--border);
   }
   .field-val {
     background: var(--bg2);
-    padding: 8px 12px;
+    padding: 7px 12px;
     font-size: 12px;
     color: var(--text);
-    line-height: 1.65;
+    line-height: 1.6;
     white-space: pre-wrap;
     word-break: break-word;
   }
@@ -394,13 +389,12 @@
     font-size: 10px;
     font-weight: 500;
     border: 1px solid;
-    white-space: nowrap;
   }
-  .jg-doctor   { background: #1a2a3a; color: var(--doctor);   border-color: #2a4a5a; }
-  .jg-nurse    { background: #1a3020; color: var(--nurse);    border-color: #2a5030; }
-  .jg-pharm    { background: #2a1a28; color: var(--pharm);    border-color: #4a2a48; }
+  .jg-doctor { background: #1a2a3a; color: var(--doctor); border-color: #2a4a5a; }
+  .jg-nurse  { background: #1a3020; color: var(--nurse);  border-color: #2a5030; }
+  .jg-pharm  { background: #2a1a28; color: var(--pharm);  border-color: #4a2a48; }
   .jg-guardian { background: #2a2418; color: var(--guardian); border-color: #4a4428; }
-  .jg-etc      { background: #1a1e2a; color: var(--etc);      border-color: #2a2e4a; }
+  .jg-etc    { background: #1a1e2a; color: var(--etc);    border-color: #2a2e4a; }
   .jg-question { background: #2a2018; color: var(--question); border-color: #4a4030; }
 
   .empty-msg { text-align: center; padding: 60px 20px; color: var(--text3); font-size: 14px; }
@@ -415,26 +409,79 @@
   }
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  .error-box {
-    background: #2a1010;
-    border: 1px solid #5a2020;
-    border-radius: var(--radius);
-    padding: 20px 24px;
-    color: var(--red);
-    font-size: 13px;
-    line-height: 1.8;
-  }
-  .error-box strong { display: block; font-size: 15px; margin-bottom: 10px; }
-  .error-box code {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    background: #1a0808;
-    padding: 2px 6px;
-    border-radius: 4px;
-    color: #e89090;
-    display: block;
-    margin-top: 8px;
-    word-break: break-all;
+  /* =============================================
+     MOBILE RESPONSIVE
+     ============================================= */
+  @media (max-width: 768px) {
+
+    /* ★ 1번 빨간박스: stat-grid 완전 숨김 */
+    .stat-grid { display: none !important; }
+
+    /* ★ 2번 빨간박스: debug-bar 완전 숨김 (이미 위에서 처리) */
+
+    /* topbar 모바일 최적화 */
+    #topbar { padding: 10px 14px; }
+    .logo-badge { display: none; }
+    .logo-title { font-size: 14px; }
+    #status-text { display: none; }
+
+    /* 레이아웃: 사이드바 숨기고 상단 탭바로 변경 */
+    .layout { flex-direction: column; }
+    .sidebar {
+      width: 100%;
+      height: auto;
+      position: static;
+      border-right: none;
+      border-bottom: 1px solid var(--border);
+      padding: 8px 0 0;
+      display: flex;
+      flex-direction: row;
+      overflow-x: auto;
+      overflow-y: hidden;
+      gap: 0;
+      -webkit-overflow-scrolling: touch;
+    }
+    .sidebar::-webkit-scrollbar { display: none; }
+    .sidebar-section { display: none; }
+    .sidebar-item {
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 14px;
+      border-left: none;
+      border-bottom: 3px solid transparent;
+      white-space: nowrap;
+      flex-shrink: 0;
+      gap: 4px;
+      font-size: 12px;
+    }
+    .sidebar-item.active {
+      border-left: none;
+      border-bottom: 3px solid var(--gold);
+      background: var(--bg3);
+    }
+    .sidebar-dot { display: none; }
+    .sidebar-badge {
+      font-size: 9px;
+      padding: 1px 5px;
+    }
+
+    /* 메인 패딩 줄이기 */
+    .main { padding: 14px; }
+
+    /* field-row 모바일: 키/값 세로 배열 */
+    .field-row {
+      grid-template-columns: 1fr;
+    }
+    .field-key {
+      border-right: none;
+      border-bottom: 1px solid var(--border);
+      padding: 5px 10px;
+    }
+
+    /* reg-card 직군 태그 줄바꿈 허용 */
+    .reg-card-header { flex-wrap: wrap; }
+    .reg-title { white-space: normal; }
   }
 
   @media print {
@@ -449,7 +496,7 @@
 <div id="topbar">
   <div style="display:flex;align-items:center;gap:12px;">
     <div>
-      <div class="logo-badge">REGULATION VIEWER v3</div>
+      <div class="logo-badge">REGULATION VIEWER V3</div>
       <div class="logo-title">한서재활요양병원 규정</div>
     </div>
   </div>
@@ -467,86 +514,95 @@
     <div class="sidebar-section">기본 보기</div>
     <div class="sidebar-item active" data-tab="all">
       <span><span class="sidebar-dot" style="background:var(--gold)"></span>전체</span>
-      <span class="sidebar-badge" id="sb-all">-</span>
+      <span class="sidebar-badge" id="sb-all">0</span>
     </div>
     <div class="sidebar-item" data-tab="review">
       <span><span class="sidebar-dot" style="background:#888"></span>규정 검토</span>
-      <span class="sidebar-badge" id="sb-review">-</span>
+      <span class="sidebar-badge" id="sb-review">0</span>
     </div>
     <div class="sidebar-section">직군 분류</div>
+    <div class="sidebar-item" data-tab="jg">
+      <span><span class="sidebar-dot" style="background:var(--gold)"></span>직군별</span>
+      <span class="sidebar-badge" id="sb-jg">0</span>
+    </div>
     <div class="sidebar-item" data-tab="doctor">
       <span><span class="sidebar-dot" style="background:var(--doctor)"></span>의사</span>
-      <span class="sidebar-badge" id="sb-doctor">-</span>
+      <span class="sidebar-badge" id="sb-doctor">0</span>
     </div>
     <div class="sidebar-item" data-tab="nurse">
       <span><span class="sidebar-dot" style="background:var(--nurse)"></span>간호사</span>
-      <span class="sidebar-badge" id="sb-nurse">-</span>
+      <span class="sidebar-badge" id="sb-nurse">0</span>
     </div>
     <div class="sidebar-item" data-tab="pharm">
       <span><span class="sidebar-dot" style="background:var(--pharm)"></span>약사</span>
-      <span class="sidebar-badge" id="sb-pharm">-</span>
+      <span class="sidebar-badge" id="sb-pharm">0</span>
     </div>
     <div class="sidebar-item" data-tab="guardian">
       <span><span class="sidebar-dot" style="background:var(--guardian)"></span>보호자</span>
-      <span class="sidebar-badge" id="sb-guardian">-</span>
+      <span class="sidebar-badge" id="sb-guardian">0</span>
     </div>
     <div class="sidebar-item" data-tab="etc">
-      <span><span class="sidebar-dot" style="background:var(--etc)"></span>기타 직군</span>
-      <span class="sidebar-badge" id="sb-etc">-</span>
+      <span><span class="sidebar-dot" style="background:var(--etc)"></span>기타</span>
+      <span class="sidebar-badge" id="sb-etc">0</span>
     </div>
     <div class="sidebar-section">특수 분류</div>
     <div class="sidebar-item" data-tab="question">
       <span><span class="sidebar-dot" style="background:var(--question)"></span>질문</span>
-      <span class="sidebar-badge" id="sb-question">-</span>
+      <span class="sidebar-badge" id="sb-question">0</span>
     </div>
   </div>
 
   <div class="main">
     <div class="search-wrap">
-      <span class="search-label">/</span>
-      <input type="text" id="search-input"
-        placeholder="규정 제목, 기준 제목, 조사 항목, 직군으로 검색... (단축키: /)" />
+      <span class="search-icon">S</span>
+      <input type="text" id="search-input" placeholder="규정 제목, 항목, 직군으로 검색... (단축키: /)" />
     </div>
 
+    <!-- stat-grid: 데스크탑만 표시 -->
     <div class="stat-grid" id="stat-grid">
       <div class="stat-card active" data-tab="all">
         <div class="stat-label">ALL</div>
-        <div class="stat-num" id="sc-all">-</div>
+        <div class="stat-num" id="sc-all">0</div>
         <div class="stat-name">전체</div>
       </div>
       <div class="stat-card" data-tab="review">
         <div class="stat-label">REVIEW</div>
-        <div class="stat-num" id="sc-review">-</div>
+        <div class="stat-num" id="sc-review">0</div>
         <div class="stat-name">규정 검토</div>
+      </div>
+      <div class="stat-card" data-tab="jg">
+        <div class="stat-label">JOB GROUP</div>
+        <div class="stat-num" id="sc-jg">0</div>
+        <div class="stat-name">직군별</div>
       </div>
       <div class="stat-card" data-tab="doctor">
         <div class="stat-label">DOCTOR</div>
-        <div class="stat-num" id="sc-doctor">-</div>
+        <div class="stat-num" id="sc-doctor">0</div>
         <div class="stat-name">의사</div>
       </div>
       <div class="stat-card" data-tab="nurse">
         <div class="stat-label">NURSE</div>
-        <div class="stat-num" id="sc-nurse">-</div>
+        <div class="stat-num" id="sc-nurse">0</div>
         <div class="stat-name">간호사</div>
       </div>
       <div class="stat-card" data-tab="pharm">
         <div class="stat-label">PHARMACIST</div>
-        <div class="stat-num" id="sc-pharm">-</div>
+        <div class="stat-num" id="sc-pharm">0</div>
         <div class="stat-name">약사</div>
       </div>
       <div class="stat-card" data-tab="guardian">
         <div class="stat-label">GUARDIAN</div>
-        <div class="stat-num" id="sc-guardian">-</div>
+        <div class="stat-num" id="sc-guardian">0</div>
         <div class="stat-name">보호자</div>
       </div>
       <div class="stat-card" data-tab="etc">
         <div class="stat-label">ETC</div>
-        <div class="stat-num" id="sc-etc">-</div>
+        <div class="stat-num" id="sc-etc">0</div>
         <div class="stat-name">기타 직군</div>
       </div>
       <div class="stat-card" data-tab="question">
         <div class="stat-label">QUESTION</div>
-        <div class="stat-num" id="sc-question">-</div>
+        <div class="stat-num" id="sc-question">0</div>
         <div class="stat-name">질문</div>
       </div>
     </div>
@@ -561,26 +617,22 @@
 </div>
 
 <script>
-// ============================================================
-// CONFIG  -  새 시트 ID 적용
-// ============================================================
 const SHEET_ID   = '18dDgxsczklu9FRm053w2rqLDFDjqm7C18rijuyJdrkI';
-const SHEET_NAME = 'Sheet1';   // 시트 탭 이름 (필요시 변경)
+const SHEET_NAME = 'Sheet1';
 
-// 열 인덱스 (0부터 시작, A=0 B=1 ...)
 const COL = {
-  REG_TITLE:   0,   // A: 규정 제목
-  JOB_GROUP:   1,   // B: 직군
-  GRADE:       2,   // C: 등급
-  CATEGORY:    3,   // D: 조사항목 구분
-  CHAPTER:     4,   // E: 조사항목 장
-  CRIT_TITLE:  5,   // F: 기준 제목
-  STANDARD:    6,   // G: 기준(Standard)
-  SURVEY_ITEM: 7,   // H: 조사 항목
-  CRIT_UNDER:  8,   // I: 기준 이해
-  SURVEY_CONT: 9,   // J: 조사 내용
-  SURVEY_OBJ:  10,  // K: 조사 목적
-  REFERENCE:   11   // L: 참고자료
+  REG_TITLE:   0,
+  JOB_GROUP:   1,
+  GRADE:       2,
+  CATEGORY:    3,
+  CHAPTER:     4,
+  CRIT_TITLE:  5,
+  STANDARD:    6,
+  SURVEY_ITEM: 7,
+  CRIT_UNDER:  8,
+  SURVEY_CONT: 9,
+  SURVEY_OBJ:  10,
+  REFERENCE:   11
 };
 
 const FIELD_LABELS = [
@@ -588,7 +640,7 @@ const FIELD_LABELS = [
   { key: COL.CATEGORY,    label: '조사항목 구분' },
   { key: COL.CHAPTER,     label: '조사항목 장' },
   { key: COL.CRIT_TITLE,  label: '기준 제목' },
-  { key: COL.STANDARD,    label: '기준 (Standard)' },
+  { key: COL.STANDARD,    label: '기준(Standard)' },
   { key: COL.SURVEY_ITEM, label: '조사 항목' },
   { key: COL.CRIT_UNDER,  label: '기준 이해' },
   { key: COL.SURVEY_CONT, label: '조사 내용' },
@@ -596,311 +648,137 @@ const FIELD_LABELS = [
   { key: COL.REFERENCE,   label: '참고자료' }
 ];
 
-// ============================================================
-// STATE
-// ============================================================
 let allRows    = [];
 let currentTab = 'all';
-let debugLines = [];
 
-// ============================================================
-// DEBUG
-// ============================================================
-function addDebug(msg) {
-  debugLines.push(msg);
-  const bar = document.getElementById('debug-bar');
-  bar.className = 'show';
-  bar.innerHTML = debugLines.map(l =>
-    '<div class="debug-line">' + escHtml(l) + '</div>'
-  ).join('');
-  bar.scrollTop = bar.scrollHeight;
-}
-
-// ============================================================
-// FETCH  -  CSV 방식 우선 (가장 안정적)
-// ============================================================
+// =============================================
+// FETCH
+// =============================================
 async function fetchSheet() {
-  addDebug('[INIT] Sheet ID: ' + SHEET_ID);
-  addDebug('[INIT] Sheet Name: ' + SHEET_NAME);
-
-  // 방법 1: CSV export
   try {
-    addDebug('[TRY] CSV export 방식...');
     await fetchViaCsv();
-    return;
   } catch(e1) {
-    addDebug('[FAIL] CSV 방식 실패: ' + e1.message);
-  }
-
-  // 방법 2: gviz JSON
-  try {
-    addDebug('[TRY] gviz JSON 방식...');
-    await fetchViaGviz();
-    return;
-  } catch(e2) {
-    addDebug('[FAIL] gviz 방식 실패: ' + e2.message);
-  }
-
-  // 모두 실패
-  showError(
-    '데이터를 불러올 수 없습니다.',
-    '구글 시트가 "링크가 있는 모든 사용자" 공개 설정인지 확인해주세요.',
-    'Sheet ID: ' + SHEET_ID
-  );
-}
-
-// ---- CSV 방식 ----
-async function fetchViaCsv() {
-  const url = 'https://docs.google.com/spreadsheets/d/'
-    + SHEET_ID
-    + '/export?format=csv&sheet='
-    + encodeURIComponent(SHEET_NAME)
-    + '&cachebust=' + Date.now();
-
-  addDebug('[CSV] URL: ' + url);
-
-  const res = await fetch(url, { cache: 'no-store' });
-
-  addDebug('[CSV] HTTP ' + res.status + ' ' + res.statusText);
-
-  if (!res.ok) throw new Error('HTTP ' + res.status);
-
-  const contentType = res.headers.get('content-type') || '';
-  addDebug('[CSV] Content-Type: ' + contentType);
-
-  // 구글이 로그인 페이지로 리다이렉트하면 text/html 반환
-  if (contentType.includes('text/html') && !contentType.includes('csv')) {
-    throw new Error('HTML 응답 (로그인 필요 또는 비공개 시트)');
-  }
-
-  const text = await res.text();
-  addDebug('[CSV] 응답 길이: ' + text.length + ' chars');
-  addDebug('[CSV] 첫 200자: ' + text.substring(0, 200));
-
-  if (!text || text.trim().length === 0) throw new Error('빈 응답');
-  if (text.trim().startsWith('<')) throw new Error('HTML 응답 (비공개 시트일 가능성)');
-
-  const rows = parseCsv(text);
-  addDebug('[CSV] 파싱된 행 수: ' + rows.length);
-
-  processRows(rows, 'CSV');
-}
-
-// ---- gviz 방식 ----
-async function fetchViaGviz() {
-  const url = 'https://docs.google.com/spreadsheets/d/'
-    + SHEET_ID
-    + '/gviz/tq?tqx=out:json&sheet='
-    + encodeURIComponent(SHEET_NAME)
-    + '&t=' + Date.now();
-
-  addDebug('[GVIZ] URL: ' + url);
-
-  const res = await fetch(url, { cache: 'no-store' });
-  addDebug('[GVIZ] HTTP ' + res.status);
-
-  if (!res.ok) throw new Error('HTTP ' + res.status);
-
-  const raw = await res.text();
-  addDebug('[GVIZ] 응답 길이: ' + raw.length + ' / 첫 150자: ' + raw.substring(0, 150));
-
-  // gviz는 보통 /*O_o*/\ngoogle.visualization.Query.setResponse({...}); 형태
-  // 여러 정규식 시도
-  let jsonStr = null;
-
-  const patterns = [
-    /google\.visualization\.Query\.setResponse\(([\s\S]+?)\);?\s*$/,
-    /setResponse\(([\s\S]+?)\);?\s*$/,
-    /\(([\s\S]+)\);\s*$/
-  ];
-
-  for (const pat of patterns) {
-    const m = raw.match(pat);
-    if (m && m[1]) {
-      jsonStr = m[1].trim();
-      addDebug('[GVIZ] 정규식 매칭 성공');
-      break;
+    try {
+      await fetchViaGviz();
+    } catch(e2) {
+      showError('데이터 로드 실패. 시트 공유 설정을 확인해주세요.');
     }
   }
+}
 
-  if (!jsonStr) throw new Error('gviz 응답 형식 파싱 불가');
+async function fetchViaCsv() {
+  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&sheet=${encodeURIComponent(SHEET_NAME)}&t=${Date.now()}`;
+  const res  = await fetch(url);
+  if (!res.ok) throw new Error('HTTP ' + res.status);
+  const text = await res.text();
+  if (text.trim().startsWith('<!')) throw new Error('로그인 페이지 반환 (시트 비공개)');
+  const rows = parseCsv(text);
+  processRows(rows, 'csv');
+}
 
-  let json;
-  try {
-    json = JSON.parse(jsonStr);
-  } catch(pe) {
-    throw new Error('JSON.parse 실패: ' + pe.message);
+async function fetchViaGviz() {
+  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(SHEET_NAME)}&t=${Date.now()}`;
+  const res  = await fetch(url);
+  if (!res.ok) throw new Error('HTTP ' + res.status);
+  const text = await res.text();
+
+  let jsonStr = null;
+  const patterns = [
+    /google\.visualization\.Query\.setResponse\(([\s\S]*?)\);?\s*$/,
+    /setResponse\(([\s\S]*?)\);?\s*$/,
+    /\(([\s\S]*)\)/
+  ];
+  for (const p of patterns) {
+    const m = text.match(p);
+    if (m) { jsonStr = m[1]; break; }
   }
+  if (!jsonStr) throw new Error('gviz 응답 파싱 실패');
 
-  const tbl = json.table;
-  if (!tbl) throw new Error('table 없음');
-  if (!tbl.rows || tbl.rows.length === 0) throw new Error('rows 없음 또는 빈 시트');
-
-  addDebug('[GVIZ] 컬럼 수: ' + (tbl.cols ? tbl.cols.length : '?') + ' / 행 수: ' + tbl.rows.length);
+  const json = JSON.parse(jsonStr);
+  const tbl  = json.table;
+  if (!tbl || !tbl.rows) throw new Error('table.rows 없음');
 
   const parsed = tbl.rows
     .filter(row => row !== null && row !== undefined)
-    .map(row => {
-      if (!row.c) return [];
-      return row.c.map(cell => {
+    .map(row =>
+      (tbl.cols || []).map((col, i) => {
+        const cell = row.c ? row.c[i] : null;
         if (!cell || cell.v === null || cell.v === undefined) return '';
-        // 날짜/숫자 포맷
-        if (cell.f) return String(cell.f).trim();
         return String(cell.v).trim();
-      });
-    });
-
-  processRows(parsed, 'GVIZ');
+      })
+    );
+  processRows(parsed, 'gviz');
 }
 
-// ============================================================
-// CSV 파서  (RFC 4180 준수)
-// ============================================================
 function parseCsv(text) {
   const result = [];
-  const n = text.length;
-  let i = 0;
-
-  while (i < n) {
-    const row = [];
-    let inQuote = false;
-    let cell = '';
-
-    while (i < n) {
-      const ch = text[i];
-
-      if (inQuote) {
-        if (ch === '"') {
-          if (i + 1 < n && text[i + 1] === '"') {
-            cell += '"';
-            i += 2;
-          } else {
-            inQuote = false;
-            i++;
-          }
-        } else {
-          cell += ch;
-          i++;
-        }
-      } else {
-        if (ch === '"') {
-          inQuote = true;
-          i++;
-        } else if (ch === ',') {
-          row.push(cell.trim());
-          cell = '';
-          i++;
-        } else if (ch === '\r' || ch === '\n') {
-          // 줄 끝
-          row.push(cell.trim());
-          cell = '';
-          if (ch === '\r' && i + 1 < n && text[i + 1] === '\n') i++;
-          i++;
-          break;
-        } else {
-          cell += ch;
-          i++;
-        }
-      }
-    }
-
-    // EOF 처리
-    if (i >= n && cell !== '') row.push(cell.trim());
-
-    if (row.length > 0 && row.some(v => v !== '')) {
-      result.push(row);
+  let cur = '', inQ = false, row = [];
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (ch === '"') {
+      if (inQ && text[i+1] === '"') { cur += '"'; i++; }
+      else inQ = !inQ;
+    } else if (ch === ',' && !inQ) {
+      row.push(cur.trim()); cur = '';
+    } else if ((ch === '\n' || ch === '\r') && !inQ) {
+      if (ch === '\r' && text[i+1] === '\n') i++;
+      row.push(cur.trim()); cur = '';
+      if (row.some(v => v !== '')) result.push(row);
+      row = [];
+    } else {
+      cur += ch;
     }
   }
-
+  if (cur || row.length) { row.push(cur.trim()); if (row.some(v => v !== '')) result.push(row); }
   return result;
 }
 
-// ============================================================
-// PROCESS  -  헤더 감지 + 빈 행 제거 + 데이터 저장
-// ============================================================
 function processRows(rows, method) {
-  addDebug('[PROCESS] 원본 행 수: ' + rows.length);
-
-  if (rows.length === 0) {
-    showError('시트에 데이터가 없습니다.');
-    return;
+  let data = rows;
+  if (data.length > 0) {
+    const first = (data[0][COL.REG_TITLE] || '').toString().trim();
+    const isHeader = ['규정제목','규정 제목','Title','REG_TITLE','제목'].some(k => first.includes(k));
+    if (isHeader) data = data.slice(1);
   }
-
-  // 헤더 감지 및 제거
-  const firstRow = rows[0];
-  const firstCell = (firstRow[0] || '').toLowerCase();
-  const headerKeywords = ['규정', '제목', 'title', 'reg', '항목', '기준', 'standard'];
-  const isHeader = headerKeywords.some(k => firstCell.includes(k));
-
-  addDebug('[PROCESS] 첫 행 A열: "' + (firstRow[0] || '') + '" -> 헤더 여부: ' + isHeader);
-
-  let data = isHeader ? rows.slice(1) : rows;
-
-  // 완전히 빈 행 제거
   data = data.filter(r => r && r.some(v => v !== '' && v !== null && v !== undefined));
-
-  addDebug('[PROCESS] 유효 데이터 행 수: ' + data.length);
-
-  if (data.length === 0) {
-    showError('유효한 데이터 행이 없습니다. 시트 구조를 확인해주세요.');
-    return;
-  }
-
-  // 샘플 로그 (처음 2행)
-  data.slice(0, 2).forEach((r, idx) => {
-    addDebug('[SAMPLE ' + idx + '] A:"' + (r[0]||'') + '" B:"' + (r[1]||'') + '" C:"' + (r[2]||'') + '"');
-  });
-
-  // B열 고유값
-  const uniqueJobs = [...new Set(data.map(r => (r[COL.JOB_GROUP] || '').trim()).filter(Boolean))];
-  addDebug('[JOBS] B열 고유값(' + uniqueJobs.length + '): ' + uniqueJobs.slice(0,8).map(j => '"'+j+'"').join(', '));
-
   allRows = data;
   updateCounts();
   renderCurrent();
-
-  document.getElementById('status-dot').className = 'ok';
-  document.getElementById('status-text').textContent = allRows.length + '개 항목 로드 (' + method + ')';
+  const dot = document.getElementById('status-dot');
+  const txt = document.getElementById('status-text');
+  dot.className = 'ok';
+  txt.textContent = allRows.length + '개 항목 로드 완료 (' + method.toUpperCase() + ')';
 }
 
-// ============================================================
-// SHOW ERROR
-// ============================================================
-function showError(title, desc, code) {
-  let html = '<div class="error-box"><strong>' + escHtml(title) + '</strong>';
-  if (desc) html += escHtml(desc);
-  if (code) html += '<code>' + escHtml(code) + '</code>';
-  html += '</div>';
-  document.getElementById('content').innerHTML = html;
+function showError(msg) {
+  document.getElementById('content').innerHTML = '<div class="empty-msg">' + escHtml(msg) + '</div>';
   document.getElementById('status-dot').className = 'err';
   document.getElementById('status-text').textContent = '로드 실패';
 }
 
-// ============================================================
+// =============================================
 // FILTERS
-// ============================================================
-function getJob(r) { return (r[COL.JOB_GROUP] || '').trim(); }
+// =============================================
+function getJob(r) { return (r[COL.JOB_GROUP] || '').toLowerCase(); }
 function isDoctor(r)   { return getJob(r).includes('의사'); }
 function isNurse(r)    { return getJob(r).includes('간호사'); }
 function isPharm(r)    { return getJob(r).includes('약사'); }
 function isGuardian(r) { return getJob(r).includes('보호자'); }
-function isQuestion(r) {
-  return (r[COL.REG_TITLE] || '').includes('질문') ||
-         getJob(r).includes('질문');
-}
-function isReview(r) {
-  const job = getJob(r).toLowerCase();
-  return job === '' || job === '검토' || job.includes('규정') || job.includes('review');
+function isQuestion(r) { return (r[COL.REG_TITLE] || '').toLowerCase().includes('질문'); }
+function isReview(r)   {
+  const job = getJob(r);
+  return job === '' || job === '검토' || job.includes('규정');
 }
 function isEtc(r) {
-  return !isDoctor(r) && !isNurse(r) && !isPharm(r) &&
-         !isGuardian(r) && !isQuestion(r) && !isReview(r);
+  return !isDoctor(r) && !isNurse(r) && !isPharm(r) && !isGuardian(r) && !isQuestion(r) && !isReview(r);
 }
+function isJG(r) { return isDoctor(r) || isNurse(r) || isPharm(r) || isGuardian(r); }
 
 function filterByTab(tab) {
   switch(tab) {
     case 'all':      return allRows;
     case 'review':   return allRows.filter(isReview);
+    case 'jg':       return allRows.filter(isJG);
     case 'doctor':   return allRows.filter(isDoctor);
     case 'nurse':    return allRows.filter(isNurse);
     case 'pharm':    return allRows.filter(isPharm);
@@ -915,17 +793,19 @@ function applySearch(rows, q) {
   if (!q) return rows;
   const lq = q.toLowerCase();
   return rows.filter(r =>
-    FIELD_LABELS.some(f => (r[f.key] || '').toLowerCase().includes(lq)) ||
-    (r[COL.REG_TITLE] || '').toLowerCase().includes(lq) ||
-    (r[COL.JOB_GROUP] || '').toLowerCase().includes(lq)
+    (r[COL.REG_TITLE]   || '').toLowerCase().includes(lq) ||
+    (r[COL.JOB_GROUP]   || '').toLowerCase().includes(lq) ||
+    (r[COL.CRIT_TITLE]  || '').toLowerCase().includes(lq) ||
+    (r[COL.SURVEY_ITEM] || '').toLowerCase().includes(lq) ||
+    (r[COL.STANDARD]    || '').toLowerCase().includes(lq)
   );
 }
 
-// ============================================================
+// =============================================
 // COUNTS
-// ============================================================
+// =============================================
 function updateCounts() {
-  ['all','review','doctor','nurse','pharm','guardian','etc','question'].forEach(tab => {
+  ['all','review','jg','doctor','nurse','pharm','guardian','etc','question'].forEach(tab => {
     const n = filterByTab(tab).length;
     const sb = document.getElementById('sb-' + tab);
     const sc = document.getElementById('sc-' + tab);
@@ -934,22 +814,22 @@ function updateCounts() {
   });
 }
 
-// ============================================================
-// GROUP BY REG TITLE
-// ============================================================
+// =============================================
+// GROUP
+// =============================================
 function groupByTitle(rows) {
   const map = new Map();
   rows.forEach(r => {
-    const title = (r[COL.REG_TITLE] || '(제목없음)').trim();
+    const title = r[COL.REG_TITLE] || '(제목없음)';
     if (!map.has(title)) map.set(title, []);
     map.get(title).push(r);
   });
   return map;
 }
 
-// ============================================================
+// =============================================
 // RENDER
-// ============================================================
+// =============================================
 function renderCurrent() {
   const q        = (document.getElementById('search-input').value || '').trim();
   const filtered = applySearch(filterByTab(currentTab), q);
@@ -963,7 +843,6 @@ function renderCurrent() {
   const grouped = groupByTitle(filtered);
   const frag    = document.createDocumentFragment();
 
-  // Section header
   const header = document.createElement('div');
   header.className = 'section-header';
   header.innerHTML =
@@ -977,34 +856,31 @@ function renderCurrent() {
     const regCard = document.createElement('div');
     regCard.className = 'reg-card';
 
-    // 직군 태그
-    const jobSet  = [...new Set(rows.map(r => getJob(r)).filter(Boolean))];
+    const jobSet  = [...new Set(rows.map(r => r[COL.JOB_GROUP]).filter(Boolean))];
     const jobHtml = jobSet.map(j => {
       let cls = 'jg-etc';
-      if (j.includes('의사'))        cls = 'jg-doctor';
-      else if (j.includes('간호사')) cls = 'jg-nurse';
-      else if (j.includes('약사'))   cls = 'jg-pharm';
-      else if (j.includes('보호자')) cls = 'jg-guardian';
-      else if (j.includes('질문'))   cls = 'jg-question';
+      const jl = j.toLowerCase();
+      if (jl.includes('의사'))       cls = 'jg-doctor';
+      else if (jl.includes('간호사')) cls = 'jg-nurse';
+      else if (jl.includes('약사'))   cls = 'jg-pharm';
+      else if (jl.includes('보호자')) cls = 'jg-guardian';
+      else if (jl.includes('질문'))   cls = 'jg-question';
       return '<span class="jg-tag ' + cls + '">' + escHtml(j) + '</span>';
     }).join('');
 
-    // Header
     const cardHeader = document.createElement('div');
     cardHeader.className = 'reg-card-header';
     cardHeader.innerHTML =
       '<div class="reg-card-left">' +
         '<span class="reg-num">' + String(regIdx).padStart(2,'0') + '</span>' +
         '<span class="reg-title">' + escHtml(title) + '</span>' +
-        (jobHtml ? '<span style="display:flex;flex-wrap:wrap;gap:4px;margin-top:2px;">' + jobHtml + '</span>' : '') +
+        (jobHtml ? '<span style="display:flex;flex-wrap:wrap;gap:4px;flex-shrink:0;">' + jobHtml + '</span>' : '') +
       '</div>' +
       '<span class="reg-count-badge">' + rows.length + ' 항목</span>' +
       '<span class="reg-chevron">&#9660;</span>';
 
-    // Body
     const cardBody = document.createElement('div');
     cardBody.className = 'reg-card-body';
-
     rows.forEach((r, itemIdx) => {
       cardBody.appendChild(makeItemCard(r, itemIdx + 1));
     });
@@ -1021,34 +897,22 @@ function renderCurrent() {
   content.innerHTML = '';
   content.appendChild(frag);
 
-  // Expand all
   const expandBtn = document.getElementById('expand-all-btn');
   if (expandBtn) {
     expandBtn.addEventListener('click', function() {
-      const allOpen = [...document.querySelectorAll('.reg-card')].every(el => el.classList.contains('open'));
-      if (allOpen) {
-        document.querySelectorAll('.reg-card').forEach(el => el.classList.remove('open'));
-        document.querySelectorAll('.item-card').forEach(el => el.classList.remove('open'));
-        this.textContent = '모두 펼치기';
-      } else {
-        document.querySelectorAll('.reg-card').forEach(el => el.classList.add('open'));
-        document.querySelectorAll('.item-card').forEach(el => el.classList.add('open'));
-        this.textContent = '모두 접기';
-      }
+      document.querySelectorAll('.reg-card').forEach(el => el.classList.add('open'));
+      document.querySelectorAll('.item-card').forEach(el => el.classList.add('open'));
     });
   }
 }
 
-// ============================================================
-// ITEM CARD
-// ============================================================
 function makeItemCard(r, seq) {
-  const itemCard  = document.createElement('div');
+  const itemCard = document.createElement('div');
   itemCard.className = 'item-card';
 
-  const grade     = (r[COL.GRADE]      || '').trim();
-  const chapter   = (r[COL.CHAPTER]    || '').trim();
-  const critTitle = (r[COL.CRIT_TITLE] || r[COL.SURVEY_ITEM] || '(항목없음)').trim();
+  const grade     = r[COL.GRADE]      || '';
+  const chapter   = r[COL.CHAPTER]    || '';
+  const critTitle = r[COL.CRIT_TITLE] || r[COL.SURVEY_ITEM] || '(항목없음)';
 
   let gradeCls = 'grade-default';
   if (grade === '필수' || grade === 'P')      gradeCls = 'grade-P';
@@ -1068,30 +932,29 @@ function makeItemCard(r, seq) {
 
   const itemBody = document.createElement('div');
   itemBody.className = 'item-body';
-
   const fieldRows = document.createElement('div');
   fieldRows.className = 'field-rows';
 
   FIELD_LABELS.forEach(f => {
-    const val = (r[f.key] || '').trim();
-    const el  = document.createElement('div');
-    el.className = 'field-row';
-    el.innerHTML =
-      '<div class="field-key">' + escHtml(f.label) + '</div>' +
+    const val     = r[f.key] || '';
+    const fieldEl = document.createElement('div');
+    fieldEl.className = 'field-row';
+    fieldEl.innerHTML =
+      '<div class="field-key">'  + escHtml(f.label) + '</div>' +
       '<div class="field-val' + (val ? '' : ' empty') + '">' + (val ? escHtml(val) : '-') + '</div>';
-    fieldRows.appendChild(el);
+    fieldRows.appendChild(fieldEl);
   });
 
-  // 추가 열 (M열 이후 = index 12+)
-  for (let i = 12; i < r.length; i++) {
-    const val = (r[i] || '').trim();
-    if (val) {
-      const el = document.createElement('div');
-      el.className = 'field-row';
-      el.innerHTML =
-        '<div class="field-key">열 ' + String.fromCharCode(65 + i) + '</div>' +
-        '<div class="field-val">' + escHtml(val) + '</div>';
-      fieldRows.appendChild(el);
+  if (r.length > 12) {
+    for (let i = 12; i < r.length; i++) {
+      if (r[i]) {
+        const extraEl = document.createElement('div');
+        extraEl.className = 'field-row';
+        extraEl.innerHTML =
+          '<div class="field-key">열 ' + String.fromCharCode(65 + i) + '</div>' +
+          '<div class="field-val">' + escHtml(r[i]) + '</div>';
+        fieldRows.appendChild(extraEl);
+      }
     }
   }
 
@@ -1107,58 +970,47 @@ function makeItemCard(r, seq) {
   return itemCard;
 }
 
-// ============================================================
-// TAB SWITCHING
-// ============================================================
+// =============================================
+// TAB
+// =============================================
 function setTab(tab) {
   currentTab = tab;
-  document.querySelectorAll('.sidebar-item').forEach(el => {
-    el.classList.toggle('active', el.dataset.tab === tab);
+  document.querySelectorAll('.sidebar-item').forEach(i => {
+    i.classList.toggle('active', i.dataset.tab === tab);
   });
-  document.querySelectorAll('.stat-card').forEach(el => {
-    el.classList.toggle('active', el.dataset.tab === tab);
+  document.querySelectorAll('.stat-card').forEach(c => {
+    c.classList.toggle('active', c.dataset.tab === tab);
   });
   renderCurrent();
 }
 
-document.querySelectorAll('.sidebar-item').forEach(el => {
-  el.addEventListener('click', () => setTab(el.dataset.tab));
+document.querySelectorAll('.sidebar-item').forEach(item => {
+  item.addEventListener('click', function() { setTab(this.dataset.tab); });
 });
-document.querySelectorAll('.stat-card').forEach(el => {
-  el.addEventListener('click', () => setTab(el.dataset.tab));
+document.querySelectorAll('.stat-card').forEach(card => {
+  card.addEventListener('click', function() { setTab(this.dataset.tab); });
 });
 
-// ============================================================
-// SEARCH
-// ============================================================
-document.getElementById('search-input').addEventListener('input', renderCurrent);
+document.getElementById('search-input').addEventListener('input', function() {
+  renderCurrent();
+});
 
-// ============================================================
-// KEYBOARD
-// ============================================================
 document.addEventListener('keydown', e => {
   const inp = document.getElementById('search-input');
   if (e.key === '/' && document.activeElement !== inp) {
-    e.preventDefault();
-    inp.focus();
+    e.preventDefault(); inp.focus();
   }
   if (e.key === 'Escape') inp.blur();
 });
 
-// ============================================================
-// UTIL
-// ============================================================
 function escHtml(s) {
   return String(s)
-    .replace(/&/g,'&amp;')
-    .replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;')
-    .replace(/"/g,'&quot;');
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
 }
 
-// ============================================================
-// START
-// ============================================================
 fetchSheet();
 </script>
 </body>
