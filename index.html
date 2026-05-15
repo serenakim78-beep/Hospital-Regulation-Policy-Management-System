@@ -37,7 +37,6 @@
       --orange-dim: rgba(201,160,122,0.15);
       --sidebar-w: 220px;
       --font: 'Malgun Gothic', '맑은 고딕', sans-serif;
-      --scroll-pct: 0%;
     }
 
     body {
@@ -60,11 +59,11 @@
     }
 
     /* ── SCROLL PROGRESS ── */
-    .scroll-bar {
+    #scrollProgress {
       position: fixed;
       top: 0; left: 0;
       height: 2px;
-      width: var(--scroll-pct);
+      width: 0%;
       background: linear-gradient(90deg, var(--gold), var(--gold2));
       z-index: 9999;
       transition: width 0.1s linear;
@@ -74,7 +73,7 @@
     header {
       background: var(--surface);
       border-bottom: 1px solid var(--border);
-      padding: 14px 24px;
+      padding: 16px 24px;
       display: flex;
       align-items: center;
       gap: 14px;
@@ -88,8 +87,8 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 3px;
-      width: 26px;
-      height: 26px;
+      width: 28px;
+      height: 28px;
       flex-shrink: 0;
     }
     .logo-grid span { border-radius: 2px; background: var(--gold); }
@@ -99,27 +98,14 @@
 
     .header-titles { display: flex; flex-direction: column; gap: 1px; }
     .header-sub { font-family: var(--font); font-size: 9px; letter-spacing: 2.5px; color: var(--text-muted); text-transform: uppercase; }
-    .header-main { font-family: var(--font); font-size: 16px; font-weight: 700; color: var(--text); letter-spacing: -0.3px; }
+    .header-main { font-family: var(--font); font-size: 17px; font-weight: 700; color: var(--text); letter-spacing: -0.5px; }
 
     .header-right {
       margin-left: auto;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
     }
-
-    .print-btn {
-      font-family: var(--font);
-      font-size: 11px;
-      padding: 6px 13px;
-      border-radius: 6px;
-      border: 1px solid var(--border);
-      background: var(--surface2);
-      color: var(--text-muted);
-      cursor: pointer;
-      transition: all 0.15s;
-    }
-    .print-btn:hover { border-color: var(--gold); color: var(--gold); }
 
     .header-status {
       font-family: var(--font);
@@ -138,6 +124,22 @@
     }
     @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
+    .print-btn {
+      font-family: var(--font);
+      font-size: 11px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 6px 12px;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .print-btn:hover { border-color: var(--gold); color: var(--gold); }
+
     /* ── LAYOUT ── */
     .app-body {
       display: flex;
@@ -152,14 +154,15 @@
       background: var(--surface);
       border-right: 1px solid var(--border);
       position: sticky;
-      top: 53px;
-      height: calc(100vh - 53px);
+      top: 57px;
+      height: calc(100vh - 57px);
       overflow-y: auto;
       padding: 20px 0;
       display: flex;
       flex-direction: column;
       gap: 4px;
     }
+
     .sidebar::-webkit-scrollbar { width: 4px; }
     .sidebar::-webkit-scrollbar-track { background: transparent; }
     .sidebar::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
@@ -172,12 +175,18 @@
       text-transform: uppercase;
       padding: 10px 18px 4px;
     }
-    .sidebar-sep { height: 1px; background: var(--border); margin: 8px 18px; }
+
+    .sidebar-sep {
+      height: 1px;
+      background: var(--border);
+      margin: 8px 18px;
+    }
 
     .tab-btn {
       display: flex;
       align-items: center;
-      padding: 9px 18px;
+      justify-content: space-between;
+      padding: 9px 18px 9px 14px;
       font-size: 13px;
       font-family: var(--font);
       font-weight: 500;
@@ -188,21 +197,28 @@
       width: 100%;
       text-align: left;
       transition: all 0.18s;
-      border-left: 2px solid transparent;
+      border-radius: 0;
       gap: 8px;
+      border-left: 2px solid transparent;
     }
     .tab-btn:hover { background: var(--surface2); color: var(--text); }
-    .tab-btn.active                    { color: var(--gold);     background: var(--gold-dim);     border-left-color: var(--gold); }
-    .tab-btn.active.purple-tab         { color: var(--purple);   background: var(--purple-dim);   border-left-color: var(--purple); }
-    .tab-btn.active.pink-tab           { color: var(--pink);     background: var(--pink-dim);     border-left-color: var(--pink); }
-    .tab-btn.active.green-tab          { color: var(--green);    background: var(--green-dim);    border-left-color: var(--green); }
-    .tab-btn.active.orange-tab         { color: var(--orange);   background: var(--orange-dim);   border-left-color: var(--orange); }
-    .tab-btn.active.gray-tab           { color: var(--text-mid); background: var(--surface3);     border-left-color: var(--text-mid); }
-    .tab-btn.active.blue-tab           { color: var(--blue);     background: var(--blue-dim);     border-left-color: var(--blue); }
-    .tab-btn.active.teal-tab           { color: var(--teal);     background: var(--teal-dim);     border-left-color: var(--teal); }
 
-    .tab-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; background: var(--text-muted); }
-    .tab-btn.active            .tab-dot { background: var(--gold); }
+    .tab-btn.active { color: var(--gold); background: var(--gold-dim); border-left-color: var(--gold); }
+    .tab-btn.active.purple-tab { color: var(--purple); background: var(--purple-dim); border-left-color: var(--purple); }
+    .tab-btn.active.pink-tab   { color: var(--pink);   background: var(--pink-dim);   border-left-color: var(--pink); }
+    .tab-btn.active.green-tab  { color: var(--green);  background: var(--green-dim);  border-left-color: var(--green); }
+    .tab-btn.active.orange-tab { color: var(--orange); background: var(--orange-dim); border-left-color: var(--orange); }
+    .tab-btn.active.gray-tab   { color: var(--text-mid); background: var(--surface3); border-left-color: var(--text-mid); }
+    .tab-btn.active.blue-tab   { color: var(--blue);   background: var(--blue-dim);   border-left-color: var(--blue); }
+    .tab-btn.active.teal-tab   { color: var(--teal);   background: var(--teal-dim);   border-left-color: var(--teal); }
+
+    .tab-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      background: var(--text-muted);
+    }
+    .tab-btn.active .tab-dot { background: var(--gold); }
     .tab-btn.active.purple-tab .tab-dot { background: var(--purple); }
     .tab-btn.active.pink-tab   .tab-dot { background: var(--pink); }
     .tab-btn.active.green-tab  .tab-dot { background: var(--green); }
@@ -225,24 +241,24 @@
       min-width: 28px;
       text-align: center;
     }
-    .tab-btn.active            .tab-badge { border-color: var(--gold);     color: var(--gold);     background: var(--gold-dim); }
-    .tab-btn.active.purple-tab .tab-badge { border-color: var(--purple);   color: var(--purple);   background: var(--purple-dim); }
-    .tab-btn.active.pink-tab   .tab-badge { border-color: var(--pink);     color: var(--pink);     background: var(--pink-dim); }
-    .tab-btn.active.green-tab  .tab-badge { border-color: var(--green);    color: var(--green);    background: var(--green-dim); }
-    .tab-btn.active.orange-tab .tab-badge { border-color: var(--orange);   color: var(--orange);   background: var(--orange-dim); }
+    .tab-btn.active .tab-badge { border-color: var(--gold); color: var(--gold); background: var(--gold-dim); }
+    .tab-btn.active.purple-tab .tab-badge { border-color: var(--purple); color: var(--purple); background: var(--purple-dim); }
+    .tab-btn.active.pink-tab   .tab-badge { border-color: var(--pink);   color: var(--pink);   background: var(--pink-dim); }
+    .tab-btn.active.green-tab  .tab-badge { border-color: var(--green);  color: var(--green);  background: var(--green-dim); }
+    .tab-btn.active.orange-tab .tab-badge { border-color: var(--orange); color: var(--orange); background: var(--orange-dim); }
     .tab-btn.active.gray-tab   .tab-badge { border-color: var(--text-mid); color: var(--text-mid); background: var(--surface3); }
-    .tab-btn.active.blue-tab   .tab-badge { border-color: var(--blue);     color: var(--blue);     background: var(--blue-dim); }
-    .tab-btn.active.teal-tab   .tab-badge { border-color: var(--teal);     color: var(--teal);     background: var(--teal-dim); }
+    .tab-btn.active.blue-tab   .tab-badge { border-color: var(--blue);   color: var(--blue);   background: var(--blue-dim); }
+    .tab-btn.active.teal-tab   .tab-badge { border-color: var(--teal);   color: var(--teal);   background: var(--teal-dim); }
 
     /* ── MAIN CONTENT ── */
     .main-area {
       flex: 1;
       min-width: 0;
-      padding: 24px 28px;
+      padding: 28px;
       overflow-y: auto;
     }
 
-    /* ── SEARCH BAR (항상 상단) ── */
+    /* ── SEARCH BAR (TOP) ── */
     .search-section {
       margin-bottom: 20px;
     }
@@ -251,7 +267,7 @@
     }
     .search-icon {
       position: absolute;
-      left: 12px;
+      left: 14px;
       top: 50%;
       transform: translateY(-50%);
       color: var(--text-muted);
@@ -262,35 +278,40 @@
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 10px;
-      padding: 12px 40px 12px 38px;
-      font-size: 13px;
+      padding: 13px 44px 13px 42px;
+      font-size: 14px;
       font-family: var(--font);
       color: var(--text);
       outline: none;
       transition: border-color 0.2s, box-shadow 0.2s;
     }
     .search-wrap input::placeholder { color: var(--text-muted); }
-    .search-wrap input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px var(--gold-dim); }
-
+    .search-wrap input:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px var(--gold-dim);
+    }
     .search-clear {
       position: absolute;
       right: 12px;
       top: 50%;
       transform: translateY(-50%);
-      background: none;
-      border: none;
-      color: var(--text-muted);
-      cursor: pointer;
-      font-size: 16px;
-      line-height: 1;
+      background: var(--surface3);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      width: 22px;
+      height: 22px;
       display: none;
-      padding: 2px 4px;
-      transition: color 0.15s;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text-muted);
+      font-size: 12px;
+      transition: all 0.15s;
     }
-    .search-clear:hover { color: var(--text); }
-    .search-clear.visible { display: block; }
+    .search-clear:hover { background: var(--border2); color: var(--text); }
+    .search-clear.visible { display: flex; }
 
-    /* ── NAV CARDS GRID ── */
+    /* ── NAV CARDS ── */
     .nav-cards {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -302,48 +323,50 @@
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 16px 18px;
+      padding: 18px 20px;
       cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s, background 0.2s;
+      transition: all 0.2s;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
       position: relative;
       overflow: hidden;
-      user-select: none;
     }
     .nav-card::before {
       content: '';
       position: absolute;
-      top: 0; left: 0; right: 0;
+      bottom: 0; left: 0; right: 0;
       height: 2px;
-      background: var(--border);
-      transition: background 0.2s;
+      background: var(--gold);
+      opacity: 0;
+      transition: opacity 0.2s;
     }
-    .nav-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.4); border-color: var(--border2); }
+    .nav-card:hover { border-color: var(--border2); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
+    .nav-card:hover::before { opacity: 0.5; }
+    .nav-card.active { border-color: var(--gold); background: var(--gold-dim); }
+    .nav-card.active::before { opacity: 1; }
 
-    /* 활성 카드 */
-    .nav-card.active                   { border-color: var(--gold);     background: var(--gold-dim); }
-    .nav-card.active::before           { background: var(--gold); }
-    .nav-card.active.purple-card       { border-color: var(--purple);   background: var(--purple-dim); }
-    .nav-card.active.purple-card::before { background: var(--purple); }
-    .nav-card.active.pink-card         { border-color: var(--pink);     background: var(--pink-dim); }
-    .nav-card.active.pink-card::before { background: var(--pink); }
-    .nav-card.active.green-card        { border-color: var(--green);    background: var(--green-dim); }
-    .nav-card.active.green-card::before { background: var(--green); }
-    .nav-card.active.orange-card       { border-color: var(--orange);   background: var(--orange-dim); }
-    .nav-card.active.orange-card::before { background: var(--orange); }
-    .nav-card.active.gray-card         { border-color: var(--text-mid); background: var(--surface3); }
-    .nav-card.active.gray-card::before { background: var(--text-mid); }
-    .nav-card.active.blue-card         { border-color: var(--blue);     background: var(--blue-dim); }
-    .nav-card.active.blue-card::before { background: var(--blue); }
-    .nav-card.active.teal-card         { border-color: var(--teal);     background: var(--teal-dim); }
-    .nav-card.active.teal-card::before { background: var(--teal); }
+    .nav-card.purple-card.active { border-color: var(--purple); background: var(--purple-dim); }
+    .nav-card.purple-card::before { background: var(--purple); }
+    .nav-card.pink-card.active   { border-color: var(--pink);   background: var(--pink-dim); }
+    .nav-card.pink-card::before   { background: var(--pink); }
+    .nav-card.green-card.active  { border-color: var(--green);  background: var(--green-dim); }
+    .nav-card.green-card::before  { background: var(--green); }
+    .nav-card.orange-card.active { border-color: var(--orange); background: var(--orange-dim); }
+    .nav-card.orange-card::before { background: var(--orange); }
+    .nav-card.gray-card.active   { border-color: var(--text-mid); background: var(--surface3); }
+    .nav-card.gray-card::before   { background: var(--text-mid); }
+    .nav-card.blue-card.active   { border-color: var(--blue);   background: var(--blue-dim); }
+    .nav-card.blue-card::before   { background: var(--blue); }
+    .nav-card.teal-card.active   { border-color: var(--teal);   background: var(--teal-dim); }
+    .nav-card.teal-card::before   { background: var(--teal); }
 
-    .nav-card-label {
+    .nav-card-en {
       font-family: var(--font);
       font-size: 9px;
       letter-spacing: 2px;
       color: var(--text-muted);
       text-transform: uppercase;
-      margin-bottom: 6px;
     }
     .nav-card-count {
       font-family: var(--font);
@@ -351,51 +374,36 @@
       font-weight: 700;
       color: var(--gold);
       line-height: 1;
-      margin-bottom: 6px;
-      transition: color 0.2s;
     }
-    .nav-card.active            .nav-card-count { color: var(--gold); }
-    .nav-card.purple-card       .nav-card-count { color: var(--purple); }
-    .nav-card.pink-card         .nav-card-count { color: var(--pink); }
-    .nav-card.green-card        .nav-card-count { color: var(--green); }
-    .nav-card.orange-card       .nav-card-count { color: var(--orange); }
-    .nav-card.gray-card         .nav-card-count { color: var(--text-mid); }
-    .nav-card.blue-card         .nav-card-count { color: var(--blue); }
-    .nav-card.teal-card         .nav-card-count { color: var(--teal); }
+    .nav-card.purple-card .nav-card-count { color: var(--purple); }
+    .nav-card.pink-card   .nav-card-count { color: var(--pink); }
+    .nav-card.green-card  .nav-card-count { color: var(--green); }
+    .nav-card.orange-card .nav-card-count { color: var(--orange); }
+    .nav-card.gray-card   .nav-card-count { color: var(--text-mid); }
+    .nav-card.blue-card   .nav-card-count { color: var(--blue); }
+    .nav-card.teal-card   .nav-card-count { color: var(--teal); }
 
     .nav-card-name {
       font-family: var(--font);
       font-size: 13px;
       font-weight: 700;
-      color: var(--text-mid);
+      color: var(--text);
     }
-    .nav-card-dot {
-      position: absolute;
-      top: 14px; right: 14px;
-      width: 7px; height: 7px;
-      border-radius: 50%;
-      background: var(--text-muted);
-      opacity: 0.4;
-      transition: opacity 0.2s, background 0.2s;
-    }
-    .nav-card.active            .nav-card-dot { background: var(--gold);     opacity: 1; }
-    .nav-card.active.purple-card .nav-card-dot { background: var(--purple); opacity: 1; }
-    .nav-card.active.pink-card   .nav-card-dot { background: var(--pink);   opacity: 1; }
-    .nav-card.active.green-card  .nav-card-dot { background: var(--green);  opacity: 1; }
-    .nav-card.active.orange-card .nav-card-dot { background: var(--orange); opacity: 1; }
-    .nav-card.active.gray-card   .nav-card-dot { background: var(--text-mid); opacity: 1; }
-    .nav-card.active.blue-card   .nav-card-dot { background: var(--blue);   opacity: 1; }
-    .nav-card.active.teal-card   .nav-card-dot { background: var(--teal);   opacity: 1; }
 
     /* ── RESULT ROW ── */
     .result-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 14px;
+      margin-bottom: 16px;
     }
-    .result-info { font-family: var(--font); font-size: 12px; color: var(--text-muted); }
+    .result-info {
+      font-family: var(--font);
+      font-size: 11px;
+      color: var(--text-muted);
+    }
     .result-info strong { color: var(--gold); }
+
     .expand-all-btn {
       font-family: var(--font);
       font-size: 11px;
@@ -403,7 +411,7 @@
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 6px;
-      padding: 6px 12px;
+      padding: 6px 14px;
       color: var(--text-muted);
       cursor: pointer;
       transition: all 0.15s;
@@ -421,14 +429,14 @@
       transition: border-color 0.2s;
     }
     .reg-card:hover { border-color: var(--border2); }
-    .reg-card.expanded                  { border-color: var(--gold); }
-    .reg-card.blue-card.expanded        { border-color: var(--blue); }
-    .reg-card.teal-card.expanded        { border-color: var(--teal); }
-    .reg-card.purple-card.expanded      { border-color: var(--purple); }
-    .reg-card.pink-card.expanded        { border-color: var(--pink); }
-    .reg-card.green-card.expanded       { border-color: var(--green); }
-    .reg-card.orange-card.expanded      { border-color: var(--orange); }
-    .reg-card.gray-card.expanded        { border-color: var(--text-mid); }
+    .reg-card.expanded { border-color: var(--gold); }
+    .reg-card.blue-card.expanded   { border-color: var(--blue); }
+    .reg-card.teal-card.expanded   { border-color: var(--teal); }
+    .reg-card.purple-card.expanded { border-color: var(--purple); }
+    .reg-card.pink-card.expanded   { border-color: var(--pink); }
+    .reg-card.green-card.expanded  { border-color: var(--green); }
+    .reg-card.orange-card.expanded { border-color: var(--orange); }
+    .reg-card.gray-card.expanded   { border-color: var(--text-mid); }
 
     .reg-card-header {
       display: flex;
@@ -438,36 +446,60 @@
       cursor: pointer;
       user-select: none;
     }
-    .reg-num { font-family: var(--font); font-size: 11px; color: var(--text-muted); width: 22px; flex-shrink: 0; }
-    .reg-title { font-family: var(--font); font-size: 14px; font-weight: 700; color: var(--text); flex: 1; }
-    .reg-count-badge {
-      font-family: var(--font); font-size: 11px;
-      background: var(--surface2); border: 1px solid var(--border);
-      color: var(--text-muted); border-radius: 6px;
-      padding: 3px 9px; white-space: nowrap; flex-shrink: 0;
+    .reg-num {
+      font-family: var(--font);
+      font-size: 11px;
+      color: var(--text-muted);
+      width: 22px;
+      flex-shrink: 0;
     }
-    .reg-card.expanded            .reg-count-badge { border-color: var(--gold);     color: var(--gold);     background: var(--gold-dim); }
-    .reg-card.blue-card.expanded  .reg-count-badge { border-color: var(--blue);     color: var(--blue);     background: var(--blue-dim); }
-    .reg-card.teal-card.expanded  .reg-count-badge { border-color: var(--teal);     color: var(--teal);     background: var(--teal-dim); }
-    .reg-card.purple-card.expanded .reg-count-badge { border-color: var(--purple);  color: var(--purple);   background: var(--purple-dim); }
-    .reg-card.pink-card.expanded   .reg-count-badge { border-color: var(--pink);    color: var(--pink);     background: var(--pink-dim); }
-    .reg-card.green-card.expanded  .reg-count-badge { border-color: var(--green);   color: var(--green);    background: var(--green-dim); }
-    .reg-card.orange-card.expanded .reg-count-badge { border-color: var(--orange);  color: var(--orange);   background: var(--orange-dim); }
-    .reg-card.gray-card.expanded   .reg-count-badge { border-color: var(--text-mid);color: var(--text-mid); background: var(--surface3); }
+    .reg-title {
+      font-family: var(--font);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      flex: 1;
+    }
+    .reg-count-badge {
+      font-family: var(--font);
+      font-size: 11px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      border-radius: 6px;
+      padding: 3px 9px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .reg-card.expanded .reg-count-badge { border-color: var(--gold); color: var(--gold); background: var(--gold-dim); }
+    .reg-card.blue-card.expanded   .reg-count-badge { border-color: var(--blue);     color: var(--blue);     background: var(--blue-dim); }
+    .reg-card.teal-card.expanded   .reg-count-badge { border-color: var(--teal);     color: var(--teal);     background: var(--teal-dim); }
+    .reg-card.purple-card.expanded .reg-count-badge { border-color: var(--purple);   color: var(--purple);   background: var(--purple-dim); }
+    .reg-card.pink-card.expanded   .reg-count-badge { border-color: var(--pink);     color: var(--pink);     background: var(--pink-dim); }
+    .reg-card.green-card.expanded  .reg-count-badge { border-color: var(--green);    color: var(--green);    background: var(--green-dim); }
+    .reg-card.orange-card.expanded .reg-count-badge { border-color: var(--orange);   color: var(--orange);   background: var(--orange-dim); }
+    .reg-card.gray-card.expanded   .reg-count-badge { border-color: var(--text-mid); color: var(--text-mid); background: var(--surface3); }
 
     .toggle-arrow {
       width: 18px; height: 18px;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0; transition: transform 0.25s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: transform 0.25s;
     }
     .reg-card.expanded .toggle-arrow,
     .jg-card.expanded  .toggle-arrow { transform: rotate(180deg); }
 
     .reg-card-body {
-      max-height: 0; overflow: hidden;
+      max-height: 0;
+      overflow: hidden;
       transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1);
     }
-    .reg-card-body-inner { padding: 0 18px 18px; border-top: 1px solid var(--border); }
+    .reg-card-body-inner {
+      padding: 0 18px 18px;
+      border-top: 1px solid var(--border);
+    }
 
     /* ── JOB GROUP CARDS ── */
     .jg-card {
@@ -481,8 +513,12 @@
     .jg-card.expanded { border-color: var(--gold); }
 
     .jg-card-header {
-      display: flex; align-items: center; gap: 14px;
-      padding: 14px 18px; cursor: pointer; user-select: none;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 18px;
+      cursor: pointer;
+      user-select: none;
     }
     .jg-num  { font-family: var(--font); font-size: 11px; color: var(--text-muted); width: 22px; flex-shrink: 0; }
     .jg-name { font-family: var(--font); font-size: 14px; font-weight: 700; color: var(--text); flex: 1; }
@@ -494,8 +530,15 @@
     }
     .jg-card.expanded .jg-count { border-color: var(--gold); color: var(--gold); background: var(--gold-dim); }
 
-    .jg-card-body { max-height: 0; overflow: hidden; transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1); }
-    .jg-card-body-inner { padding: 0 18px 18px; border-top: 1px solid var(--border); }
+    .jg-card-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1);
+    }
+    .jg-card-body-inner {
+      padding: 0 18px 18px;
+      border-top: 1px solid var(--border);
+    }
 
     .jg-reg-group { margin-top: 14px; }
     .jg-reg-title {
@@ -508,42 +551,80 @@
     /* ── ITEM CARDS ── */
     .item-list { display: flex; flex-direction: column; gap: 10px; margin-top: 14px; }
 
-    .item-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+    .item-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
     .item-card-header {
-      display: flex; align-items: center; gap: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
       padding: 8px 12px;
-      background: var(--surface3); border-bottom: 1px solid var(--border);
-      cursor: pointer; user-select: none;
+      background: var(--surface3);
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      user-select: none;
     }
     .item-idx { font-family: var(--font); font-size: 10px; color: var(--text-muted); }
-
-    .grade-badge { font-family: var(--font); font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 4px; }
+    .grade-badge {
+      font-family: var(--font);
+      font-size: 10px;
+      font-weight: 500;
+      padding: 2px 7px;
+      border-radius: 4px;
+    }
     .grade-A { background: rgba(109,185,138,0.15); color: var(--success); border: 1px solid rgba(109,185,138,0.3); }
     .grade-B { background: rgba(201,168,76,0.15);  color: var(--warning); border: 1px solid rgba(201,168,76,0.3); }
     .grade-C { background: rgba(201,122,109,0.15); color: var(--danger);  border: 1px solid rgba(201,122,109,0.3); }
     .grade-default { background: var(--surface2); color: var(--text-muted); border: 1px solid var(--border); }
 
     .item-division { font-size: 11px; color: var(--text-muted); font-family: var(--font); flex: 1; }
-    .item-toggle-arrow { width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: transform 0.2s; color: var(--text-muted); }
-    .item-card.expanded .item-toggle-arrow { transform: rotate(180deg); }
+    .item-toggle-arrow {
+      width: 16px; height: 16px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-muted);
+      transition: transform 0.2s;
+      flex-shrink: 0;
+    }
+    .item-card.item-expanded .item-toggle-arrow { transform: rotate(180deg); }
 
-    .item-card-body { max-height: 0; overflow: hidden; transition: max-height 0.35s cubic-bezier(0.4,0,0.2,1); }
+    .item-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s cubic-bezier(0.4,0,0.2,1);
+    }
+    .item-card.item-expanded .item-body {
+      max-height: 2000px;
+    }
 
-    .field-rows { padding: 10px 12px; display: flex; flex-direction: column; gap: 0; }
+    .field-rows { padding: 12px; display: flex; flex-direction: column; gap: 0; }
     .field-row {
-      display: grid; grid-template-columns: 90px 1fr;
-      gap: 0; border-bottom: 1px solid var(--border); min-height: 32px;
+      display: grid;
+      grid-template-columns: 90px 1fr;
+      gap: 0;
+      border-bottom: 1px solid var(--border);
+      min-height: 34px;
     }
     .field-row:last-child { border-bottom: none; }
     .field-label {
-      font-family: var(--font); font-size: 10px;
-      color: var(--text-muted); letter-spacing: 0.3px;
-      padding: 7px 10px 7px 0; border-right: 1px solid var(--border);
-      display: flex; align-items: flex-start;
+      font-family: var(--font);
+      font-size: 10px;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+      padding: 8px 10px 8px 0;
+      border-right: 1px solid var(--border);
+      display: flex;
+      align-items: flex-start;
     }
     .field-value {
-      font-size: 12px; color: var(--text); font-family: var(--font);
-      padding: 7px 0 7px 12px; line-height: 1.6; word-break: break-word;
+      font-size: 12px;
+      font-family: var(--font);
+      color: var(--text);
+      padding: 8px 0 8px 12px;
+      line-height: 1.6;
+      word-break: break-word;
     }
     .field-value.empty { color: var(--text-muted); font-style: italic; }
 
@@ -562,42 +643,59 @@
     }
     .spinner {
       width: 36px; height: 36px;
-      border: 2px solid var(--border); border-top-color: var(--gold);
-      border-radius: 50%; animation: spin 0.9s linear infinite;
+      border: 2px solid var(--border);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin 0.9s linear infinite;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
-    .loading-text { color: var(--text-muted); font-size: 12px; font-family: var(--font); letter-spacing: 0.5px; }
+    .loading-text { color: var(--text-muted); font-size: 12px; font-family: var(--font); letter-spacing: 1px; }
 
     .error-box {
-      background: rgba(201,122,109,0.08); border: 1px solid rgba(201,122,109,0.3);
-      border-radius: 12px; padding: 24px 32px; color: var(--danger);
-      font-size: 13px; max-width: 480px; line-height: 1.7;
+      background: rgba(201,122,109,0.08);
+      border: 1px solid rgba(201,122,109,0.3);
+      border-radius: 12px;
+      padding: 24px 32px;
+      color: var(--danger);
+      font-size: 13px;
+      max-width: 480px;
+      line-height: 1.7;
     }
-    .empty-state { text-align: center; padding: 48px; color: var(--text-muted); font-size: 13px; font-family: var(--font); }
-
-    /* ── RESPONSIVE ── */
-    @media (max-width: 768px) {
-      .sidebar { display: none !important; }
-      .main-area { padding: 14px; }
-      .nav-cards { grid-template-columns: repeat(2, 1fr); }
-      .field-row { grid-template-columns: 70px 1fr; }
-    }
-    @media (min-width: 769px) {
-      .sidebar { display: flex !important; }
+    .empty-state {
+      text-align: center;
+      padding: 48px;
+      color: var(--text-muted);
+      font-size: 13px;
+      font-family: var(--font);
     }
 
     /* ── PRINT ── */
     @media print {
-      .sidebar, header, .nav-cards, .search-section, .result-row { display: none !important; }
+      .sidebar, header, .nav-cards, .search-section, .result-row, #scrollProgress { display: none !important; }
       .main-area { padding: 0; }
       .reg-card-body, .jg-card-body { max-height: none !important; }
       body { background: white; color: black; }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .nav-cards { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .sidebar { display: none !important; }
+      .main-area { padding: 16px; }
+      .nav-cards { grid-template-columns: repeat(2, 1fr); }
+      .field-row { grid-template-columns: 70px 1fr; }
+      .header-status .status-text { display: none; }
+    }
+    @media (min-width: 769px) {
+      .sidebar { display: flex !important; }
     }
   </style>
 </head>
 <body>
 
-<div class="scroll-bar" id="scrollBar"></div>
+<div id="scrollProgress"></div>
 
 <header>
   <div class="logo-grid">
@@ -609,7 +707,10 @@
     <div class="header-main">한서재활요양병원 규정</div>
   </div>
   <div class="header-right">
-    <button class="print-btn" onclick="window.print()">인쇄</button>
+    <button class="print-btn" onclick="window.print()">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+      인쇄
+    </button>
     <div class="header-status">
       <div class="status-dot" id="statusDot"></div>
       <span id="statusText" class="status-text">데이터 로딩 중...</span>
@@ -622,21 +723,21 @@
   <!-- 데스크탑 사이드바 -->
   <nav class="sidebar" id="sidebar">
     <div class="sidebar-section-label">기본 보기</div>
-    <button class="tab-btn active"     data-tab="all">      <span class="tab-dot"></span><span class="tab-label">전체</span>      <span class="tab-badge" id="sb-all">0</span></button>
-    <button class="tab-btn"            data-tab="jobgroup"> <span class="tab-dot"></span><span class="tab-label">직군별 보기</span><span class="tab-badge" id="sb-jobgroup">0</span></button>
+    <button class="tab-btn active"     data-tab="all">       <span class="tab-dot"></span><span class="tab-label">전체</span>      <span class="tab-badge" id="sb-all">0</span></button>
+    <button class="tab-btn teal-tab"   data-tab="review">    <span class="tab-dot"></span><span class="tab-label">규정 검토</span> <span class="tab-badge" id="sb-review">0</span></button>
 
     <div class="sidebar-sep"></div>
-    <div class="sidebar-section-label">직군 필터</div>
-    <button class="tab-btn purple-tab" data-tab="doctor">   <span class="tab-dot"></span><span class="tab-label">의사</span>      <span class="tab-badge" id="sb-doctor">0</span></button>
-    <button class="tab-btn pink-tab"   data-tab="nurse">    <span class="tab-dot"></span><span class="tab-label">간호사</span>    <span class="tab-badge" id="sb-nurse">0</span></button>
-    <button class="tab-btn green-tab"  data-tab="pharm">    <span class="tab-dot"></span><span class="tab-label">약사</span>      <span class="tab-badge" id="sb-pharm">0</span></button>
-    <button class="tab-btn orange-tab" data-tab="guardian"> <span class="tab-dot"></span><span class="tab-label">보호자</span>    <span class="tab-badge" id="sb-guardian">0</span></button>
-    <button class="tab-btn gray-tab"   data-tab="etc">      <span class="tab-dot"></span><span class="tab-label">기타 직군</span><span class="tab-badge" id="sb-etc">0</span></button>
+    <div class="sidebar-section-label">직군 분류</div>
+    <button class="tab-btn"            data-tab="jobgroup">  <span class="tab-dot"></span><span class="tab-label">직군별 보기</span><span class="tab-badge" id="sb-jobgroup">0</span></button>
+    <button class="tab-btn purple-tab" data-tab="doctor">    <span class="tab-dot"></span><span class="tab-label">의사</span>      <span class="tab-badge" id="sb-doctor">0</span></button>
+    <button class="tab-btn pink-tab"   data-tab="nurse">     <span class="tab-dot"></span><span class="tab-label">간호사</span>    <span class="tab-badge" id="sb-nurse">0</span></button>
+    <button class="tab-btn green-tab"  data-tab="pharm">     <span class="tab-dot"></span><span class="tab-label">약사</span>      <span class="tab-badge" id="sb-pharm">0</span></button>
+    <button class="tab-btn orange-tab" data-tab="guardian">  <span class="tab-dot"></span><span class="tab-label">보호자</span>    <span class="tab-badge" id="sb-guardian">0</span></button>
+    <button class="tab-btn gray-tab"   data-tab="etc">       <span class="tab-dot"></span><span class="tab-label">기타 직군</span> <span class="tab-badge" id="sb-etc">0</span></button>
 
     <div class="sidebar-sep"></div>
     <div class="sidebar-section-label">특수 분류</div>
-    <button class="tab-btn blue-tab"   data-tab="question"> <span class="tab-dot"></span><span class="tab-label">질문</span>      <span class="tab-badge" id="sb-question">0</span></button>
-    <button class="tab-btn teal-tab"   data-tab="review">   <span class="tab-dot"></span><span class="tab-label">규정 검토</span><span class="tab-badge" id="sb-review">0</span></button>
+    <button class="tab-btn blue-tab"   data-tab="question">  <span class="tab-dot"></span><span class="tab-label">질문</span>      <span class="tab-badge" id="sb-question">0</span></button>
   </nav>
 
   <!-- 메인 콘텐츠 -->
@@ -656,99 +757,83 @@
       <div class="search-section">
         <div class="search-wrap">
           <span class="search-icon">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
             </svg>
           </span>
-          <input type="text" id="searchInput" placeholder="규정 제목, 조사 항목, 기준 제목으로 검색..."/>
-          <button class="search-clear" id="searchClear">x</button>
+          <input type="text" id="searchInput" placeholder="규정 제목, 조사 항목, 기준 제목, 직군으로 검색... (단축키: /)"/>
+          <button class="search-clear" id="searchClear" title="검색 지우기">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
         </div>
       </div>
 
-      <!-- 네비게이션 카드 그리드 -->
-      <!-- 순서: ALL, JOB GROUP / DOCTOR, NURSE / PHARM, GUARDIAN / ETC, QUESTION / REVIEW(단독) -->
+      <!-- 탭 네비게이션 카드 -->
+      <!-- 순서: 전체, 규정검토, 직군별보기, 의사, 간호사, 약사, 보호자, 기타직군, 질문 -->
       <div class="nav-cards">
-        <!-- 1: 전체 (gold, active) -->
-        <div class="nav-card active" data-tab="all">
-          <div class="nav-card-dot"></div>
-          <div class="nav-card-label">ALL</div>
+        <div class="nav-card active"       data-tab="all">
+          <div class="nav-card-en">ALL</div>
           <div class="nav-card-count" id="nc-all">0</div>
           <div class="nav-card-name">전체</div>
         </div>
-        <!-- 2: 직군별 보기 — 원래 규정 검토 자리(9번째)와 위치 교환 -->
-        <div class="nav-card" data-tab="jobgroup">
-          <div class="nav-card-dot"></div>
-          <div class="nav-card-label">JOB GROUP</div>
-          <div class="nav-card-count" id="nc-jobgroup">0</div>
-          <div class="nav-card-name">직군별 보기</div>
-        </div>
-        <!-- 3: 의사 -->
-        <div class="nav-card purple-card" data-tab="doctor">
-          <div class="nav-card-dot"></div>
-          <div class="nav-card-label">DOCTOR</div>
-          <div class="nav-card-count" id="nc-doctor">0</div>
-          <div class="nav-card-name">의사</div>
-        </div>
-        <!-- 4: 간호사 -->
-        <div class="nav-card pink-card" data-tab="nurse">
-          <div class="nav-card-dot"></div>
-          <div class="nav-card-label">NURSE</div>
-          <div class="nav-card-count" id="nc-nurse">0</div>
-          <div class="nav-card-name">간호사</div>
-        </div>
-        <!-- 5: 약사 -->
-        <div class="nav-card green-card" data-tab="pharm">
-          <div class="nav-card-dot"></div>
-          <div class="nav-card-label">PHARM</div>
-          <div class="nav-card-count" id="nc-pharm">0</div>
-          <div class="nav-card-name">약사</div>
-        </div>
-        <!-- 6: 보호자 -->
-        <div class="nav-card orange-card" data-tab="guardian">
-          <div class="nav-card-dot"></div>
-          <div class="nav-card-label">GUARDIAN</div>
-          <div class="nav-card-count" id="nc-guardian">0</div>
-          <div class="nav-card-name">보호자</div>
-        </div>
-        <!-- 7: 기타 직군 -->
-        <div class="nav-card gray-card" data-tab="etc">
-          <div class="nav-card-dot"></div>
-          <div class="nav-card-label">ETC</div>
-          <div class="nav-card-count" id="nc-etc">0</div>
-          <div class="nav-card-name">기타 직군</div>
-        </div>
-        <!-- 8: 질문 -->
-        <div class="nav-card blue-card" data-tab="question">
-          <div class="nav-card-dot"></div>
-          <div class="nav-card-label">QUESTION</div>
-          <div class="nav-card-count" id="nc-question">0</div>
-          <div class="nav-card-name">질문</div>
-        </div>
-        <!-- 9: 규정 검토 — 원래 직군별 보기 자리(2번째)와 교환 -->
-        <div class="nav-card teal-card" data-tab="review">
-          <div class="nav-card-dot"></div>
-          <div class="nav-card-label">REVIEW</div>
+        <div class="nav-card teal-card"    data-tab="review">
+          <div class="nav-card-en">REVIEW</div>
           <div class="nav-card-count" id="nc-review">0</div>
           <div class="nav-card-name">규정 검토</div>
         </div>
+        <div class="nav-card"              data-tab="jobgroup">
+          <div class="nav-card-en">JOB GROUP</div>
+          <div class="nav-card-count" id="nc-jobgroup">0</div>
+          <div class="nav-card-name">직군별 보기</div>
+        </div>
+        <div class="nav-card purple-card"  data-tab="doctor">
+          <div class="nav-card-en">DOCTOR</div>
+          <div class="nav-card-count" id="nc-doctor">0</div>
+          <div class="nav-card-name">의사</div>
+        </div>
+        <div class="nav-card pink-card"    data-tab="nurse">
+          <div class="nav-card-en">NURSE</div>
+          <div class="nav-card-count" id="nc-nurse">0</div>
+          <div class="nav-card-name">간호사</div>
+        </div>
+        <div class="nav-card green-card"   data-tab="pharm">
+          <div class="nav-card-en">PHARMACIST</div>
+          <div class="nav-card-count" id="nc-pharm">0</div>
+          <div class="nav-card-name">약사</div>
+        </div>
+        <div class="nav-card orange-card"  data-tab="guardian">
+          <div class="nav-card-en">GUARDIAN</div>
+          <div class="nav-card-count" id="nc-guardian">0</div>
+          <div class="nav-card-name">보호자</div>
+        </div>
+        <div class="nav-card gray-card"    data-tab="etc">
+          <div class="nav-card-en">ETC</div>
+          <div class="nav-card-count" id="nc-etc">0</div>
+          <div class="nav-card-name">기타 직군</div>
+        </div>
+        <div class="nav-card blue-card"    data-tab="question">
+          <div class="nav-card-en">QUESTION</div>
+          <div class="nav-card-count" id="nc-question">0</div>
+          <div class="nav-card-name">질문</div>
+        </div>
       </div>
 
-      <!-- 결과 행 -->
       <div class="result-row">
         <span class="result-info" id="resultInfo"></span>
         <button class="expand-all-btn" id="expandAllBtn">모두 펼치기</button>
       </div>
 
       <!-- 뷰 컨테이너 -->
-      <div id="view-all">      <div class="reg-list"      id="regList"></div></div>
-      <div id="view-jobgroup" style="display:none;"><div class="jobgroup-list" id="jobgroupList"></div></div>
-      <div id="view-doctor"   style="display:none;"><div class="reg-list"      id="doctorList"></div></div>
-      <div id="view-nurse"    style="display:none;"><div class="reg-list"      id="nurseList"></div></div>
-      <div id="view-pharm"    style="display:none;"><div class="reg-list"      id="pharmList"></div></div>
-      <div id="view-guardian" style="display:none;"><div class="reg-list"      id="guardianList"></div></div>
-      <div id="view-etc"      style="display:none;"><div class="reg-list"      id="etcList"></div></div>
-      <div id="view-question" style="display:none;"><div class="reg-list"      id="questionList"></div></div>
-      <div id="view-review"   style="display:none;"><div class="reg-list"      id="reviewList"></div></div>
+      <div id="view-all">       <div class="reg-list"      id="regList"></div></div>
+      <div id="view-jobgroup"   style="display:none;"><div class="jobgroup-list" id="jobgroupList"></div></div>
+      <div id="view-doctor"     style="display:none;"><div class="reg-list"      id="doctorList"></div></div>
+      <div id="view-nurse"      style="display:none;"><div class="reg-list"      id="nurseList"></div></div>
+      <div id="view-pharm"      style="display:none;"><div class="reg-list"      id="pharmList"></div></div>
+      <div id="view-guardian"   style="display:none;"><div class="reg-list"      id="guardianList"></div></div>
+      <div id="view-etc"        style="display:none;"><div class="reg-list"      id="etcList"></div></div>
+      <div id="view-question"   style="display:none;"><div class="reg-list"      id="questionList"></div></div>
+      <div id="view-review"     style="display:none;"><div class="reg-list"      id="reviewList"></div></div>
+
     </div>
   </div>
 </div>
@@ -762,12 +847,17 @@
   const PROXY_URL  = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(DIRECT_URL);
 
   const COL = {
-    규정제목:0, 직군:1, 조사항목등급:2, 조사항목구분:3,
-    조사항목장:4, 기준제목:5, 기준:6, 조사항목:7,
-    기준이해:8, 조사내용:9, 조사목적:10, 참고자료:11,
+    규정제목: 0, 직군: 1, 조사항목등급: 2, 조사항목구분: 3,
+    조사항목장: 4, 기준제목: 5, 기준: 6, 조사항목: 7,
+    기준이해: 8, 조사내용: 9, 조사목적: 10, 참고자료: 11,
   };
 
-  const JOB_TABS = { doctor:'의사', nurse:'간호사', pharm:'약사', guardian:'보호자' };
+  const JOB_TABS = {
+    doctor:   '의사',
+    nurse:    '간호사',
+    pharm:    '약사',
+    guardian: '보호자',
+  };
   const SPECIAL_JOBS = Object.values(JOB_TABS);
 
   let allRows     = [];
@@ -775,35 +865,24 @@
   let searchQuery = '';
   let allExpanded = false;
 
-  /* ── 유틸 ── */
+  /* ── 문자열 정규화 ── */
   function norm(s) {
     if (!s) return '';
     return s.replace(/\ufeff/g,'').replace(/\u00a0/g,' ').replace(/\u3000/g,' ').trim().toLowerCase();
   }
-  function esc(str) {
-    if (!str) return '-';
-    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  }
-  function highlight(str, q) {
-    if (!str) return '-';
-    if (!q) return esc(str);
-    var escaped = esc(str);
-    var escapedQ = esc(q).replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
-    return escaped.replace(new RegExp(escapedQ, 'gi'), function(m) { return '<mark>' + m + '</mark>'; });
-  }
-  function el(id)         { return document.getElementById(id); }
-  function setText(id, v) { var e = el(id); if (e) e.textContent = v; }
-  function pad(n)         { return String(n).padStart(2,'0'); }
 
   /* ── CSV 파서 ── */
   function parseCSV(text) {
-    var lines = [], cur = '', inQ = false, row = [];
-    for (var i = 0; i < text.length; i++) {
-      var ch = text[i];
+    const lines = [];
+    let cur = '', inQ = false, row = [];
+    for (let i = 0; i < text.length; i++) {
+      const ch = text[i];
       if (ch === '"') {
-        if (inQ && text[i+1] === '"') { cur += '"'; i++; } else { inQ = !inQ; }
-      } else if (ch === ',' && !inQ) { row.push(cur.trim()); cur = ''; }
-      else if ((ch === '\n' || ch === '\r') && !inQ) {
+        if (inQ && text[i+1] === '"') { cur += '"'; i++; }
+        else { inQ = !inQ; }
+      } else if (ch === ',' && !inQ) {
+        row.push(cur.trim()); cur = '';
+      } else if ((ch === '\n' || ch === '\r') && !inQ) {
         if (ch === '\r' && text[i+1] === '\n') i++;
         row.push(cur.trim()); cur = '';
         lines.push(row); row = [];
@@ -815,7 +894,10 @@
 
   /* ── 분류 함수 ── */
   function isQuestion(r) { return norm(r[COL.규정제목]).indexOf('질문') !== -1; }
-  function isReview(r)   { var v = norm(r[COL.직군]); return v.indexOf('규정검토') !== -1 || v.indexOf('규정 검토') !== -1; }
+  function isReview(r)   {
+    var v = norm(r[COL.직군]);
+    return v.indexOf('규정검토') !== -1 || v.indexOf('규정 검토') !== -1;
+  }
   function isDoctor(r)   { return !isQuestion(r) && !isReview(r) && norm(r[COL.직군]).indexOf(norm(JOB_TABS.doctor))   !== -1; }
   function isNurse(r)    { return !isQuestion(r) && !isReview(r) && norm(r[COL.직군]).indexOf(norm(JOB_TABS.nurse))    !== -1; }
   function isPharm(r)    { return !isQuestion(r) && !isReview(r) && norm(r[COL.직군]).indexOf(norm(JOB_TABS.pharm))    !== -1; }
@@ -823,30 +905,80 @@
   function isEtc(r) {
     if (isQuestion(r) || isReview(r)) return false;
     var v = norm(r[COL.직군]);
-    for (var i = 0; i < SPECIAL_JOBS.length; i++) { if (v.indexOf(norm(SPECIAL_JOBS[i])) !== -1) return false; }
+    for (var i = 0; i < SPECIAL_JOBS.length; i++) {
+      if (v.indexOf(norm(SPECIAL_JOBS[i])) !== -1) return false;
+    }
     return true;
   }
-  function isGeneral(r) { return !isQuestion(r) && !isReview(r); }
+  function isGeneral(r)  { return !isQuestion(r) && !isReview(r); }
+  /* 전체: 모든 행 포함 */
+  function isAll(r)      { return true; }
+
+  /* ── HTML 이스케이프 ── */
+  function esc(str) {
+    if (!str) return '-';
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  /* ── 검색 하이라이트 ── */
+  function highlight(str, q) {
+    if (!str) return '-';
+    var escaped = str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    if (!q) return escaped;
+    var re = new RegExp('(' + q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + ')', 'gi');
+    return escaped.replace(re, '<mark>$1</mark>');
+  }
+
+  /* ── 유틸 ── */
+  function el(id)          { return document.getElementById(id); }
+  function setText(id, v)  { var e = el(id); if (e) e.textContent = v; }
+  function pad(n)          { return String(n).padStart(2, '0'); }
+
+  /* ── 스크롤 진행 바 ── */
+  el('mainArea').addEventListener('scroll', function() {
+    var area = el('mainArea');
+    var pct  = area.scrollTop / (area.scrollHeight - area.clientHeight) * 100;
+    el('scrollProgress').style.width = (isNaN(pct) ? 0 : pct) + '%';
+  });
 
   /* ── 데이터 로드 ── */
   async function loadData() {
-    var text = null;
-    try { var r1 = await fetch(DIRECT_URL); if (r1.ok) text = await r1.text(); } catch(_) {}
+    let text = null;
+    try {
+      var res = await fetch(DIRECT_URL);
+      if (res.ok) text = await res.text();
+    } catch(_) {}
+
     if (!text) {
-      try { var r2 = await fetch(PROXY_URL); if (r2.ok) text = await r2.text(); } catch(e) { showError('네트워크 오류: ' + e.message); return; }
+      try {
+        var res2 = await fetch(PROXY_URL);
+        if (res2.ok) text = await res2.text();
+      } catch(e) { showError('네트워크 오류: ' + e.message); return; }
     }
+
     if (!text) { showError('데이터를 불러오지 못했습니다.'); return; }
+
     var rows = parseCSV(text);
     if (rows.length < 2) { showError('시트에 데이터가 없습니다.'); return; }
+
     allRows = rows.slice(1).filter(function(r) { return r.some(function(c) { return c !== ''; }); });
     if (!allRows.length) { showError('유효한 데이터 행이 없습니다.'); return; }
 
     updateBadges();
+
     el('statusDot').style.background = '#6db98a';
     el('statusDot').style.animation  = 'none';
-    setText('statusText', allRows.length + '개 항목 로드');
+    setText('statusText', allRows.length + '개 항목 로드 완료');
     el('loadingScreen').style.display = 'none';
     el('mainContent').style.display   = 'block';
+
+    /* URL 해시로 탭 복원 */
+    var hash = location.hash.replace('#','');
+    var validTabs = ['all','jobgroup','doctor','nurse','pharm','guardian','etc','question','review'];
+    if (hash && validTabs.indexOf(hash) !== -1) {
+      switchTab(hash);
+    }
+
     rerender();
   }
 
@@ -858,47 +990,56 @@
     setText('statusText', '로드 실패');
   }
 
-  /* ── 배지 & 카드 숫자 업데이트 ── */
+  /* ── 배지 업데이트 ── */
   function updateBadges() {
-    var genRows  = allRows.filter(isGeneral);
-    var qRows    = allRows.filter(isQuestion);
-    var rvRows   = allRows.filter(isReview);
-    var drRows   = allRows.filter(isDoctor);
-    var nuRows   = allRows.filter(isNurse);
-    var phRows   = allRows.filter(isPharm);
-    var guRows   = allRows.filter(isGuardian);
-    var etRows   = allRows.filter(isEtc);
-    var regSet   = new Set(genRows.map(function(r) { return r[COL.규정제목]; }).filter(Boolean));
-    var grpSet   = new Set(genRows.map(function(r) { return r[COL.직군]; }).filter(Boolean));
+    var genRows = allRows.filter(isGeneral);
+    var qRows   = allRows.filter(isQuestion);
+    var rvRows  = allRows.filter(isReview);
+    var drRows  = allRows.filter(isDoctor);
+    var nuRows  = allRows.filter(isNurse);
+    var phRows  = allRows.filter(isPharm);
+    var guRows  = allRows.filter(isGuardian);
+    var etRows  = allRows.filter(isEtc);
+
+    /* 전체 탭: A열(규정제목)의 고유 값 개수 */
+    var allRegSet = new Set(allRows.map(function(r) { return r[COL.규정제목]; }).filter(Boolean));
+    var genRegSet = new Set(genRows.map(function(r) { return r[COL.규정제목]; }).filter(Boolean));
+    var grpSet    = new Set(genRows.map(function(r) { return r[COL.직군]; }).filter(Boolean));
 
     var counts = {
-      all: regSet.size, jobgroup: grpSet.size,
-      doctor: drRows.length, nurse: nuRows.length,
-      pharm: phRows.length, guardian: guRows.length,
-      etc: etRows.length, question: qRows.length, review: rvRows.length,
+      all:      allRegSet.size,   /* 전체: A열 고유 규정제목 수 */
+      jobgroup: grpSet.size,
+      doctor:   drRows.length,
+      nurse:    nuRows.length,
+      pharm:    phRows.length,
+      guardian: guRows.length,
+      etc:      etRows.length,
+      question: qRows.length,
+      review:   rvRows.length,
     };
+
     Object.keys(counts).forEach(function(k) {
-      setText('sb-' + k, counts[k]);
-      setText('nc-' + k, counts[k]);
+      setText('sb-' + k,  counts[k]);
+      setText('nc-' + k,  counts[k]);
     });
   }
 
-  /* ── 필터 ── */
+  /* ── 필터 헬퍼 ── */
   function getFiltered(filterFn) {
     var rows = allRows.filter(filterFn);
     if (searchQuery) {
       var q = searchQuery.toLowerCase();
       rows = rows.filter(function(r) {
-        return (r[COL.규정제목]||'').toLowerCase().indexOf(q) !== -1 ||
-               (r[COL.기준제목]||'').toLowerCase().indexOf(q) !== -1 ||
-               (r[COL.조사항목]||'').toLowerCase().indexOf(q) !== -1 ||
-               (r[COL.직군]    ||'').toLowerCase().indexOf(q) !== -1;
+        return (r[COL.규정제목] || '').toLowerCase().indexOf(q) !== -1 ||
+               (r[COL.기준제목] || '').toLowerCase().indexOf(q) !== -1 ||
+               (r[COL.조사항목] || '').toLowerCase().indexOf(q) !== -1 ||
+               (r[COL.직군]     || '').toLowerCase().indexOf(q) !== -1;
       });
     }
     return rows;
   }
 
-  /* ── 규정제목 그룹 아코디언 ── */
+  /* ── 규정제목 그룹 아코디언 렌더 ── */
   function renderAccordion(containerId, rows, cardClass) {
     var container = el(containerId);
     container.innerHTML = '';
@@ -906,16 +1047,19 @@
       container.innerHTML = '<div class="empty-state">표시할 데이터가 없습니다.</div>';
       updateResultInfo(0); return;
     }
+
     var order = [], groups = {};
     rows.forEach(function(r) {
       var t = r[COL.규정제목] || '(제목 없음)';
       if (!groups[t]) { groups[t] = []; order.push(t); }
       groups[t].push(r);
     });
+
     updateResultInfo(order.length);
+
     order.forEach(function(title, idx) {
       var rowSet = groups[title];
-      var card = document.createElement('div');
+      var card   = document.createElement('div');
       card.className = 'reg-card' + (cardClass ? ' ' + cardClass : '');
       card.innerHTML =
         '<div class="reg-card-header">' +
@@ -925,23 +1069,30 @@
           '<span class="toggle-arrow"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>' +
         '</div>' +
         '<div class="reg-card-body"><div class="reg-card-body-inner"><div class="item-list">' +
-          rowSet.map(function(r,i) { return itemCardHtml(r,i); }).join('') +
+          rowSet.map(function(r, i) { return itemCardHtml(r, i); }).join('') +
         '</div></div></div>';
       card.querySelector('.reg-card-header').addEventListener('click', function() { toggleCard(card); });
-      /* 항목 카드 토글 */
+      /* 항목 카드 개별 토글 */
       card.querySelectorAll('.item-card-header').forEach(function(hdr) {
-        hdr.addEventListener('click', function(e) { e.stopPropagation(); toggleItemCard(hdr.closest('.item-card')); });
+        hdr.addEventListener('click', function(e) {
+          e.stopPropagation();
+          var ic = hdr.closest('.item-card');
+          var body = ic.querySelector('.item-body');
+          ic.classList.toggle('item-expanded');
+          body.style.maxHeight = ic.classList.contains('item-expanded') ? (body.scrollHeight + 500) + 'px' : '0';
+        });
       });
       container.appendChild(card);
     });
   }
 
-  /* ── 직군별 아코디언 ── */
+  /* ── 직군별 아코디언 렌더 ── */
   function renderJobGroup() {
     var container = el('jobgroupList');
     container.innerHTML = '';
     var filtered = getFiltered(isGeneral);
     if (!filtered.length) { container.innerHTML = '<div class="empty-state">표시할 데이터가 없습니다.</div>'; return; }
+
     var order = [], byGroup = {};
     filtered.forEach(function(r) {
       var g = r[COL.직군] || '(직군 없음)';
@@ -949,6 +1100,7 @@
       byGroup[g].push(r);
     });
     order.sort(function(a,b) { return a.localeCompare(b); });
+
     order.forEach(function(group, idx) {
       var rows = byGroup[group];
       var regOrder = [], byReg = {};
@@ -957,24 +1109,31 @@
         if (!byReg[t]) { byReg[t] = []; regOrder.push(t); }
         byReg[t].push(r);
       });
+
       var card = document.createElement('div');
       card.className = 'jg-card';
       card.innerHTML =
         '<div class="jg-card-header">' +
           '<span class="jg-num">' + pad(idx+1) + '</span>' +
-          '<span class="jg-name">' + highlight(group, searchQuery) + '</span>' +
+          '<span class="jg-name">' + esc(group) + '</span>' +
           '<span class="jg-count">' + rows.length + ' 항목</span>' +
           '<span class="toggle-arrow"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>' +
         '</div>' +
         '<div class="jg-card-body"><div class="jg-card-body-inner">' +
           regOrder.map(function(regTitle) {
-            return '<div class="jg-reg-group"><div class="jg-reg-title">' + highlight(regTitle, searchQuery) + '</div>' +
+            return '<div class="jg-reg-group"><div class="jg-reg-title">' + esc(regTitle) + '</div>' +
               '<div class="item-list">' + byReg[regTitle].map(function(r,i) { return itemCardHtml(r,i); }).join('') + '</div></div>';
           }).join('') +
         '</div></div>';
       card.querySelector('.jg-card-header').addEventListener('click', function() { toggleCard(card); });
       card.querySelectorAll('.item-card-header').forEach(function(hdr) {
-        hdr.addEventListener('click', function(e) { e.stopPropagation(); toggleItemCard(hdr.closest('.item-card')); });
+        hdr.addEventListener('click', function(e) {
+          e.stopPropagation();
+          var ic   = hdr.closest('.item-card');
+          var body = ic.querySelector('.item-body');
+          ic.classList.toggle('item-expanded');
+          body.style.maxHeight = ic.classList.contains('item-expanded') ? (body.scrollHeight + 500) + 'px' : '0';
+        });
       });
       container.appendChild(card);
     });
@@ -982,31 +1141,31 @@
 
   /* ── 항목 카드 HTML ── */
   function itemCardHtml(r, i) {
-    var grade = (r[COL.조사항목등급]||'').toUpperCase();
+    var grade = (r[COL.조사항목등급] || '').toUpperCase();
     var gradeClass = ['A','B','C'].indexOf(grade) !== -1 ? 'grade-' + grade : 'grade-default';
     var fields = [
-      { label:'직군',      val: r[COL.직군] },
-      { label:'구분',      val: r[COL.조사항목구분] },
-      { label:'Chapter',   val: r[COL.조사항목장] },
-      { label:'기준 제목', val: r[COL.기준제목] },
-      { label:'기준',      val: r[COL.기준] },
-      { label:'조사 항목', val: r[COL.조사항목] },
-      { label:'기준 이해', val: r[COL.기준이해] },
-      { label:'조사 내용', val: r[COL.조사내용] },
-      { label:'조사 목적', val: r[COL.조사목적] },
-      { label:'참고 자료', val: r[COL.참고자료] },
+      { label: '직군',      val: r[COL.직군] },
+      { label: '구분',      val: r[COL.조사항목구분] },
+      { label: 'Chapter',   val: r[COL.조사항목장] },
+      { label: '기준 제목', val: r[COL.기준제목] },
+      { label: '기준',      val: r[COL.기준] },
+      { label: '조사 항목', val: r[COL.조사항목] },
+      { label: '기준 이해', val: r[COL.기준이해] },
+      { label: '조사 내용', val: r[COL.조사내용] },
+      { label: '조사 목적', val: r[COL.조사목적] },
+      { label: '참고 자료', val: r[COL.참고자료] },
     ];
     return '<div class="item-card">' +
       '<div class="item-card-header">' +
         '<span class="item-idx">#' + pad(i+1) + '</span>' +
-        '<span class="grade-badge ' + gradeClass + '">' + (esc(grade)||'-') + '</span>' +
+        '<span class="grade-badge ' + gradeClass + '">' + (esc(grade) || '-') + '</span>' +
         '<span class="item-division">' + highlight(r[COL.조사항목구분], searchQuery) + '</span>' +
         '<span class="item-toggle-arrow"><svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>' +
       '</div>' +
-      '<div class="item-card-body"><div class="field-rows">' +
+      '<div class="item-body"><div class="field-rows">' +
         fields.map(function(f) {
           return '<div class="field-row">' +
-            '<div class="field-label">' + esc(f.label) + '</div>' +
+            '<div class="field-label">' + f.label + '</div>' +
             '<div class="field-value' + (f.val ? '' : ' empty') + '">' + highlight(f.val, searchQuery) + '</div>' +
           '</div>';
         }).join('') +
@@ -1026,35 +1185,24 @@
     }
   }
 
-  function toggleItemCard(card) {
-    var body = card.querySelector('.item-card-body');
-    if (card.classList.contains('expanded')) {
-      body.style.maxHeight = '0';
-      card.classList.remove('expanded');
-    } else {
-      card.classList.add('expanded');
-      body.style.maxHeight = (body.scrollHeight + 2000) + 'px';
-    }
-  }
-
   /* ── 탭 전환 ── */
   function switchTab(tab) {
     currentView = tab;
-    /* 사이드바 버튼 */
+    location.hash = tab;
+
     document.querySelectorAll('.tab-btn').forEach(function(btn) {
       btn.classList.toggle('active', btn.dataset.tab === tab);
     });
-    /* 네비게이션 카드 */
     document.querySelectorAll('.nav-card').forEach(function(card) {
       card.classList.toggle('active', card.dataset.tab === tab);
     });
+
     var views = ['all','jobgroup','doctor','nurse','pharm','guardian','etc','question','review'];
     views.forEach(function(v) {
       var viewEl = el('view-' + v);
       if (viewEl) viewEl.style.display = v === tab ? 'block' : 'none';
     });
-    /* URL 해시 동기화 */
-    history.replaceState(null, '', '#' + tab);
+
     allExpanded = false;
     setText('expandAllBtn', '모두 펼치기');
   }
@@ -1064,17 +1212,23 @@
     allExpanded = !allExpanded;
     setText('expandAllBtn', allExpanded ? '모두 접기' : '모두 펼치기');
     var listMap = {
-      all:'regList', jobgroup:'jobgroupList',
-      doctor:'doctorList', nurse:'nurseList', pharm:'pharmList',
-      guardian:'guardianList', etc:'etcList', question:'questionList', review:'reviewList',
+      all: 'regList', jobgroup: 'jobgroupList',
+      doctor: 'doctorList', nurse: 'nurseList',
+      pharm: 'pharmList', guardian: 'guardianList',
+      etc: 'etcList', question: 'questionList', review: 'reviewList',
     };
     var container = el(listMap[currentView]);
     if (!container) return;
     container.querySelectorAll('.reg-card, .jg-card').forEach(function(card) {
       var body  = card.querySelector('.reg-card-body, .jg-card-body');
       var inner = card.querySelector('.reg-card-body-inner, .jg-card-body-inner');
-      if (allExpanded) { card.classList.add('expanded'); body.style.maxHeight = (inner.scrollHeight + 9999) + 'px'; }
-      else { card.classList.remove('expanded'); body.style.maxHeight = '0'; }
+      if (allExpanded) {
+        card.classList.add('expanded');
+        body.style.maxHeight = (inner.scrollHeight + 9999) + 'px';
+      } else {
+        card.classList.remove('expanded');
+        body.style.maxHeight = '0';
+      }
     });
   }
 
@@ -1082,7 +1236,8 @@
   function rerender() {
     allExpanded = false;
     setText('expandAllBtn', '모두 펼치기');
-    renderAccordion('regList',      getFiltered(isGeneral),  '');
+    /* 전체 탭: isAll (모든 행) */
+    renderAccordion('regList',      getFiltered(isAll),      '');
     renderAccordion('doctorList',   getFiltered(isDoctor),   'purple-card');
     renderAccordion('nurseList',    getFiltered(isNurse),    'pink-card');
     renderAccordion('pharmList',    getFiltered(isPharm),    'green-card');
@@ -1091,12 +1246,11 @@
     renderAccordion('questionList', getFiltered(isQuestion), 'blue-card');
     renderAccordion('reviewList',   getFiltered(isReview),   'teal-card');
     renderJobGroup();
-    updateBadges();
   }
 
+  /* ── 결과 정보 ── */
   function updateResultInfo(count) {
     var infoEl = el('resultInfo');
-    if (!infoEl) return;
     if (searchQuery) {
       infoEl.innerHTML = '<strong>' + count + '</strong> 규정 검색됨';
     } else {
@@ -1107,7 +1261,8 @@
   /* ── 이벤트 바인딩 ── */
   el('searchInput').addEventListener('input', function(e) {
     searchQuery = e.target.value;
-    el('searchClear').classList.toggle('visible', searchQuery.length > 0);
+    var clearBtn = el('searchClear');
+    clearBtn.classList.toggle('visible', searchQuery.length > 0);
     rerender();
   });
 
@@ -1132,28 +1287,22 @@
   /* 키보드 단축키 */
   document.addEventListener('keydown', function(e) {
     if (e.key === '/' && document.activeElement !== el('searchInput')) {
-      e.preventDefault(); el('searchInput').focus();
+      e.preventDefault();
+      el('searchInput').focus();
     }
-    if (e.key === 'Escape') {
-      el('searchInput').value = ''; searchQuery = '';
+    if (e.key === 'Escape' && document.activeElement === el('searchInput')) {
+      el('searchInput').blur();
+      el('searchInput').value = '';
+      searchQuery = '';
       el('searchClear').classList.remove('visible');
       rerender();
     }
-    if (e.key === 'e' || e.key === 'E') { if (document.activeElement !== el('searchInput')) toggleExpandAll(); }
+    if (e.key === 'e' || e.key === 'E') {
+      if (document.activeElement.tagName !== 'INPUT') toggleExpandAll();
+    }
   });
 
-  /* URL 해시로 초기 탭 */
-  var initHash = (location.hash || '').replace('#', '');
-  var validTabs = ['all','jobgroup','doctor','nurse','pharm','guardian','etc','question','review'];
-  if (validTabs.indexOf(initHash) !== -1) currentView = initHash;
-
-  /* 스크롤 진행 바 */
-  el('mainArea').addEventListener('scroll', function() {
-    var el2 = el('mainArea');
-    var pct = el2.scrollTop / (el2.scrollHeight - el2.clientHeight) * 100;
-    document.documentElement.style.setProperty('--scroll-pct', Math.min(pct, 100) + '%');
-  });
-
+  /* ── 시작 ── */
   loadData();
 })();
 </script>
