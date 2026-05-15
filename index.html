@@ -1,60 +1,347 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>구글 시트 데이터</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-        }
-        .card {
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 10px;
-            margin-bottom: 10px;
-            display: flex;
-            flex-direction: column; /* 세로로 나열 */
-        }
-        .title {
-            font-weight: bold;
-            font-size: 1.2em;
-        }
-        .content {
-            margin-top: 5px;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>규정 조사 항목 뷰어</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --surface2: #22263a;
+    --border: #2e3248;
+    --accent: #4f8ef7;
+    --text: #e8eaf0;
+    --muted: #7a7f9a;
+    --green: #3ecf8e;
+    --badge: #2a3050;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Noto Sans KR', sans-serif; min-height: 100vh; }
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+
+  header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 18px; background: var(--surface);
+    border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100;
+  }
+  header .logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 15px; }
+  header .logo-icon {
+    width: 32px; height: 32px; background: var(--accent); border-radius: 8px;
+    display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 14px;
+  }
+  .status { font-size: 12px; color: var(--green); display: flex; align-items: center; gap: 6px; }
+  .status::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--green); display: inline-block; }
+
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 16px; }
+  .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
+  .stat-card .label { font-size: 11px; color: var(--muted); margin-bottom: 6px; }
+  .stat-card .value { font-size: 22px; font-weight: 700; color: var(--accent); }
+
+  .search-wrap { padding: 0 16px 12px; }
+  .search-wrap input {
+    width: 100%; background: var(--surface); border: 1px solid var(--border);
+    color: var(--text); border-radius: 8px; padding: 10px 14px; font-size: 13px;
+    outline: none;
+  }
+  .search-wrap input::placeholder { color: var(--muted); }
+
+  .tabs-wrap { overflow-x: auto; padding: 0 16px 12px; }
+  .tabs { display: flex; gap: 8px; width: max-content; }
+  .tab {
+    padding: 6px 14px; border-radius: 20px; font-size: 12px; cursor: pointer;
+    background: var(--surface); border: 1px solid var(--border); color: var(--muted);
+    white-space: nowrap; transition: all .2s;
+  }
+  .tab.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+  .list { padding: 0 16px 80px; display: flex; flex-direction: column; gap: 10px; }
+
+  .regulation-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; overflow: hidden;
+  }
+  .regulation-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 16px; cursor: pointer; gap: 10px;
+  }
+  .regulation-header .title { font-size: 14px; font-weight: 500; flex: 1; }
+  .regulation-header .badge {
+    background: var(--badge); color: var(--muted); font-size: 11px;
+    padding: 3px 8px; border-radius: 10px; white-space: nowrap;
+  }
+  .chevron { color: var(--muted); font-size: 12px; transition: transform .2s; }
+  .chevron.open { transform: rotate(180deg); }
+
+  /* 세로 카드 영역 */
+  .detail-area { display: none; padding: 0 12px 12px; flex-direction: column; gap: 10px; }
+  .detail-area.open { display: flex; }
+
+  /* 각 항목 세로 카드 */
+  .item-card {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 10px; overflow: hidden;
+  }
+  .item-card .item-header {
+    background: var(--badge); padding: 8px 12px;
+    font-size: 11px; color: var(--accent); font-weight: 700;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .item-card .item-num {
+    width: 18px; height: 18px; background: var(--accent); color: #fff;
+    border-radius: 50%; font-size: 10px; display: flex; align-items: center; justify-content: center;
+  }
+
+  /* 세로 필드 리스트 */
+  .field-list { display: flex; flex-direction: column; }
+  .field-row {
+    display: flex; border-bottom: 1px solid var(--border); min-height: 36px;
+  }
+  .field-row:last-child { border-bottom: none; }
+  .field-label {
+    width: 90px; min-width: 90px; padding: 10px 12px;
+    font-size: 11px; color: var(--muted); font-weight: 500;
+    background: rgba(255,255,255,0.02); border-right: 1px solid var(--border);
+    display: flex; align-items: flex-start;
+  }
+  .field-value {
+    flex: 1; padding: 10px 12px; font-size: 13px; color: var(--text);
+    word-break: keep-all; line-height: 1.6;
+  }
+  .grade-pill {
+    display: inline-block; padding: 2px 8px; border-radius: 4px;
+    font-size: 11px; font-weight: 700;
+  }
+  .grade-S { background: #2d4a8a; color: #7fb3ff; }
+  .grade-A { background: #2d5a3d; color: #5ecf8e; }
+  .grade-B { background: #5a4a2d; color: #f0c070; }
+
+  .loading { text-align: center; padding: 60px 20px; color: var(--muted); font-size: 14px; }
+  .spinner {
+    width: 36px; height: 36px; border: 3px solid var(--border);
+    border-top-color: var(--accent); border-radius: 50%;
+    animation: spin 0.8s linear infinite; margin: 0 auto 16px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .empty { text-align: center; padding: 40px 20px; color: var(--muted); font-size: 13px; }
+</style>
 </head>
 <body>
-    <div id="data-container"></div>
 
-    <script>
-        const data = [
-            { title: "규정 제목 1", content: "내용 1" },
-            { title: "규정 제목 2", content: "내용 2" },
-            { title: "규정 제목 3", content: "내용 3" }
-        ];
+<header>
+  <div class="logo">
+    <div class="logo-icon">R</div>
+    규정 조사 항목 뷰어
+  </div>
+  <div class="status" id="statusText">로딩중...</div>
+</header>
 
-        const container = document.getElementById('data-container');
+<div class="stats">
+  <div class="stat-card"><div class="label">전체 항목</div><div class="value" id="totalCount">-</div></div>
+  <div class="stat-card"><div class="label">규정 수</div><div class="value" id="regCount">-</div></div>
+  <div class="stat-card"><div class="label">직군 수</div><div class="value" id="jobCount">-</div></div>
+</div>
 
-        data.forEach(item => {
-            const card = document.createElement('div');
-            card.className = 'card';
+<div class="search-wrap">
+  <input type="text" id="searchInput" placeholder="규정 제목, 조사 항목, 기준 제목으로 검색...">
+</div>
 
-            const title = document.createElement('div');
-            title.className = 'title';
-            title.textContent = item.title;
+<div class="tabs-wrap">
+  <div class="tabs" id="tabsContainer">
+    <div class="tab active" data-job="전체">전체</div>
+  </div>
+</div>
 
-            const content = document.createElement('div');
-            content.className = 'content';
-            content.textContent = item.content;
+<div class="list" id="listContainer">
+  <div class="loading">
+    <div class="spinner"></div>
+    데이터를 불러오는 중입니다...
+  </div>
+</div>
 
-            card.appendChild(title);
-            card.appendChild(content);
-            container.appendChild(card);
+<script>
+  const SHEET_ID = '1fqFVOmQGVGhKQTLBTGRCeDW_JoOeWVmUU3PjqCMNnx0';
+  const SHEET_NAME = 'Sheet1';
+  const API_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(SHEET_NAME)}`;
+
+  let allData = [];
+  let currentJob = '전체';
+  let currentSearch = '';
+
+  const COLUMNS = {
+    규정제목: 0,
+    직군: 1,
+    등급: 2,
+    구분: 3,
+    CHAPTER: 4,
+    기준제목: 5,
+    조사항목: 6,
+    조사내용: 7,
+    조사목적: 8,
+    조사방법: 9,
+    기준문서: 10,
+    비고: 11
+  };
+
+  const COL_LABELS = [
+    { key: '직군', col: 1 },
+    { key: '등급', col: 2 },
+    { key: '구분', col: 3 },
+    { key: 'CHAPTER', col: 4 },
+    { key: '기준제목', col: 5 },
+    { key: '조사항목', col: 6 },
+    { key: '조사내용', col: 7 },
+    { key: '조사목적', col: 8 },
+    { key: '조사방법', col: 9 },
+    { key: '기준문서', col: 10 },
+    { key: '비고', col: 11 }
+  ];
+
+  async function loadData() {
+    try {
+      const res = await fetch(API_URL);
+      const text = await res.text();
+      const json = JSON.parse(text.match(/google\.visualization\.Query\.setResponse\(([\s\S]*)\)/)[1]);
+      const rows = json.table.rows;
+
+      allData = rows.slice(1).map(row => {
+        return row.c.map(cell => (cell && cell.v !== null && cell.v !== undefined) ? String(cell.v).trim() : '');
+      }).filter(row => row[0]);
+
+      const jobs = [...new Set(allData.map(r => r[1]).filter(Boolean))];
+      buildTabs(jobs);
+      updateStats();
+      render();
+      document.getElementById('statusText').textContent = `${allData.length}개 항목 로드 완료`;
+    } catch(e) {
+      document.getElementById('listContainer').innerHTML = '<div class="empty">데이터 로드 실패. 구글 시트 공유 설정을 확인해주세요.</div>';
+    }
+  }
+
+  function buildTabs(jobs) {
+    const container = document.getElementById('tabsContainer');
+    container.innerHTML = '<div class="tab active" data-job="전체">전체</div>';
+    jobs.forEach(job => {
+      const div = document.createElement('div');
+      div.className = 'tab';
+      div.dataset.job = job;
+      div.textContent = job;
+      container.appendChild(div);
+    });
+    container.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        container.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        currentJob = tab.dataset.job;
+        render();
+      });
+    });
+  }
+
+  function updateStats() {
+    document.getElementById('totalCount').textContent = allData.length;
+    document.getElementById('regCount').textContent = new Set(allData.map(r => r[0])).size;
+    document.getElementById('jobCount').textContent = new Set(allData.map(r => r[1]).filter(Boolean)).size;
+  }
+
+  function getFiltered() {
+    return allData.filter(row => {
+      const jobMatch = currentJob === '전체' || row[1] === currentJob;
+      const searchMatch = !currentSearch || row.some(cell => cell.toLowerCase().includes(currentSearch.toLowerCase()));
+      return jobMatch && searchMatch;
+    });
+  }
+
+  function gradeClass(g) {
+    if (g === 'S') return 'grade-S';
+    if (g === 'A') return 'grade-A';
+    if (g === 'B') return 'grade-B';
+    return '';
+  }
+
+  function render() {
+    const filtered = getFiltered();
+    const container = document.getElementById('listContainer');
+
+    if (!filtered.length) {
+      container.innerHTML = '<div class="empty">검색 결과가 없습니다.</div>';
+      return;
+    }
+
+    // 규정제목별 그룹핑
+    const groups = {};
+    filtered.forEach(row => {
+      const title = row[0] || '(제목없음)';
+      if (!groups[title]) groups[title] = [];
+      groups[title].push(row);
+    });
+
+    container.innerHTML = '';
+
+    Object.entries(groups).forEach(([title, items]) => {
+      const card = document.createElement('div');
+      card.className = 'regulation-card';
+
+      const header = document.createElement('div');
+      header.className = 'regulation-header';
+      header.innerHTML = `
+        <div class="title">${title}</div>
+        <div class="badge">${items.length}개 항목</div>
+        <div class="chevron" id="chev_${encodeURIComponent(title)}">V</div>
+      `;
+
+      const detail = document.createElement('div');
+      detail.className = 'detail-area';
+
+      items.forEach((row, idx) => {
+        const itemCard = document.createElement('div');
+        itemCard.className = 'item-card';
+
+        let fieldsHTML = '';
+        COL_LABELS.forEach(({ key, col }) => {
+          const val = row[col] || '';
+          if (!val) return;
+          let displayVal = val;
+          if (key === '등급') {
+            displayVal = `<span class="grade-pill ${gradeClass(val)}">${val}</span>`;
+          }
+          fieldsHTML += `
+            <div class="field-row">
+              <div class="field-label">${key}</div>
+              <div class="field-value">${displayVal}</div>
+            </div>
+          `;
         });
-    </script>
+
+        itemCard.innerHTML = `
+          <div class="item-header">
+            <div class="item-num">${idx + 1}</div>
+            항목 ${idx + 1}
+          </div>
+          <div class="field-list">${fieldsHTML}</div>
+        `;
+        detail.appendChild(itemCard);
+      });
+
+      header.addEventListener('click', () => {
+        const isOpen = detail.classList.contains('open');
+        detail.classList.toggle('open', !isOpen);
+        header.querySelector('.chevron').textContent = isOpen ? 'V' : 'A';
+      });
+
+      card.appendChild(header);
+      card.appendChild(detail);
+      container.appendChild(card);
+    });
+  }
+
+  document.getElementById('searchInput').addEventListener('input', (e) => {
+    currentSearch = e.target.value;
+    render();
+  });
+
+  loadData();
+</script>
 </body>
 </html>
