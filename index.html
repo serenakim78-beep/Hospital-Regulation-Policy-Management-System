@@ -1,1023 +1,1165 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>한서재활요양병원 규정 뷰어</title>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>한서재활요양병원 규정 뷰어</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=IBM+Plex+Mono:wght@400;600&display=swap');
 
-    :root {
-      --bg: #0c0b09;
-      --surface: #141210;
-      --surface2: #1c1916;
-      --surface3: #242018;
-      --gold: #c9a84c;
-      --gold2: #e8c97a;
-      --gold-dim: rgba(201,168,76,0.15);
-      --text: #ede8df;
-      --text-muted: #7a7060;
-      --text-mid: #a89880;
-      --border: #2a2520;
-      --border2: #3a342c;
-      --success: #6db98a;
-      --warning: #c9a84c;
-      --danger: #c97a6d;
-      --blue: #7a9fc9;
-      --blue-dim: rgba(122,159,201,0.15);
-      --teal: #6db9b0;
-      --teal-dim: rgba(109,185,176,0.15);
-      --purple: #a87ac9;
-      --purple-dim: rgba(168,122,201,0.15);
-      --pink: #c97aa0;
-      --pink-dim: rgba(201,122,160,0.15);
-      --green: #7ac9a0;
-      --green-dim: rgba(122,201,160,0.15);
-      --orange: #c9a07a;
-      --orange-dim: rgba(201,160,122,0.15);
-      --sidebar-w: 220px;
-      --font: 'Malgun Gothic', '맑은 고딕', sans-serif;
-    }
+  :root {
+    --bg: #1a1612;
+    --bg2: #221e19;
+    --bg3: #2c2620;
+    --bg4: #342e27;
+    --border: #3d3630;
+    --gold: #c8a96e;
+    --gold2: #e8c98e;
+    --text: #e8ddd0;
+    --text2: #a89880;
+    --text3: #6e6055;
+    --doctor: #7eb8d4;
+    --nurse: #a8d4a0;
+    --pharm: #d4a8c0;
+    --guardian: #d4c4a0;
+    --etc: #b0b8d4;
+    --question: #d4b8a0;
+    --red: #d47070;
+    --radius: 10px;
+  }
 
-    body {
-      font-family: var(--font);
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-      pointer-events: none;
-      z-index: 999;
-      opacity: 0.35;
-    }
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 14px;
+    line-height: 1.6;
+  }
 
-    #scrollProgress {
-      position: fixed;
-      top: 0; left: 0;
-      height: 2px;
-      width: 0%;
-      background: linear-gradient(90deg, var(--gold), var(--gold2));
-      z-index: 9999;
-      transition: width 0.1s linear;
-    }
+  #topbar {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .logo-badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    color: var(--text3);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  .logo-title { font-size: 16px; font-weight: 700; color: var(--gold); }
+  .topbar-right { display: flex; align-items: center; gap: 16px; }
+  #status-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--text3);
+    display: inline-block;
+    transition: background 0.3s;
+  }
+  #status-dot.ok  { background: #6dbe6d; }
+  #status-dot.err { background: var(--red); }
+  #status-text { font-size: 12px; color: var(--text2); }
+  .print-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text2);
+    padding: 5px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    font-family: inherit;
+    transition: all 0.2s;
+  }
+  .print-btn:hover { border-color: var(--gold); color: var(--gold); }
 
-    header {
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
-      padding: 16px 24px;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      position: sticky;
-      top: 0;
-      z-index: 200;
-      flex-shrink: 0;
-    }
+  /* Debug bar */
+  #debug-bar {
+    background: #1e1408;
+    border-bottom: 2px solid #6a3a00;
+    padding: 10px 24px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: #e8a050;
+    display: none;
+    word-break: break-all;
+    white-space: pre-wrap;
+    max-height: 160px;
+    overflow-y: auto;
+  }
+  #debug-bar.show { display: block; }
+  .debug-line { padding: 2px 0; border-bottom: 1px solid #3a2a10; }
+  .debug-line:last-child { border-bottom: none; }
 
-    .logo-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3px;
-      width: 28px;
-      height: 28px;
-      flex-shrink: 0;
-    }
-    .logo-grid span { border-radius: 2px; background: var(--gold); }
-    .logo-grid span:nth-child(2) { background: var(--gold2); opacity: 0.6; }
-    .logo-grid span:nth-child(3) { background: var(--gold2); opacity: 0.4; }
-    .logo-grid span:nth-child(4) { background: var(--gold); opacity: 0.8; }
+  .layout { display: flex; min-height: calc(100vh - 53px); }
 
-    .header-titles { display: flex; flex-direction: column; gap: 1px; }
-    .header-sub { font-family: var(--font); font-size: 9px; letter-spacing: 2.5px; color: var(--text-muted); text-transform: uppercase; }
-    .header-main { font-family: var(--font); font-size: 17px; font-weight: 700; color: var(--text); letter-spacing: -0.5px; }
+  .sidebar {
+    width: 210px;
+    flex-shrink: 0;
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    padding: 20px 0;
+    position: sticky;
+    top: 53px;
+    height: calc(100vh - 53px);
+    overflow-y: auto;
+  }
+  .sidebar-section {
+    padding: 0 16px 6px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-top: 16px;
+  }
+  .sidebar-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 16px;
+    cursor: pointer;
+    border-left: 3px solid transparent;
+    transition: all 0.15s;
+    color: var(--text2);
+    font-size: 13px;
+    user-select: none;
+  }
+  .sidebar-item:hover { background: var(--bg3); color: var(--text); }
+  .sidebar-item.active {
+    background: var(--bg3);
+    border-left-color: var(--gold);
+    color: var(--gold);
+    font-weight: 500;
+  }
+  .sidebar-badge {
+    background: var(--bg4);
+    color: var(--text3);
+    padding: 1px 7px;
+    border-radius: 10px;
+    font-size: 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    min-width: 24px;
+    text-align: center;
+  }
+  .sidebar-item.active .sidebar-badge { background: var(--gold); color: var(--bg); }
+  .sidebar-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 8px;
+    flex-shrink: 0;
+  }
 
-    .header-right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+  .main { flex: 1; padding: 24px; overflow-x: hidden; }
 
-    .header-status { font-family: var(--font); font-size: 11px; color: var(--text-muted); display: flex; align-items: center; gap: 6px; }
-    .status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--warning); animation: pulse 2.5s infinite; flex-shrink: 0; }
-    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  .search-wrap { position: relative; margin-bottom: 20px; }
+  .search-label {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text3);
+    font-size: 13px;
+    pointer-events: none;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  #search-input {
+    width: 100%;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 10px 14px 10px 40px;
+    color: var(--text);
+    font-size: 13px;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  #search-input:focus { border-color: var(--gold); }
+  #search-input::placeholder { color: var(--text3); }
 
-    .print-btn {
-      font-family: var(--font); font-size: 11px;
-      background: var(--surface2); border: 1px solid var(--border);
-      border-radius: 6px; padding: 6px 12px; color: var(--text-muted);
-      cursor: pointer; transition: all 0.15s; display: flex; align-items: center; gap: 5px;
-    }
-    .print-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .stat-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+    user-select: none;
+  }
+  .stat-card:hover { border-color: var(--gold); transform: translateY(-1px); }
+  .stat-card.active { border-color: var(--gold); background: var(--bg3); }
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: transparent;
+    transition: background 0.2s;
+  }
+  .stat-card.active::before,
+  .stat-card:hover::before { background: var(--gold); }
+  .stat-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: 6px;
+  }
+  .stat-num { font-size: 28px; font-weight: 700; color: var(--gold2); line-height: 1; margin-bottom: 4px; }
+  .stat-name { font-size: 12px; color: var(--text2); }
 
-    .app-body { display: flex; flex: 1; min-height: 0; }
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+  .section-title { font-size: 13px; color: var(--text2); font-weight: 500; }
+  .expand-all-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text3);
+    padding: 4px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 11px;
+    font-family: inherit;
+    transition: all 0.15s;
+  }
+  .expand-all-btn:hover { border-color: var(--gold); color: var(--gold); }
 
-    /* ── SIDEBAR ── */
-    .sidebar {
-      width: var(--sidebar-w); flex-shrink: 0;
-      background: var(--surface); border-right: 1px solid var(--border);
-      position: sticky; top: 57px; height: calc(100vh - 57px);
-      overflow-y: auto; padding: 20px 0;
-      display: flex; flex-direction: column; gap: 4px;
-    }
-    .sidebar::-webkit-scrollbar { width: 4px; }
-    .sidebar::-webkit-scrollbar-track { background: transparent; }
-    .sidebar::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+  .reg-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 12px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .reg-card:hover { border-color: var(--bg4); }
+  .reg-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    cursor: pointer;
+    user-select: none;
+    gap: 12px;
+  }
+  .reg-card-left { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; flex-wrap: wrap; }
+  .reg-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text3);
+    flex-shrink: 0;
+    width: 24px;
+  }
+  .reg-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    flex: 1;
+    min-width: 120px;
+  }
+  .reg-count-badge {
+    background: var(--bg4);
+    color: var(--text3);
+    padding: 2px 9px;
+    border-radius: 10px;
+    font-size: 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+  .reg-chevron {
+    color: var(--text3);
+    font-size: 11px;
+    transition: transform 0.25s;
+    flex-shrink: 0;
+  }
+  .reg-card.open .reg-chevron { transform: rotate(180deg); }
+  .reg-card-body {
+    display: none;
+    padding: 0 18px 14px;
+  }
+  .reg-card.open .reg-card-body { display: block; }
 
-    .sidebar-section-label {
-      font-family: var(--font); font-size: 9px; letter-spacing: 2px;
-      color: var(--text-muted); text-transform: uppercase; padding: 10px 18px 4px;
-    }
-    .sidebar-sep { height: 1px; background: var(--border); margin: 8px 18px; }
+  .item-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    overflow: hidden;
+  }
+  .item-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    cursor: pointer;
+    user-select: none;
+    gap: 10px;
+  }
+  .item-header-left { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
+  .item-seq {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--text3);
+    flex-shrink: 0;
+    width: 30px;
+  }
+  .grade-badge {
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 700;
+    flex-shrink: 0;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  .grade-P { background: #3a1a1a; color: var(--red); border: 1px solid #5a2a2a; }
+  .grade-S { background: #1a2a3a; color: var(--doctor); border: 1px solid #2a3a5a; }
+  .grade-M { background: #1a3a2a; color: var(--nurse); border: 1px solid #2a5a3a; }
+  .grade-default { background: var(--bg4); color: var(--text3); border: 1px solid var(--border); }
+  .item-criterion-title {
+    font-size: 13px;
+    color: var(--text);
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .item-chevron {
+    color: var(--text3);
+    font-size: 10px;
+    transition: transform 0.2s;
+    flex-shrink: 0;
+  }
+  .item-card.open .item-chevron { transform: rotate(180deg); }
+  .item-body { display: none; padding: 0 14px 12px; }
+  .item-card.open .item-body { display: block; }
 
-    .tab-btn {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 9px 18px 9px 14px; font-size: 13px; font-family: var(--font);
-      font-weight: 500; color: var(--text-muted); cursor: pointer;
-      border: none; background: transparent; width: 100%; text-align: left;
-      transition: all 0.18s; border-radius: 0; gap: 8px;
-      border-left: 2px solid transparent;
-    }
-    .tab-btn:hover { background: var(--surface2); color: var(--text); }
-    .tab-btn.active                { color: var(--gold);     background: var(--gold-dim);   border-left-color: var(--gold); }
-    .tab-btn.active.purple-tab     { color: var(--purple);   background: var(--purple-dim); border-left-color: var(--purple); }
-    .tab-btn.active.pink-tab       { color: var(--pink);     background: var(--pink-dim);   border-left-color: var(--pink); }
-    .tab-btn.active.green-tab      { color: var(--green);    background: var(--green-dim);  border-left-color: var(--green); }
-    .tab-btn.active.orange-tab     { color: var(--orange);   background: var(--orange-dim); border-left-color: var(--orange); }
-    .tab-btn.active.gray-tab       { color: var(--text-mid); background: var(--surface3);   border-left-color: var(--text-mid); }
-    .tab-btn.active.blue-tab       { color: var(--blue);     background: var(--blue-dim);   border-left-color: var(--blue); }
-    .tab-btn.active.teal-tab       { color: var(--teal);     background: var(--teal-dim);   border-left-color: var(--teal); }
+  .field-rows { display: flex; flex-direction: column; gap: 6px; }
+  .field-row {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .field-key {
+    background: var(--bg4);
+    padding: 8px 10px;
+    font-size: 11px;
+    color: var(--text3);
+    font-weight: 500;
+    border-right: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+  }
+  .field-val {
+    background: var(--bg2);
+    padding: 8px 12px;
+    font-size: 12px;
+    color: var(--text);
+    line-height: 1.65;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .field-val.empty { color: var(--text3); font-style: italic; }
 
-    .tab-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; background: var(--text-muted); }
-    .tab-btn.active .tab-dot                { background: var(--gold); }
-    .tab-btn.active.purple-tab .tab-dot     { background: var(--purple); }
-    .tab-btn.active.pink-tab   .tab-dot     { background: var(--pink); }
-    .tab-btn.active.green-tab  .tab-dot     { background: var(--green); }
-    .tab-btn.active.orange-tab .tab-dot     { background: var(--orange); }
-    .tab-btn.active.gray-tab   .tab-dot     { background: var(--text-mid); }
-    .tab-btn.active.blue-tab   .tab-dot     { background: var(--blue); }
-    .tab-btn.active.teal-tab   .tab-dot     { background: var(--teal); }
+  .jg-tag {
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 10px;
+    font-weight: 500;
+    border: 1px solid;
+    white-space: nowrap;
+  }
+  .jg-doctor   { background: #1a2a3a; color: var(--doctor);   border-color: #2a4a5a; }
+  .jg-nurse    { background: #1a3020; color: var(--nurse);    border-color: #2a5030; }
+  .jg-pharm    { background: #2a1a28; color: var(--pharm);    border-color: #4a2a48; }
+  .jg-guardian { background: #2a2418; color: var(--guardian); border-color: #4a4428; }
+  .jg-etc      { background: #1a1e2a; color: var(--etc);      border-color: #2a2e4a; }
+  .jg-question { background: #2a2018; color: var(--question); border-color: #4a4030; }
 
-    .tab-label { flex: 1; }
+  .empty-msg { text-align: center; padding: 60px 20px; color: var(--text3); font-size: 14px; }
+  .loading-msg { text-align: center; padding: 60px 20px; color: var(--text2); }
+  .spinner {
+    width: 32px; height: 32px;
+    border: 3px solid var(--border);
+    border-top-color: var(--gold);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 16px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
 
-    .tab-badge {
-      font-family: var(--font); font-size: 10px;
-      background: var(--surface2); border: 1px solid var(--border);
-      color: var(--text-muted); border-radius: 20px;
-      padding: 1px 7px; flex-shrink: 0; min-width: 28px; text-align: center;
-    }
-    .tab-btn.active .tab-badge                { border-color: var(--gold);     color: var(--gold);     background: var(--gold-dim); }
-    .tab-btn.active.purple-tab .tab-badge     { border-color: var(--purple);   color: var(--purple);   background: var(--purple-dim); }
-    .tab-btn.active.pink-tab   .tab-badge     { border-color: var(--pink);     color: var(--pink);     background: var(--pink-dim); }
-    .tab-btn.active.green-tab  .tab-badge     { border-color: var(--green);    color: var(--green);    background: var(--green-dim); }
-    .tab-btn.active.orange-tab .tab-badge     { border-color: var(--orange);   color: var(--orange);   background: var(--orange-dim); }
-    .tab-btn.active.gray-tab   .tab-badge     { border-color: var(--text-mid); color: var(--text-mid); background: var(--surface3); }
-    .tab-btn.active.blue-tab   .tab-badge     { border-color: var(--blue);     color: var(--blue);     background: var(--blue-dim); }
-    .tab-btn.active.teal-tab   .tab-badge     { border-color: var(--teal);     color: var(--teal);     background: var(--teal-dim); }
+  .error-box {
+    background: #2a1010;
+    border: 1px solid #5a2020;
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    color: var(--red);
+    font-size: 13px;
+    line-height: 1.8;
+  }
+  .error-box strong { display: block; font-size: 15px; margin-bottom: 10px; }
+  .error-box code {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    background: #1a0808;
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: #e89090;
+    display: block;
+    margin-top: 8px;
+    word-break: break-all;
+  }
 
-    /* ── MAIN ── */
-    .main-area { flex: 1; min-width: 0; padding: 28px; overflow-y: auto; }
-
-    .search-section { margin-bottom: 20px; }
-    .search-wrap { position: relative; }
-    .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none; }
-    .search-wrap input {
-      width: 100%; background: var(--surface); border: 1px solid var(--border);
-      border-radius: 10px; padding: 13px 44px 13px 42px; font-size: 14px;
-      font-family: var(--font); color: var(--text); outline: none; transition: border-color 0.2s, box-shadow 0.2s;
-    }
-    .search-wrap input::placeholder { color: var(--text-muted); }
-    .search-wrap input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px var(--gold-dim); }
-    .search-clear {
-      position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
-      background: var(--surface3); border: 1px solid var(--border); border-radius: 50%;
-      width: 22px; height: 22px; display: none; align-items: center; justify-content: center;
-      cursor: pointer; color: var(--text-muted); font-size: 12px; transition: all 0.15s;
-    }
-    .search-clear:hover { background: var(--border2); color: var(--text); }
-    .search-clear.visible { display: flex; }
-
-    /* ── NAV CARDS ── */
-    .nav-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 24px; }
-
-    .nav-card {
-      background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
-      padding: 18px 20px; cursor: pointer; transition: all 0.2s;
-      display: flex; flex-direction: column; gap: 6px; position: relative; overflow: hidden;
-    }
-    .nav-card::before {
-      content: ''; position: absolute; bottom: 0; left: 0; right: 0;
-      height: 2px; background: var(--gold); opacity: 0; transition: opacity 0.2s;
-    }
-    .nav-card:hover { border-color: var(--border2); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
-    .nav-card:hover::before { opacity: 0.5; }
-    .nav-card.active { border-color: var(--gold); background: var(--gold-dim); }
-    .nav-card.active::before { opacity: 1; }
-
-    .nav-card.purple-card.active  { border-color: var(--purple);   background: var(--purple-dim); }
-    .nav-card.purple-card::before { background: var(--purple); }
-    .nav-card.pink-card.active    { border-color: var(--pink);     background: var(--pink-dim); }
-    .nav-card.pink-card::before   { background: var(--pink); }
-    .nav-card.green-card.active   { border-color: var(--green);    background: var(--green-dim); }
-    .nav-card.green-card::before  { background: var(--green); }
-    .nav-card.orange-card.active  { border-color: var(--orange);   background: var(--orange-dim); }
-    .nav-card.orange-card::before { background: var(--orange); }
-    .nav-card.gray-card.active    { border-color: var(--text-mid); background: var(--surface3); }
-    .nav-card.gray-card::before   { background: var(--text-mid); }
-    .nav-card.blue-card.active    { border-color: var(--blue);     background: var(--blue-dim); }
-    .nav-card.blue-card::before   { background: var(--blue); }
-    .nav-card.teal-card.active    { border-color: var(--teal);     background: var(--teal-dim); }
-    .nav-card.teal-card::before   { background: var(--teal); }
-
-    .nav-card-en { font-family: var(--font); font-size: 9px; letter-spacing: 2px; color: var(--text-muted); text-transform: uppercase; }
-    .nav-card-count { font-family: var(--font); font-size: 28px; font-weight: 700; color: var(--gold); line-height: 1; }
-    .nav-card.purple-card .nav-card-count { color: var(--purple); }
-    .nav-card.pink-card   .nav-card-count { color: var(--pink); }
-    .nav-card.green-card  .nav-card-count { color: var(--green); }
-    .nav-card.orange-card .nav-card-count { color: var(--orange); }
-    .nav-card.gray-card   .nav-card-count { color: var(--text-mid); }
-    .nav-card.blue-card   .nav-card-count { color: var(--blue); }
-    .nav-card.teal-card   .nav-card-count { color: var(--teal); }
-    .nav-card-name { font-family: var(--font); font-size: 13px; font-weight: 700; color: var(--text); }
-
-    .result-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
-    .result-info { font-family: var(--font); font-size: 11px; color: var(--text-muted); }
-    .result-info strong { color: var(--gold); }
-
-    .expand-all-btn {
-      font-family: var(--font); font-size: 11px; letter-spacing: 0.5px;
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 6px; padding: 6px 14px; color: var(--text-muted);
-      cursor: pointer; transition: all 0.15s;
-    }
-    .expand-all-btn:hover { border-color: var(--border2); color: var(--text); }
-
-    /* ── ACCORDION ── */
-    .reg-list, .jobgroup-list { display: flex; flex-direction: column; gap: 10px; }
-
-    .reg-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; transition: border-color 0.2s; }
-    .reg-card:hover { border-color: var(--border2); }
-    .reg-card.expanded                { border-color: var(--gold); }
-    .reg-card.blue-card.expanded      { border-color: var(--blue); }
-    .reg-card.teal-card.expanded      { border-color: var(--teal); }
-    .reg-card.purple-card.expanded    { border-color: var(--purple); }
-    .reg-card.pink-card.expanded      { border-color: var(--pink); }
-    .reg-card.green-card.expanded     { border-color: var(--green); }
-    .reg-card.orange-card.expanded    { border-color: var(--orange); }
-    .reg-card.gray-card.expanded      { border-color: var(--text-mid); }
-
-    .reg-card-header { display: flex; align-items: center; gap: 14px; padding: 14px 18px; cursor: pointer; user-select: none; }
-    .reg-num { font-family: var(--font); font-size: 11px; color: var(--text-muted); width: 22px; flex-shrink: 0; }
-    .reg-title { font-family: var(--font); font-size: 14px; font-weight: 700; color: var(--text); flex: 1; }
-    .reg-count-badge {
-      font-family: var(--font); font-size: 11px; background: var(--surface2);
-      border: 1px solid var(--border); color: var(--text-muted); border-radius: 6px;
-      padding: 3px 9px; white-space: nowrap; flex-shrink: 0;
-    }
-    .reg-card.expanded .reg-count-badge                { border-color: var(--gold);     color: var(--gold);     background: var(--gold-dim); }
-    .reg-card.blue-card.expanded   .reg-count-badge    { border-color: var(--blue);     color: var(--blue);     background: var(--blue-dim); }
-    .reg-card.teal-card.expanded   .reg-count-badge    { border-color: var(--teal);     color: var(--teal);     background: var(--teal-dim); }
-    .reg-card.purple-card.expanded .reg-count-badge    { border-color: var(--purple);   color: var(--purple);   background: var(--purple-dim); }
-    .reg-card.pink-card.expanded   .reg-count-badge    { border-color: var(--pink);     color: var(--pink);     background: var(--pink-dim); }
-    .reg-card.green-card.expanded  .reg-count-badge    { border-color: var(--green);    color: var(--green);    background: var(--green-dim); }
-    .reg-card.orange-card.expanded .reg-count-badge    { border-color: var(--orange);   color: var(--orange);   background: var(--orange-dim); }
-    .reg-card.gray-card.expanded   .reg-count-badge    { border-color: var(--text-mid); color: var(--text-mid); background: var(--surface3); }
-
-    .toggle-arrow { width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: transform 0.25s; }
-    .reg-card.expanded .toggle-arrow,
-    .jg-card.expanded  .toggle-arrow { transform: rotate(180deg); }
-
-    .reg-card-body { max-height: 0; overflow: hidden; transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1); }
-    .reg-card-body-inner { padding: 0 18px 18px; border-top: 1px solid var(--border); }
-
-    /* ── JOB GROUP ── */
-    .jg-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; transition: border-color 0.2s; }
-    .jg-card:hover { border-color: var(--border2); }
-    .jg-card.expanded { border-color: var(--gold); }
-    .jg-card-header { display: flex; align-items: center; gap: 14px; padding: 14px 18px; cursor: pointer; user-select: none; }
-    .jg-num  { font-family: var(--font); font-size: 11px; color: var(--text-muted); width: 22px; flex-shrink: 0; }
-    .jg-name { font-family: var(--font); font-size: 14px; font-weight: 700; color: var(--text); flex: 1; }
-    .jg-count { font-family: var(--font); font-size: 11px; background: var(--surface2); border: 1px solid var(--border); color: var(--text-muted); border-radius: 6px; padding: 3px 9px; white-space: nowrap; flex-shrink: 0; }
-    .jg-card.expanded .jg-count { border-color: var(--gold); color: var(--gold); background: var(--gold-dim); }
-    .jg-card-body { max-height: 0; overflow: hidden; transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1); }
-    .jg-card-body-inner { padding: 0 18px 18px; border-top: 1px solid var(--border); }
-    .jg-reg-group { margin-top: 14px; }
-    .jg-reg-title { font-size: 12px; font-weight: 700; color: var(--gold); margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid var(--border); font-family: var(--font); }
-
-    /* ── ITEM CARDS ── */
-    .item-list { display: flex; flex-direction: column; gap: 10px; margin-top: 14px; }
-    .item-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
-    .item-card-header { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: var(--surface3); border-bottom: 1px solid var(--border); cursor: pointer; user-select: none; }
-    .item-idx { font-family: var(--font); font-size: 10px; color: var(--text-muted); }
-    .grade-badge { font-family: var(--font); font-size: 10px; font-weight: 500; padding: 2px 7px; border-radius: 4px; }
-    .grade-A { background: rgba(109,185,138,0.15); color: var(--success); border: 1px solid rgba(109,185,138,0.3); }
-    .grade-B { background: rgba(201,168,76,0.15);  color: var(--warning); border: 1px solid rgba(201,168,76,0.3); }
-    .grade-C { background: rgba(201,122,109,0.15); color: var(--danger);  border: 1px solid rgba(201,122,109,0.3); }
-    .grade-default { background: var(--surface2); color: var(--text-muted); border: 1px solid var(--border); }
-    .item-division { font-size: 11px; color: var(--text-muted); font-family: var(--font); flex: 1; }
-    .item-toggle-arrow { width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); transition: transform 0.2s; flex-shrink: 0; }
-    .item-card.item-expanded .item-toggle-arrow { transform: rotate(180deg); }
-    .item-body { max-height: 0; overflow: hidden; transition: max-height 0.3s cubic-bezier(0.4,0,0.2,1); }
-    .item-card.item-expanded .item-body { max-height: 2000px; }
-
-    .field-rows { padding: 12px; display: flex; flex-direction: column; gap: 0; }
-    .field-row { display: grid; grid-template-columns: 90px 1fr; gap: 0; border-bottom: 1px solid var(--border); min-height: 34px; }
-    .field-row:last-child { border-bottom: none; }
-    .field-label { font-family: var(--font); font-size: 10px; color: var(--text-muted); letter-spacing: 0.5px; padding: 8px 10px 8px 0; border-right: 1px solid var(--border); display: flex; align-items: flex-start; }
-    .field-value { font-size: 12px; font-family: var(--font); color: var(--text); padding: 8px 0 8px 12px; line-height: 1.6; word-break: break-word; }
-    .field-value.empty { color: var(--text-muted); font-style: italic; }
-
-    mark { background: rgba(201,168,76,0.3); color: var(--gold2); border-radius: 2px; padding: 0 1px; }
-
-    /* ── 디버그 배지 ── */
-    .debug-note {
-      font-size: 9px; font-family: var(--font); color: var(--text-muted);
-      background: var(--surface3); border: 1px solid var(--border);
-      border-radius: 4px; padding: 2px 6px; margin-left: 6px;
-      display: inline-block; vertical-align: middle;
-    }
-
-    /* ── LOADING / ERROR ── */
-    .loading-screen, .error-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 60vh; gap: 16px; text-align: center; }
-    .spinner { width: 36px; height: 36px; border: 2px solid var(--border); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.9s linear infinite; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .loading-text { color: var(--text-muted); font-size: 12px; font-family: var(--font); letter-spacing: 1px; }
-    .error-box { background: rgba(201,122,109,0.08); border: 1px solid rgba(201,122,109,0.3); border-radius: 12px; padding: 24px 32px; color: var(--danger); font-size: 13px; max-width: 480px; line-height: 1.7; }
-    .empty-state { text-align: center; padding: 48px; color: var(--text-muted); font-size: 13px; font-family: var(--font); }
-
-    @media print {
-      .sidebar, header, .nav-cards, .search-section, .result-row, #scrollProgress { display: none !important; }
-      .main-area { padding: 0; }
-      .reg-card-body, .jg-card-body { max-height: none !important; }
-      body { background: white; color: black; }
-    }
-
-    @media (max-width: 900px) { .nav-cards { grid-template-columns: repeat(2, 1fr); } }
-    @media (max-width: 768px) {
-      .sidebar { display: none !important; }
-      .main-area { padding: 16px; }
-      .nav-cards { grid-template-columns: repeat(2, 1fr); }
-      .field-row { grid-template-columns: 70px 1fr; }
-      .header-status .status-text { display: none; }
-    }
-    @media (min-width: 769px) { .sidebar { display: flex !important; } }
-  </style>
+  @media print {
+    .sidebar, #topbar, .search-wrap, .stat-grid, #debug-bar { display: none !important; }
+    .main { padding: 0; }
+    .reg-card-body, .item-body { display: block !important; }
+  }
+</style>
 </head>
 <body>
 
-<div id="scrollProgress"></div>
-
-<header>
-  <div class="logo-grid">
-    <span></span><span></span>
-    <span></span><span></span>
-  </div>
-  <div class="header-titles">
-    <div class="header-sub">Regulation Viewer</div>
-    <div class="header-main">한서재활요양병원 규정</div>
-  </div>
-  <div class="header-right">
-    <button class="print-btn" onclick="window.print()">
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
-      인쇄
-    </button>
-    <div class="header-status">
-      <div class="status-dot" id="statusDot"></div>
-      <span id="statusText" class="status-text">데이터 로딩 중...</span>
+<div id="topbar">
+  <div style="display:flex;align-items:center;gap:12px;">
+    <div>
+      <div class="logo-badge">REGULATION VIEWER v3</div>
+      <div class="logo-title">한서재활요양병원 규정</div>
     </div>
   </div>
-</header>
+  <div class="topbar-right">
+    <button class="print-btn" onclick="window.print()">인쇄</button>
+    <span id="status-dot"></span>
+    <span id="status-text">로딩중...</span>
+  </div>
+</div>
 
-<div class="app-body">
+<div id="debug-bar"></div>
 
-  <nav class="sidebar" id="sidebar">
-    <div class="sidebar-section-label">기본 보기</div>
-    <button class="tab-btn active"     data-tab="all">      <span class="tab-dot"></span><span class="tab-label">전체</span>      <span class="tab-badge" id="sb-all">0</span></button>
-    <button class="tab-btn teal-tab"   data-tab="review">   <span class="tab-dot"></span><span class="tab-label">규정 검토</span> <span class="tab-badge" id="sb-review">0</span></button>
-
-    <div class="sidebar-sep"></div>
-    <div class="sidebar-section-label">직군 분류</div>
-    <button class="tab-btn"            data-tab="jobgroup"> <span class="tab-dot"></span><span class="tab-label">직군별 보기</span><span class="tab-badge" id="sb-jobgroup">0</span></button>
-    <button class="tab-btn purple-tab" data-tab="doctor">   <span class="tab-dot"></span><span class="tab-label">의사</span>      <span class="tab-badge" id="sb-doctor">0</span></button>
-    <button class="tab-btn pink-tab"   data-tab="nurse">    <span class="tab-dot"></span><span class="tab-label">간호사</span>    <span class="tab-badge" id="sb-nurse">0</span></button>
-    <button class="tab-btn green-tab"  data-tab="pharm">    <span class="tab-dot"></span><span class="tab-label">약사</span>      <span class="tab-badge" id="sb-pharm">0</span></button>
-    <button class="tab-btn orange-tab" data-tab="guardian"> <span class="tab-dot"></span><span class="tab-label">보호자</span>    <span class="tab-badge" id="sb-guardian">0</span></button>
-    <button class="tab-btn gray-tab"   data-tab="etc">      <span class="tab-dot"></span><span class="tab-label">기타 직군</span> <span class="tab-badge" id="sb-etc">0</span></button>
-
-    <div class="sidebar-sep"></div>
-    <div class="sidebar-section-label">특수 분류</div>
-    <button class="tab-btn blue-tab"   data-tab="question"> <span class="tab-dot"></span><span class="tab-label">질문</span>      <span class="tab-badge" id="sb-question">0</span></button>
-  </nav>
-
-  <div class="main-area" id="mainArea">
-
-    <div class="loading-screen" id="loadingScreen">
-      <div class="spinner"></div>
-      <div class="loading-text">loading data...</div>
+<div class="layout">
+  <div class="sidebar">
+    <div class="sidebar-section">기본 보기</div>
+    <div class="sidebar-item active" data-tab="all">
+      <span><span class="sidebar-dot" style="background:var(--gold)"></span>전체</span>
+      <span class="sidebar-badge" id="sb-all">-</span>
     </div>
-    <div class="error-screen" id="errorScreen" style="display:none;">
-      <div class="error-box" id="errorMsg"></div>
+    <div class="sidebar-item" data-tab="review">
+      <span><span class="sidebar-dot" style="background:#888"></span>규정 검토</span>
+      <span class="sidebar-badge" id="sb-review">-</span>
+    </div>
+    <div class="sidebar-section">직군 분류</div>
+    <div class="sidebar-item" data-tab="doctor">
+      <span><span class="sidebar-dot" style="background:var(--doctor)"></span>의사</span>
+      <span class="sidebar-badge" id="sb-doctor">-</span>
+    </div>
+    <div class="sidebar-item" data-tab="nurse">
+      <span><span class="sidebar-dot" style="background:var(--nurse)"></span>간호사</span>
+      <span class="sidebar-badge" id="sb-nurse">-</span>
+    </div>
+    <div class="sidebar-item" data-tab="pharm">
+      <span><span class="sidebar-dot" style="background:var(--pharm)"></span>약사</span>
+      <span class="sidebar-badge" id="sb-pharm">-</span>
+    </div>
+    <div class="sidebar-item" data-tab="guardian">
+      <span><span class="sidebar-dot" style="background:var(--guardian)"></span>보호자</span>
+      <span class="sidebar-badge" id="sb-guardian">-</span>
+    </div>
+    <div class="sidebar-item" data-tab="etc">
+      <span><span class="sidebar-dot" style="background:var(--etc)"></span>기타 직군</span>
+      <span class="sidebar-badge" id="sb-etc">-</span>
+    </div>
+    <div class="sidebar-section">특수 분류</div>
+    <div class="sidebar-item" data-tab="question">
+      <span><span class="sidebar-dot" style="background:var(--question)"></span>질문</span>
+      <span class="sidebar-badge" id="sb-question">-</span>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="search-wrap">
+      <span class="search-label">/</span>
+      <input type="text" id="search-input"
+        placeholder="규정 제목, 기준 제목, 조사 항목, 직군으로 검색... (단축키: /)" />
     </div>
 
-    <div id="mainContent" style="display:none;">
-
-      <div class="search-section">
-        <div class="search-wrap">
-          <span class="search-icon">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-            </svg>
-          </span>
-          <input type="text" id="searchInput" placeholder="규정 제목, 조사 항목, 기준 제목, 직군으로 검색... (단축키: /)"/>
-          <button class="search-clear" id="searchClear" title="검색 지우기">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-          </button>
-        </div>
+    <div class="stat-grid" id="stat-grid">
+      <div class="stat-card active" data-tab="all">
+        <div class="stat-label">ALL</div>
+        <div class="stat-num" id="sc-all">-</div>
+        <div class="stat-name">전체</div>
       </div>
-
-      <div class="nav-cards">
-        <div class="nav-card active"       data-tab="all">
-          <div class="nav-card-en">ALL</div>
-          <div class="nav-card-count" id="nc-all">0</div>
-          <div class="nav-card-name">전체</div>
-        </div>
-        <div class="nav-card teal-card"    data-tab="review">
-          <div class="nav-card-en">REVIEW</div>
-          <div class="nav-card-count" id="nc-review">0</div>
-          <div class="nav-card-name">규정 검토</div>
-        </div>
-        <div class="nav-card"              data-tab="jobgroup">
-          <div class="nav-card-en">JOB GROUP</div>
-          <div class="nav-card-count" id="nc-jobgroup">0</div>
-          <div class="nav-card-name">직군별 보기</div>
-        </div>
-        <div class="nav-card purple-card"  data-tab="doctor">
-          <div class="nav-card-en">DOCTOR</div>
-          <div class="nav-card-count" id="nc-doctor">0</div>
-          <div class="nav-card-name">의사</div>
-        </div>
-        <div class="nav-card pink-card"    data-tab="nurse">
-          <div class="nav-card-en">NURSE</div>
-          <div class="nav-card-count" id="nc-nurse">0</div>
-          <div class="nav-card-name">간호사</div>
-        </div>
-        <div class="nav-card green-card"   data-tab="pharm">
-          <div class="nav-card-en">PHARMACIST</div>
-          <div class="nav-card-count" id="nc-pharm">0</div>
-          <div class="nav-card-name">약사</div>
-        </div>
-        <div class="nav-card orange-card"  data-tab="guardian">
-          <div class="nav-card-en">GUARDIAN</div>
-          <div class="nav-card-count" id="nc-guardian">0</div>
-          <div class="nav-card-name">보호자</div>
-        </div>
-        <div class="nav-card gray-card"    data-tab="etc">
-          <div class="nav-card-en">ETC</div>
-          <div class="nav-card-count" id="nc-etc">0</div>
-          <div class="nav-card-name">기타 직군</div>
-        </div>
-        <div class="nav-card blue-card"    data-tab="question">
-          <div class="nav-card-en">QUESTION</div>
-          <div class="nav-card-count" id="nc-question">0</div>
-          <div class="nav-card-name">질문</div>
-        </div>
+      <div class="stat-card" data-tab="review">
+        <div class="stat-label">REVIEW</div>
+        <div class="stat-num" id="sc-review">-</div>
+        <div class="stat-name">규정 검토</div>
       </div>
-
-      <div class="result-row">
-        <span class="result-info" id="resultInfo"></span>
-        <button class="expand-all-btn" id="expandAllBtn">모두 펼치기</button>
+      <div class="stat-card" data-tab="doctor">
+        <div class="stat-label">DOCTOR</div>
+        <div class="stat-num" id="sc-doctor">-</div>
+        <div class="stat-name">의사</div>
       </div>
+      <div class="stat-card" data-tab="nurse">
+        <div class="stat-label">NURSE</div>
+        <div class="stat-num" id="sc-nurse">-</div>
+        <div class="stat-name">간호사</div>
+      </div>
+      <div class="stat-card" data-tab="pharm">
+        <div class="stat-label">PHARMACIST</div>
+        <div class="stat-num" id="sc-pharm">-</div>
+        <div class="stat-name">약사</div>
+      </div>
+      <div class="stat-card" data-tab="guardian">
+        <div class="stat-label">GUARDIAN</div>
+        <div class="stat-num" id="sc-guardian">-</div>
+        <div class="stat-name">보호자</div>
+      </div>
+      <div class="stat-card" data-tab="etc">
+        <div class="stat-label">ETC</div>
+        <div class="stat-num" id="sc-etc">-</div>
+        <div class="stat-name">기타 직군</div>
+      </div>
+      <div class="stat-card" data-tab="question">
+        <div class="stat-label">QUESTION</div>
+        <div class="stat-num" id="sc-question">-</div>
+        <div class="stat-name">질문</div>
+      </div>
+    </div>
 
-      <div id="view-all">      <div class="reg-list"      id="regList"></div></div>
-      <div id="view-jobgroup"  style="display:none;"><div class="jobgroup-list" id="jobgroupList"></div></div>
-      <div id="view-doctor"    style="display:none;"><div class="reg-list"      id="doctorList"></div></div>
-      <div id="view-nurse"     style="display:none;"><div class="reg-list"      id="nurseList"></div></div>
-      <div id="view-pharm"     style="display:none;"><div class="reg-list"      id="pharmList"></div></div>
-      <div id="view-guardian"  style="display:none;"><div class="reg-list"      id="guardianList"></div></div>
-      <div id="view-etc"       style="display:none;"><div class="reg-list"      id="etcList"></div></div>
-      <div id="view-question"  style="display:none;"><div class="reg-list"      id="questionList"></div></div>
-      <div id="view-review"    style="display:none;"><div class="reg-list"      id="reviewList"></div></div>
-
+    <div id="content">
+      <div class="loading-msg">
+        <div class="spinner"></div>
+        <div>구글 시트에서 데이터를 불러오는 중...</div>
+      </div>
     </div>
   </div>
 </div>
 
 <script>
-(function () {
-  'use strict';
+// ============================================================
+// CONFIG  -  새 시트 ID 적용
+// ============================================================
+const SHEET_ID   = '18dDgxsczklu9FRm053w2rqLDFDjqm7C18rijuyJdrkI';
+const SHEET_NAME = 'Sheet1';   // 시트 탭 이름 (필요시 변경)
 
-  var SPREADSHEET_ID = '18dDgxsczklu9FRm053w2rqLDFDjqm7C18rijuyJdrkI';
-  var DIRECT_URL = 'https://docs.google.com/spreadsheets/d/' + SPREADSHEET_ID + '/export?format=csv&gid=0';
-  var PROXY_URL  = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(DIRECT_URL);
+// 열 인덱스 (0부터 시작, A=0 B=1 ...)
+const COL = {
+  REG_TITLE:   0,   // A: 규정 제목
+  JOB_GROUP:   1,   // B: 직군
+  GRADE:       2,   // C: 등급
+  CATEGORY:    3,   // D: 조사항목 구분
+  CHAPTER:     4,   // E: 조사항목 장
+  CRIT_TITLE:  5,   // F: 기준 제목
+  STANDARD:    6,   // G: 기준(Standard)
+  SURVEY_ITEM: 7,   // H: 조사 항목
+  CRIT_UNDER:  8,   // I: 기준 이해
+  SURVEY_CONT: 9,   // J: 조사 내용
+  SURVEY_OBJ:  10,  // K: 조사 목적
+  REFERENCE:   11   // L: 참고자료
+};
 
-  var COL = {
-    규정제목: 0, 직군: 1, 조사항목등급: 2, 조사항목구분: 3,
-    조사항목장: 4, 기준제목: 5, 기준: 6, 조사항목: 7,
-    기준이해: 8, 조사내용: 9, 조사목적: 10, 참고자료: 11,
-  };
+const FIELD_LABELS = [
+  { key: COL.GRADE,       label: '등급' },
+  { key: COL.CATEGORY,    label: '조사항목 구분' },
+  { key: COL.CHAPTER,     label: '조사항목 장' },
+  { key: COL.CRIT_TITLE,  label: '기준 제목' },
+  { key: COL.STANDARD,    label: '기준 (Standard)' },
+  { key: COL.SURVEY_ITEM, label: '조사 항목' },
+  { key: COL.CRIT_UNDER,  label: '기준 이해' },
+  { key: COL.SURVEY_CONT, label: '조사 내용' },
+  { key: COL.SURVEY_OBJ,  label: '조사 목적' },
+  { key: COL.REFERENCE,   label: '참고자료' }
+];
 
-  /*
-   * ================================================================
-   * 직군 키워드 정의
-   * ================================================================
-   * B열(직군)에 해당 키워드가 포함되면 해당 탭에 표시합니다.
-   * 하나의 행이 여러 탭에 동시에 나타날 수 있습니다.
-   * (예: "간호사, 약사" → 간호사 탭 + 약사 탭 모두 표시)
-   * ================================================================
-   */
-  var JOB_KEYWORDS = {
-    doctor:   ['의사'],
-    nurse:    ['간호사'],
-    pharm:    ['약사'],
-    guardian: ['보호자'],
-  };
+// ============================================================
+// STATE
+// ============================================================
+let allRows    = [];
+let currentTab = 'all';
+let debugLines = [];
 
-  /*
-   * ================================================================
-   * 분류 함수 설계 원칙
-   * ================================================================
-   * - isReview : B열에 "규정검토" 또는 "규정 검토" 포함
-   * - isQuestion: A열(규정제목)에 "질문" 포함
-   * - isDoctor/isNurse/isPharm/isGuardian:
-   *     B열에 해당 키워드 포함이면 무조건 해당 탭에 포함
-   *     (isQuestion, isReview 여부와 무관)
-   * - isEtc: B열에 어떤 직군 키워드도 없고, isReview도 아닌 행
-   * - isAll: 모든 행
-   * ================================================================
-   */
+// ============================================================
+// DEBUG
+// ============================================================
+function addDebug(msg) {
+  debugLines.push(msg);
+  const bar = document.getElementById('debug-bar');
+  bar.className = 'show';
+  bar.innerHTML = debugLines.map(l =>
+    '<div class="debug-line">' + escHtml(l) + '</div>'
+  ).join('');
+  bar.scrollTop = bar.scrollHeight;
+}
 
-  var allRows     = [];
-  var currentView = 'all';
-  var searchQuery = '';
-  var allExpanded = false;
+// ============================================================
+// FETCH  -  CSV 방식 우선 (가장 안정적)
+// ============================================================
+async function fetchSheet() {
+  addDebug('[INIT] Sheet ID: ' + SHEET_ID);
+  addDebug('[INIT] Sheet Name: ' + SHEET_NAME);
 
-  /* ── 문자열 정규화 ── */
-  function norm(s) {
-    if (!s) return '';
-    return s.replace(/\ufeff/g,'').replace(/\u00a0/g,' ').replace(/\u3000/g,' ').trim().toLowerCase();
+  // 방법 1: CSV export
+  try {
+    addDebug('[TRY] CSV export 방식...');
+    await fetchViaCsv();
+    return;
+  } catch(e1) {
+    addDebug('[FAIL] CSV 방식 실패: ' + e1.message);
   }
 
-  /* ── CSV 파서 ── */
-  function parseCSV(text) {
-    var lines = [];
-    var cur = '', inQ = false, row = [];
-    for (var i = 0; i < text.length; i++) {
-      var ch = text[i];
-      if (ch === '"') {
-        if (inQ && text[i+1] === '"') { cur += '"'; i++; }
-        else { inQ = !inQ; }
-      } else if (ch === ',' && !inQ) {
-        row.push(cur.trim()); cur = '';
-      } else if ((ch === '\n' || ch === '\r') && !inQ) {
-        if (ch === '\r' && text[i+1] === '\n') i++;
-        row.push(cur.trim()); cur = '';
-        lines.push(row); row = [];
-      } else { cur += ch; }
+  // 방법 2: gviz JSON
+  try {
+    addDebug('[TRY] gviz JSON 방식...');
+    await fetchViaGviz();
+    return;
+  } catch(e2) {
+    addDebug('[FAIL] gviz 방식 실패: ' + e2.message);
+  }
+
+  // 모두 실패
+  showError(
+    '데이터를 불러올 수 없습니다.',
+    '구글 시트가 "링크가 있는 모든 사용자" 공개 설정인지 확인해주세요.',
+    'Sheet ID: ' + SHEET_ID
+  );
+}
+
+// ---- CSV 방식 ----
+async function fetchViaCsv() {
+  const url = 'https://docs.google.com/spreadsheets/d/'
+    + SHEET_ID
+    + '/export?format=csv&sheet='
+    + encodeURIComponent(SHEET_NAME)
+    + '&cachebust=' + Date.now();
+
+  addDebug('[CSV] URL: ' + url);
+
+  const res = await fetch(url, { cache: 'no-store' });
+
+  addDebug('[CSV] HTTP ' + res.status + ' ' + res.statusText);
+
+  if (!res.ok) throw new Error('HTTP ' + res.status);
+
+  const contentType = res.headers.get('content-type') || '';
+  addDebug('[CSV] Content-Type: ' + contentType);
+
+  // 구글이 로그인 페이지로 리다이렉트하면 text/html 반환
+  if (contentType.includes('text/html') && !contentType.includes('csv')) {
+    throw new Error('HTML 응답 (로그인 필요 또는 비공개 시트)');
+  }
+
+  const text = await res.text();
+  addDebug('[CSV] 응답 길이: ' + text.length + ' chars');
+  addDebug('[CSV] 첫 200자: ' + text.substring(0, 200));
+
+  if (!text || text.trim().length === 0) throw new Error('빈 응답');
+  if (text.trim().startsWith('<')) throw new Error('HTML 응답 (비공개 시트일 가능성)');
+
+  const rows = parseCsv(text);
+  addDebug('[CSV] 파싱된 행 수: ' + rows.length);
+
+  processRows(rows, 'CSV');
+}
+
+// ---- gviz 방식 ----
+async function fetchViaGviz() {
+  const url = 'https://docs.google.com/spreadsheets/d/'
+    + SHEET_ID
+    + '/gviz/tq?tqx=out:json&sheet='
+    + encodeURIComponent(SHEET_NAME)
+    + '&t=' + Date.now();
+
+  addDebug('[GVIZ] URL: ' + url);
+
+  const res = await fetch(url, { cache: 'no-store' });
+  addDebug('[GVIZ] HTTP ' + res.status);
+
+  if (!res.ok) throw new Error('HTTP ' + res.status);
+
+  const raw = await res.text();
+  addDebug('[GVIZ] 응답 길이: ' + raw.length + ' / 첫 150자: ' + raw.substring(0, 150));
+
+  // gviz는 보통 /*O_o*/\ngoogle.visualization.Query.setResponse({...}); 형태
+  // 여러 정규식 시도
+  let jsonStr = null;
+
+  const patterns = [
+    /google\.visualization\.Query\.setResponse\(([\s\S]+?)\);?\s*$/,
+    /setResponse\(([\s\S]+?)\);?\s*$/,
+    /\(([\s\S]+)\);\s*$/
+  ];
+
+  for (const pat of patterns) {
+    const m = raw.match(pat);
+    if (m && m[1]) {
+      jsonStr = m[1].trim();
+      addDebug('[GVIZ] 정규식 매칭 성공');
+      break;
     }
-    if (cur !== '' || row.length) { row.push(cur.trim()); lines.push(row); }
-    return lines;
   }
 
-  /* ── 분류 함수 ── */
+  if (!jsonStr) throw new Error('gviz 응답 형식 파싱 불가');
 
-  /* 규정 검토: B열에 "규정검토" 또는 "규정 검토" 포함 */
-  function isReview(r) {
-    var v = norm(r[COL.직군]);
-    return v.indexOf('규정검토') !== -1 || v.indexOf('규정 검토') !== -1;
+  let json;
+  try {
+    json = JSON.parse(jsonStr);
+  } catch(pe) {
+    throw new Error('JSON.parse 실패: ' + pe.message);
   }
 
-  /* 질문: A열(규정제목)에 "질문" 포함 */
-  function isQuestion(r) {
-    return norm(r[COL.규정제목]).indexOf('질문') !== -1;
-  }
+  const tbl = json.table;
+  if (!tbl) throw new Error('table 없음');
+  if (!tbl.rows || tbl.rows.length === 0) throw new Error('rows 없음 또는 빈 시트');
 
-  /*
-   * 직군 탭 필터: B열에 해당 키워드가 하나라도 포함되면 해당 탭에 표시
-   * isQuestion, isReview 여부를 따지지 않음 → 데이터 누락 방지
-   */
-  function hasJobKeyword(r, keywords) {
-    var v = norm(r[COL.직군]);
-    for (var i = 0; i < keywords.length; i++) {
-      if (v.indexOf(norm(keywords[i])) !== -1) return true;
+  addDebug('[GVIZ] 컬럼 수: ' + (tbl.cols ? tbl.cols.length : '?') + ' / 행 수: ' + tbl.rows.length);
+
+  const parsed = tbl.rows
+    .filter(row => row !== null && row !== undefined)
+    .map(row => {
+      if (!row.c) return [];
+      return row.c.map(cell => {
+        if (!cell || cell.v === null || cell.v === undefined) return '';
+        // 날짜/숫자 포맷
+        if (cell.f) return String(cell.f).trim();
+        return String(cell.v).trim();
+      });
+    });
+
+  processRows(parsed, 'GVIZ');
+}
+
+// ============================================================
+// CSV 파서  (RFC 4180 준수)
+// ============================================================
+function parseCsv(text) {
+  const result = [];
+  const n = text.length;
+  let i = 0;
+
+  while (i < n) {
+    const row = [];
+    let inQuote = false;
+    let cell = '';
+
+    while (i < n) {
+      const ch = text[i];
+
+      if (inQuote) {
+        if (ch === '"') {
+          if (i + 1 < n && text[i + 1] === '"') {
+            cell += '"';
+            i += 2;
+          } else {
+            inQuote = false;
+            i++;
+          }
+        } else {
+          cell += ch;
+          i++;
+        }
+      } else {
+        if (ch === '"') {
+          inQuote = true;
+          i++;
+        } else if (ch === ',') {
+          row.push(cell.trim());
+          cell = '';
+          i++;
+        } else if (ch === '\r' || ch === '\n') {
+          // 줄 끝
+          row.push(cell.trim());
+          cell = '';
+          if (ch === '\r' && i + 1 < n && text[i + 1] === '\n') i++;
+          i++;
+          break;
+        } else {
+          cell += ch;
+          i++;
+        }
+      }
     }
-    return false;
+
+    // EOF 처리
+    if (i >= n && cell !== '') row.push(cell.trim());
+
+    if (row.length > 0 && row.some(v => v !== '')) {
+      result.push(row);
+    }
   }
 
-  function isDoctor(r)   { return hasJobKeyword(r, JOB_KEYWORDS.doctor); }
-  function isNurse(r)    { return hasJobKeyword(r, JOB_KEYWORDS.nurse); }
-  function isPharm(r)    { return hasJobKeyword(r, JOB_KEYWORDS.pharm); }
-  function isGuardian(r) { return hasJobKeyword(r, JOB_KEYWORDS.guardian); }
+  return result;
+}
 
-  /*
-   * 기타 직군: 어떤 직군 키워드도 없고, 규정검토도 아닌 행
-   * (질문 탭 행이라도 직군 키워드가 없으면 기타에 포함)
-   */
-  function isEtc(r) {
-    if (isReview(r)) return false;
-    var allKeywords = [].concat(
-      JOB_KEYWORDS.doctor, JOB_KEYWORDS.nurse,
-      JOB_KEYWORDS.pharm,  JOB_KEYWORDS.guardian
-    );
-    return !hasJobKeyword(r, allKeywords);
+// ============================================================
+// PROCESS  -  헤더 감지 + 빈 행 제거 + 데이터 저장
+// ============================================================
+function processRows(rows, method) {
+  addDebug('[PROCESS] 원본 행 수: ' + rows.length);
+
+  if (rows.length === 0) {
+    showError('시트에 데이터가 없습니다.');
+    return;
   }
 
-  /*
-   * 직군별 보기: 규정검토가 아닌 모든 행 (직군 정보가 있는 행)
-   * 직군별 보기는 B열 값 기준으로 그룹핑
-   */
-  function isGeneral(r) { return !isReview(r); }
+  // 헤더 감지 및 제거
+  const firstRow = rows[0];
+  const firstCell = (firstRow[0] || '').toLowerCase();
+  const headerKeywords = ['규정', '제목', 'title', 'reg', '항목', '기준', 'standard'];
+  const isHeader = headerKeywords.some(k => firstCell.includes(k));
 
-  /* 전체 탭: 모든 행 */
-  function isAll(r) { return true; }
+  addDebug('[PROCESS] 첫 행 A열: "' + (firstRow[0] || '') + '" -> 헤더 여부: ' + isHeader);
 
-  /* ── HTML 이스케이프 ── */
-  function esc(str) {
-    if (!str) return '-';
-    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  let data = isHeader ? rows.slice(1) : rows;
+
+  // 완전히 빈 행 제거
+  data = data.filter(r => r && r.some(v => v !== '' && v !== null && v !== undefined));
+
+  addDebug('[PROCESS] 유효 데이터 행 수: ' + data.length);
+
+  if (data.length === 0) {
+    showError('유효한 데이터 행이 없습니다. 시트 구조를 확인해주세요.');
+    return;
   }
 
-  /* ── 검색 하이라이트 ── */
-  function highlight(str, q) {
-    if (!str) return '-';
-    var escaped = str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-    if (!q) return escaped;
-    var re = new RegExp('(' + q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + ')', 'gi');
-    return escaped.replace(re, '<mark>$1</mark>');
-  }
-
-  /* ── 유틸 ── */
-  function el(id)         { return document.getElementById(id); }
-  function setText(id, v) { var e = el(id); if (e) e.textContent = v; }
-  function pad(n)         { return String(n).padStart(2, '0'); }
-
-  /* ── 스크롤 진행 바 ── */
-  el('mainArea').addEventListener('scroll', function() {
-    var area = el('mainArea');
-    var pct  = area.scrollTop / (area.scrollHeight - area.clientHeight) * 100;
-    el('scrollProgress').style.width = (isNaN(pct) ? 0 : pct) + '%';
+  // 샘플 로그 (처음 2행)
+  data.slice(0, 2).forEach((r, idx) => {
+    addDebug('[SAMPLE ' + idx + '] A:"' + (r[0]||'') + '" B:"' + (r[1]||'') + '" C:"' + (r[2]||'') + '"');
   });
 
-  /* ── 데이터 로드 ── */
-  async function loadData() {
-    var text = null;
-    try {
-      var res = await fetch(DIRECT_URL);
-      if (res.ok) text = await res.text();
-    } catch(_) {}
+  // B열 고유값
+  const uniqueJobs = [...new Set(data.map(r => (r[COL.JOB_GROUP] || '').trim()).filter(Boolean))];
+  addDebug('[JOBS] B열 고유값(' + uniqueJobs.length + '): ' + uniqueJobs.slice(0,8).map(j => '"'+j+'"').join(', '));
 
-    if (!text) {
-      try {
-        var res2 = await fetch(PROXY_URL);
-        if (res2.ok) text = await res2.text();
-      } catch(e) { showError('네트워크 오류: ' + e.message); return; }
-    }
+  allRows = data;
+  updateCounts();
+  renderCurrent();
 
-    if (!text) { showError('데이터를 불러오지 못했습니다.'); return; }
+  document.getElementById('status-dot').className = 'ok';
+  document.getElementById('status-text').textContent = allRows.length + '개 항목 로드 (' + method + ')';
+}
 
-    var rows = parseCSV(text);
-    if (rows.length < 2) { showError('시트에 데이터가 없습니다.'); return; }
+// ============================================================
+// SHOW ERROR
+// ============================================================
+function showError(title, desc, code) {
+  let html = '<div class="error-box"><strong>' + escHtml(title) + '</strong>';
+  if (desc) html += escHtml(desc);
+  if (code) html += '<code>' + escHtml(code) + '</code>';
+  html += '</div>';
+  document.getElementById('content').innerHTML = html;
+  document.getElementById('status-dot').className = 'err';
+  document.getElementById('status-text').textContent = '로드 실패';
+}
 
-    allRows = rows.slice(1).filter(function(r) { return r.some(function(c) { return c !== ''; }); });
-    if (!allRows.length) { showError('유효한 데이터 행이 없습니다.'); return; }
+// ============================================================
+// FILTERS
+// ============================================================
+function getJob(r) { return (r[COL.JOB_GROUP] || '').trim(); }
+function isDoctor(r)   { return getJob(r).includes('의사'); }
+function isNurse(r)    { return getJob(r).includes('간호사'); }
+function isPharm(r)    { return getJob(r).includes('약사'); }
+function isGuardian(r) { return getJob(r).includes('보호자'); }
+function isQuestion(r) {
+  return (r[COL.REG_TITLE] || '').includes('질문') ||
+         getJob(r).includes('질문');
+}
+function isReview(r) {
+  const job = getJob(r).toLowerCase();
+  return job === '' || job === '검토' || job.includes('규정') || job.includes('review');
+}
+function isEtc(r) {
+  return !isDoctor(r) && !isNurse(r) && !isPharm(r) &&
+         !isGuardian(r) && !isQuestion(r) && !isReview(r);
+}
 
-    updateBadges();
+function filterByTab(tab) {
+  switch(tab) {
+    case 'all':      return allRows;
+    case 'review':   return allRows.filter(isReview);
+    case 'doctor':   return allRows.filter(isDoctor);
+    case 'nurse':    return allRows.filter(isNurse);
+    case 'pharm':    return allRows.filter(isPharm);
+    case 'guardian': return allRows.filter(isGuardian);
+    case 'etc':      return allRows.filter(isEtc);
+    case 'question': return allRows.filter(isQuestion);
+    default:         return allRows;
+  }
+}
 
-    el('statusDot').style.background = '#6db98a';
-    el('statusDot').style.animation  = 'none';
-    setText('statusText', allRows.length + '개 항목 로드 완료');
-    el('loadingScreen').style.display = 'none';
-    el('mainContent').style.display   = 'block';
+function applySearch(rows, q) {
+  if (!q) return rows;
+  const lq = q.toLowerCase();
+  return rows.filter(r =>
+    FIELD_LABELS.some(f => (r[f.key] || '').toLowerCase().includes(lq)) ||
+    (r[COL.REG_TITLE] || '').toLowerCase().includes(lq) ||
+    (r[COL.JOB_GROUP] || '').toLowerCase().includes(lq)
+  );
+}
 
-    var hash = location.hash.replace('#','');
-    var validTabs = ['all','jobgroup','doctor','nurse','pharm','guardian','etc','question','review'];
-    if (hash && validTabs.indexOf(hash) !== -1) switchTab(hash);
+// ============================================================
+// COUNTS
+// ============================================================
+function updateCounts() {
+  ['all','review','doctor','nurse','pharm','guardian','etc','question'].forEach(tab => {
+    const n = filterByTab(tab).length;
+    const sb = document.getElementById('sb-' + tab);
+    const sc = document.getElementById('sc-' + tab);
+    if (sb) sb.textContent = n;
+    if (sc) sc.textContent = n;
+  });
+}
 
-    rerender();
+// ============================================================
+// GROUP BY REG TITLE
+// ============================================================
+function groupByTitle(rows) {
+  const map = new Map();
+  rows.forEach(r => {
+    const title = (r[COL.REG_TITLE] || '(제목없음)').trim();
+    if (!map.has(title)) map.set(title, []);
+    map.get(title).push(r);
+  });
+  return map;
+}
+
+// ============================================================
+// RENDER
+// ============================================================
+function renderCurrent() {
+  const q        = (document.getElementById('search-input').value || '').trim();
+  const filtered = applySearch(filterByTab(currentTab), q);
+  const content  = document.getElementById('content');
+
+  if (filtered.length === 0) {
+    content.innerHTML = '<div class="empty-msg">표시할 항목이 없습니다.</div>';
+    return;
   }
 
-  function showError(msg) {
-    el('loadingScreen').style.display = 'none';
-    el('errorScreen').style.display   = 'flex';
-    el('errorMsg').innerHTML = '<strong>데이터를 불러오지 못했습니다.</strong><br/><br/>' + msg;
-    el('statusDot').style.background = '#c97a6d';
-    setText('statusText', '로드 실패');
-  }
+  const grouped = groupByTitle(filtered);
+  const frag    = document.createDocumentFragment();
 
-  /* ── 배지 업데이트 ── */
-  function updateBadges() {
-    var allRegSet = new Set(allRows.map(function(r) { return r[COL.규정제목]; }).filter(Boolean));
+  // Section header
+  const header = document.createElement('div');
+  header.className = 'section-header';
+  header.innerHTML =
+    '<span class="section-title">' + filtered.length + '개 항목 / ' + grouped.size + '개 규정</span>' +
+    '<button class="expand-all-btn" id="expand-all-btn">모두 펼치기</button>';
+  frag.appendChild(header);
 
-    /*
-     * 직군별 보기: 고유 B열 값 개수 (규정검토 제외)
-     * 직군 탭: 해당 키워드를 가진 행 수 (중복 허용)
-     */
-    var genRows  = allRows.filter(isGeneral);
-    var grpSet   = new Set(genRows.map(function(r) { return r[COL.직군]; }).filter(Boolean));
+  let regIdx = 0;
+  grouped.forEach((rows, title) => {
+    regIdx++;
+    const regCard = document.createElement('div');
+    regCard.className = 'reg-card';
 
-    var counts = {
-      all:      allRegSet.size,
-      jobgroup: grpSet.size,
-      doctor:   allRows.filter(isDoctor).length,
-      nurse:    allRows.filter(isNurse).length,
-      pharm:    allRows.filter(isPharm).length,
-      guardian: allRows.filter(isGuardian).length,
-      etc:      allRows.filter(isEtc).length,
-      question: allRows.filter(isQuestion).length,
-      review:   allRows.filter(isReview).length,
-    };
+    // 직군 태그
+    const jobSet  = [...new Set(rows.map(r => getJob(r)).filter(Boolean))];
+    const jobHtml = jobSet.map(j => {
+      let cls = 'jg-etc';
+      if (j.includes('의사'))        cls = 'jg-doctor';
+      else if (j.includes('간호사')) cls = 'jg-nurse';
+      else if (j.includes('약사'))   cls = 'jg-pharm';
+      else if (j.includes('보호자')) cls = 'jg-guardian';
+      else if (j.includes('질문'))   cls = 'jg-question';
+      return '<span class="jg-tag ' + cls + '">' + escHtml(j) + '</span>';
+    }).join('');
 
-    Object.keys(counts).forEach(function(k) {
-      setText('sb-' + k, counts[k]);
-      setText('nc-' + k, counts[k]);
-    });
-  }
-
-  /* ── 검색 필터 적용 ── */
-  function applySearch(rows) {
-    if (!searchQuery) return rows;
-    var q = searchQuery.toLowerCase();
-    return rows.filter(function(r) {
-      return (r[COL.규정제목]    || '').toLowerCase().indexOf(q) !== -1 ||
-             (r[COL.기준제목]    || '').toLowerCase().indexOf(q) !== -1 ||
-             (r[COL.조사항목]    || '').toLowerCase().indexOf(q) !== -1 ||
-             (r[COL.직군]        || '').toLowerCase().indexOf(q) !== -1 ||
-             (r[COL.조사항목구분]|| '').toLowerCase().indexOf(q) !== -1;
-    });
-  }
-
-  function getFiltered(filterFn) {
-    return applySearch(allRows.filter(filterFn));
-  }
-
-  /* ── 규정제목 그룹 아코디언 렌더 ── */
-  function renderAccordion(containerId, rows, cardClass) {
-    var container = el(containerId);
-    container.innerHTML = '';
-    if (!rows.length) {
-      container.innerHTML = '<div class="empty-state">표시할 데이터가 없습니다.</div>';
-      updateResultInfo(0);
-      return;
-    }
-
-    var order = [], groups = {};
-    rows.forEach(function(r) {
-      var t = r[COL.규정제목] || '(제목 없음)';
-      if (!groups[t]) { groups[t] = []; order.push(t); }
-      groups[t].push(r);
-    });
-
-    updateResultInfo(order.length);
-
-    order.forEach(function(title, idx) {
-      var rowSet = groups[title];
-      var card   = document.createElement('div');
-      card.className = 'reg-card' + (cardClass ? ' ' + cardClass : '');
-      card.innerHTML =
-        '<div class="reg-card-header">' +
-          '<span class="reg-num">' + pad(idx+1) + '</span>' +
-          '<span class="reg-title">' + highlight(title, searchQuery) + '</span>' +
-          '<span class="reg-count-badge">' + rowSet.length + ' 항목</span>' +
-          '<span class="toggle-arrow"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>' +
-        '</div>' +
-        '<div class="reg-card-body"><div class="reg-card-body-inner"><div class="item-list">' +
-          rowSet.map(function(r, i) { return itemCardHtml(r, i); }).join('') +
-        '</div></div></div>';
-
-      card.querySelector('.reg-card-header').addEventListener('click', function() { toggleCard(card); });
-      card.querySelectorAll('.item-card-header').forEach(function(hdr) {
-        hdr.addEventListener('click', function(e) {
-          e.stopPropagation();
-          var ic   = hdr.closest('.item-card');
-          var body = ic.querySelector('.item-body');
-          ic.classList.toggle('item-expanded');
-          body.style.maxHeight = ic.classList.contains('item-expanded') ? (body.scrollHeight + 500) + 'px' : '0';
-        });
-      });
-      container.appendChild(card);
-    });
-  }
-
-  /* ── 직군별 아코디언 렌더 ── */
-  function renderJobGroup() {
-    var container = el('jobgroupList');
-    container.innerHTML = '';
-    var filtered = getFiltered(isGeneral);
-    if (!filtered.length) {
-      container.innerHTML = '<div class="empty-state">표시할 데이터가 없습니다.</div>';
-      return;
-    }
-
-    var order = [], byGroup = {};
-    filtered.forEach(function(r) {
-      var g = r[COL.직군] || '(직군 없음)';
-      if (!byGroup[g]) { byGroup[g] = []; order.push(g); }
-      byGroup[g].push(r);
-    });
-    order.sort(function(a,b) { return a.localeCompare(b); });
-
-    order.forEach(function(group, idx) {
-      var rows = byGroup[group];
-      var regOrder = [], byReg = {};
-      rows.forEach(function(r) {
-        var t = r[COL.규정제목] || '(제목 없음)';
-        if (!byReg[t]) { byReg[t] = []; regOrder.push(t); }
-        byReg[t].push(r);
-      });
-
-      var card = document.createElement('div');
-      card.className = 'jg-card';
-      card.innerHTML =
-        '<div class="jg-card-header">' +
-          '<span class="jg-num">' + pad(idx+1) + '</span>' +
-          '<span class="jg-name">' + esc(group) + '</span>' +
-          '<span class="jg-count">' + rows.length + ' 항목</span>' +
-          '<span class="toggle-arrow"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>' +
-        '</div>' +
-        '<div class="jg-card-body"><div class="jg-card-body-inner">' +
-          regOrder.map(function(regTitle) {
-            return '<div class="jg-reg-group"><div class="jg-reg-title">' + esc(regTitle) + '</div>' +
-              '<div class="item-list">' + byReg[regTitle].map(function(r,i) { return itemCardHtml(r,i); }).join('') + '</div></div>';
-          }).join('') +
-        '</div></div>';
-
-      card.querySelector('.jg-card-header').addEventListener('click', function() { toggleCard(card); });
-      card.querySelectorAll('.item-card-header').forEach(function(hdr) {
-        hdr.addEventListener('click', function(e) {
-          e.stopPropagation();
-          var ic   = hdr.closest('.item-card');
-          var body = ic.querySelector('.item-body');
-          ic.classList.toggle('item-expanded');
-          body.style.maxHeight = ic.classList.contains('item-expanded') ? (body.scrollHeight + 500) + 'px' : '0';
-        });
-      });
-      container.appendChild(card);
-    });
-  }
-
-  /* ── 항목 카드 HTML ── */
-  function itemCardHtml(r, i) {
-    var grade = (r[COL.조사항목등급] || '').toUpperCase();
-    var gradeClass = ['A','B','C'].indexOf(grade) !== -1 ? 'grade-' + grade : 'grade-default';
-    var fields = [
-      { label: '직군',      val: r[COL.직군] },
-      { label: '구분',      val: r[COL.조사항목구분] },
-      { label: 'Chapter',   val: r[COL.조사항목장] },
-      { label: '기준 제목', val: r[COL.기준제목] },
-      { label: '기준',      val: r[COL.기준] },
-      { label: '조사 항목', val: r[COL.조사항목] },
-      { label: '기준 이해', val: r[COL.기준이해] },
-      { label: '조사 내용', val: r[COL.조사내용] },
-      { label: '조사 목적', val: r[COL.조사목적] },
-      { label: '참고 자료', val: r[COL.참고자료] },
-    ];
-    return '<div class="item-card">' +
-      '<div class="item-card-header">' +
-        '<span class="item-idx">#' + pad(i+1) + '</span>' +
-        '<span class="grade-badge ' + gradeClass + '">' + (esc(grade) || '-') + '</span>' +
-        '<span class="item-division">' + highlight(r[COL.조사항목구분], searchQuery) + '</span>' +
-        '<span class="item-toggle-arrow"><svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>' +
+    // Header
+    const cardHeader = document.createElement('div');
+    cardHeader.className = 'reg-card-header';
+    cardHeader.innerHTML =
+      '<div class="reg-card-left">' +
+        '<span class="reg-num">' + String(regIdx).padStart(2,'0') + '</span>' +
+        '<span class="reg-title">' + escHtml(title) + '</span>' +
+        (jobHtml ? '<span style="display:flex;flex-wrap:wrap;gap:4px;margin-top:2px;">' + jobHtml + '</span>' : '') +
       '</div>' +
-      '<div class="item-body"><div class="field-rows">' +
-        fields.map(function(f) {
-          return '<div class="field-row">' +
-            '<div class="field-label">' + f.label + '</div>' +
-            '<div class="field-value' + (f.val ? '' : ' empty') + '">' + highlight(f.val, searchQuery) + '</div>' +
-          '</div>';
-        }).join('') +
-      '</div></div></div>';
-  }
+      '<span class="reg-count-badge">' + rows.length + ' 항목</span>' +
+      '<span class="reg-chevron">&#9660;</span>';
 
-  /* ── 아코디언 토글 ── */
-  function toggleCard(card) {
-    var body  = card.querySelector('.reg-card-body, .jg-card-body');
-    var inner = card.querySelector('.reg-card-body-inner, .jg-card-body-inner');
-    if (card.classList.contains('expanded')) {
-      body.style.maxHeight = '0';
-      card.classList.remove('expanded');
-    } else {
-      card.classList.add('expanded');
-      body.style.maxHeight = (inner.scrollHeight + 9999) + 'px';
-    }
-  }
+    // Body
+    const cardBody = document.createElement('div');
+    cardBody.className = 'reg-card-body';
 
-  /* ── 탭 전환 ── */
-  function switchTab(tab) {
-    currentView = tab;
-    location.hash = tab;
-
-    document.querySelectorAll('.tab-btn').forEach(function(btn) {
-      btn.classList.toggle('active', btn.dataset.tab === tab);
-    });
-    document.querySelectorAll('.nav-card').forEach(function(card) {
-      card.classList.toggle('active', card.dataset.tab === tab);
+    rows.forEach((r, itemIdx) => {
+      cardBody.appendChild(makeItemCard(r, itemIdx + 1));
     });
 
-    var views = ['all','jobgroup','doctor','nurse','pharm','guardian','etc','question','review'];
-    views.forEach(function(v) {
-      var viewEl = el('view-' + v);
-      if (viewEl) viewEl.style.display = v === tab ? 'block' : 'none';
+    cardHeader.addEventListener('click', function() {
+      regCard.classList.toggle('open');
     });
 
-    allExpanded = false;
-    setText('expandAllBtn', '모두 펼치기');
-  }
+    regCard.appendChild(cardHeader);
+    regCard.appendChild(cardBody);
+    frag.appendChild(regCard);
+  });
 
-  /* ── 모두 펼치기/접기 ── */
-  function toggleExpandAll() {
-    allExpanded = !allExpanded;
-    setText('expandAllBtn', allExpanded ? '모두 접기' : '모두 펼치기');
-    var listMap = {
-      all: 'regList', jobgroup: 'jobgroupList',
-      doctor: 'doctorList', nurse: 'nurseList',
-      pharm: 'pharmList', guardian: 'guardianList',
-      etc: 'etcList', question: 'questionList', review: 'reviewList',
-    };
-    var container = el(listMap[currentView]);
-    if (!container) return;
-    container.querySelectorAll('.reg-card, .jg-card').forEach(function(card) {
-      var body  = card.querySelector('.reg-card-body, .jg-card-body');
-      var inner = card.querySelector('.reg-card-body-inner, .jg-card-body-inner');
-      if (allExpanded) {
-        card.classList.add('expanded');
-        body.style.maxHeight = (inner.scrollHeight + 9999) + 'px';
+  content.innerHTML = '';
+  content.appendChild(frag);
+
+  // Expand all
+  const expandBtn = document.getElementById('expand-all-btn');
+  if (expandBtn) {
+    expandBtn.addEventListener('click', function() {
+      const allOpen = [...document.querySelectorAll('.reg-card')].every(el => el.classList.contains('open'));
+      if (allOpen) {
+        document.querySelectorAll('.reg-card').forEach(el => el.classList.remove('open'));
+        document.querySelectorAll('.item-card').forEach(el => el.classList.remove('open'));
+        this.textContent = '모두 펼치기';
       } else {
-        card.classList.remove('expanded');
-        body.style.maxHeight = '0';
+        document.querySelectorAll('.reg-card').forEach(el => el.classList.add('open'));
+        document.querySelectorAll('.item-card').forEach(el => el.classList.add('open'));
+        this.textContent = '모두 접기';
       }
     });
   }
+}
 
-  /* ── 전체 재렌더 ── */
-  function rerender() {
-    allExpanded = false;
-    setText('expandAllBtn', '모두 펼치기');
+// ============================================================
+// ITEM CARD
+// ============================================================
+function makeItemCard(r, seq) {
+  const itemCard  = document.createElement('div');
+  itemCard.className = 'item-card';
 
-    renderAccordion('regList',      getFiltered(isAll),      '');
-    renderAccordion('reviewList',   getFiltered(isReview),   'teal-card');
-    renderAccordion('doctorList',   getFiltered(isDoctor),   'purple-card');
-    renderAccordion('nurseList',    getFiltered(isNurse),    'pink-card');
-    renderAccordion('pharmList',    getFiltered(isPharm),    'green-card');
-    renderAccordion('guardianList', getFiltered(isGuardian), 'orange-card');
-    renderAccordion('etcList',      getFiltered(isEtc),      'gray-card');
-    renderAccordion('questionList', getFiltered(isQuestion), 'blue-card');
-    renderJobGroup();
-  }
+  const grade     = (r[COL.GRADE]      || '').trim();
+  const chapter   = (r[COL.CHAPTER]    || '').trim();
+  const critTitle = (r[COL.CRIT_TITLE] || r[COL.SURVEY_ITEM] || '(항목없음)').trim();
 
-  /* ── 결과 정보 ── */
-  function updateResultInfo(count) {
-    var infoEl = el('resultInfo');
-    if (searchQuery) {
-      infoEl.innerHTML = '<strong>' + count + '</strong> 규정 검색됨';
-    } else {
-      infoEl.innerHTML = '<strong>' + count + '</strong> 규정';
+  let gradeCls = 'grade-default';
+  if (grade === '필수' || grade === 'P')      gradeCls = 'grade-P';
+  else if (grade === '선택' || grade === 'S') gradeCls = 'grade-S';
+  else if (grade === 'M')                      gradeCls = 'grade-M';
+
+  const itemHeader = document.createElement('div');
+  itemHeader.className = 'item-header';
+  itemHeader.innerHTML =
+    '<div class="item-header-left">' +
+      '<span class="item-seq">#' + String(seq).padStart(2,'0') + '</span>' +
+      (grade   ? '<span class="grade-badge ' + gradeCls + '">' + escHtml(grade) + '</span>' : '') +
+      (chapter ? '<span style="font-family:\'IBM Plex Mono\',monospace;font-size:10px;color:var(--text3);flex-shrink:0;">' + escHtml(chapter) + '</span>' : '') +
+      '<span class="item-criterion-title">' + escHtml(critTitle) + '</span>' +
+    '</div>' +
+    '<span class="item-chevron">&#9660;</span>';
+
+  const itemBody = document.createElement('div');
+  itemBody.className = 'item-body';
+
+  const fieldRows = document.createElement('div');
+  fieldRows.className = 'field-rows';
+
+  FIELD_LABELS.forEach(f => {
+    const val = (r[f.key] || '').trim();
+    const el  = document.createElement('div');
+    el.className = 'field-row';
+    el.innerHTML =
+      '<div class="field-key">' + escHtml(f.label) + '</div>' +
+      '<div class="field-val' + (val ? '' : ' empty') + '">' + (val ? escHtml(val) : '-') + '</div>';
+    fieldRows.appendChild(el);
+  });
+
+  // 추가 열 (M열 이후 = index 12+)
+  for (let i = 12; i < r.length; i++) {
+    const val = (r[i] || '').trim();
+    if (val) {
+      const el = document.createElement('div');
+      el.className = 'field-row';
+      el.innerHTML =
+        '<div class="field-key">열 ' + String.fromCharCode(65 + i) + '</div>' +
+        '<div class="field-val">' + escHtml(val) + '</div>';
+      fieldRows.appendChild(el);
     }
   }
 
-  /* ── 이벤트 바인딩 ── */
-  el('searchInput').addEventListener('input', function(e) {
-    searchQuery = e.target.value;
-    el('searchClear').classList.toggle('visible', searchQuery.length > 0);
-    rerender();
+  itemBody.appendChild(fieldRows);
+
+  itemHeader.addEventListener('click', function(e) {
+    e.stopPropagation();
+    itemCard.classList.toggle('open');
   });
 
-  el('searchClear').addEventListener('click', function() {
-    el('searchInput').value = '';
-    searchQuery = '';
-    el('searchClear').classList.remove('visible');
-    rerender();
-    el('searchInput').focus();
-  });
+  itemCard.appendChild(itemHeader);
+  itemCard.appendChild(itemBody);
+  return itemCard;
+}
 
-  el('expandAllBtn').addEventListener('click', toggleExpandAll);
-
-  document.querySelectorAll('.tab-btn').forEach(function(btn) {
-    btn.addEventListener('click', function() { switchTab(btn.dataset.tab); });
+// ============================================================
+// TAB SWITCHING
+// ============================================================
+function setTab(tab) {
+  currentTab = tab;
+  document.querySelectorAll('.sidebar-item').forEach(el => {
+    el.classList.toggle('active', el.dataset.tab === tab);
   });
-  document.querySelectorAll('.nav-card').forEach(function(card) {
-    card.addEventListener('click', function() { switchTab(card.dataset.tab); });
+  document.querySelectorAll('.stat-card').forEach(el => {
+    el.classList.toggle('active', el.dataset.tab === tab);
   });
+  renderCurrent();
+}
 
-  document.addEventListener('keydown', function(e) {
-    if (e.key === '/' && document.activeElement !== el('searchInput')) {
-      e.preventDefault();
-      el('searchInput').focus();
-    }
-    if (e.key === 'Escape' && document.activeElement === el('searchInput')) {
-      el('searchInput').blur();
-      el('searchInput').value = '';
-      searchQuery = '';
-      el('searchClear').classList.remove('visible');
-      rerender();
-    }
-    if ((e.key === 'e' || e.key === 'E') && document.activeElement.tagName !== 'INPUT') {
-      toggleExpandAll();
-    }
-  });
+document.querySelectorAll('.sidebar-item').forEach(el => {
+  el.addEventListener('click', () => setTab(el.dataset.tab));
+});
+document.querySelectorAll('.stat-card').forEach(el => {
+  el.addEventListener('click', () => setTab(el.dataset.tab));
+});
 
-  loadData();
-})();
+// ============================================================
+// SEARCH
+// ============================================================
+document.getElementById('search-input').addEventListener('input', renderCurrent);
+
+// ============================================================
+// KEYBOARD
+// ============================================================
+document.addEventListener('keydown', e => {
+  const inp = document.getElementById('search-input');
+  if (e.key === '/' && document.activeElement !== inp) {
+    e.preventDefault();
+    inp.focus();
+  }
+  if (e.key === 'Escape') inp.blur();
+});
+
+// ============================================================
+// UTIL
+// ============================================================
+function escHtml(s) {
+  return String(s)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+
+// ============================================================
+// START
+// ============================================================
+fetchSheet();
 </script>
 </body>
 </html>
