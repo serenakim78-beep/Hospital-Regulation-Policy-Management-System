@@ -58,7 +58,6 @@
       opacity: 0.35;
     }
 
-    /* ── SCROLL PROGRESS ── */
     #scrollProgress {
       position: fixed;
       top: 0; left: 0;
@@ -69,7 +68,6 @@
       transition: width 0.1s linear;
     }
 
-    /* ── HEADER ── */
     header {
       background: var(--surface);
       border-bottom: 1px solid var(--border);
@@ -100,281 +98,141 @@
     .header-sub { font-family: var(--font); font-size: 9px; letter-spacing: 2.5px; color: var(--text-muted); text-transform: uppercase; }
     .header-main { font-family: var(--font); font-size: 17px; font-weight: 700; color: var(--text); letter-spacing: -0.5px; }
 
-    .header-right {
-      margin-left: auto;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
+    .header-right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
 
-    .header-status {
-      font-family: var(--font);
-      font-size: 11px;
-      color: var(--text-muted);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .status-dot {
-      width: 7px; height: 7px;
-      border-radius: 50%;
-      background: var(--warning);
-      animation: pulse 2.5s infinite;
-      flex-shrink: 0;
-    }
+    .header-status { font-family: var(--font); font-size: 11px; color: var(--text-muted); display: flex; align-items: center; gap: 6px; }
+    .status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--warning); animation: pulse 2.5s infinite; flex-shrink: 0; }
     @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
     .print-btn {
-      font-family: var(--font);
-      font-size: 11px;
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 6px 12px;
-      color: var(--text-muted);
-      cursor: pointer;
-      transition: all 0.15s;
-      display: flex;
-      align-items: center;
-      gap: 5px;
+      font-family: var(--font); font-size: 11px;
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 6px; padding: 6px 12px; color: var(--text-muted);
+      cursor: pointer; transition: all 0.15s; display: flex; align-items: center; gap: 5px;
     }
     .print-btn:hover { border-color: var(--gold); color: var(--gold); }
 
-    /* ── LAYOUT ── */
-    .app-body {
-      display: flex;
-      flex: 1;
-      min-height: 0;
-    }
+    .app-body { display: flex; flex: 1; min-height: 0; }
 
     /* ── SIDEBAR ── */
     .sidebar {
-      width: var(--sidebar-w);
-      flex-shrink: 0;
-      background: var(--surface);
-      border-right: 1px solid var(--border);
-      position: sticky;
-      top: 57px;
-      height: calc(100vh - 57px);
-      overflow-y: auto;
-      padding: 20px 0;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
+      width: var(--sidebar-w); flex-shrink: 0;
+      background: var(--surface); border-right: 1px solid var(--border);
+      position: sticky; top: 57px; height: calc(100vh - 57px);
+      overflow-y: auto; padding: 20px 0;
+      display: flex; flex-direction: column; gap: 4px;
     }
-
     .sidebar::-webkit-scrollbar { width: 4px; }
     .sidebar::-webkit-scrollbar-track { background: transparent; }
     .sidebar::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
 
     .sidebar-section-label {
-      font-family: var(--font);
-      font-size: 9px;
-      letter-spacing: 2px;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      padding: 10px 18px 4px;
+      font-family: var(--font); font-size: 9px; letter-spacing: 2px;
+      color: var(--text-muted); text-transform: uppercase; padding: 10px 18px 4px;
     }
-
-    .sidebar-sep {
-      height: 1px;
-      background: var(--border);
-      margin: 8px 18px;
-    }
+    .sidebar-sep { height: 1px; background: var(--border); margin: 8px 18px; }
 
     .tab-btn {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 9px 18px 9px 14px;
-      font-size: 13px;
-      font-family: var(--font);
-      font-weight: 500;
-      color: var(--text-muted);
-      cursor: pointer;
-      border: none;
-      background: transparent;
-      width: 100%;
-      text-align: left;
-      transition: all 0.18s;
-      border-radius: 0;
-      gap: 8px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 9px 18px 9px 14px; font-size: 13px; font-family: var(--font);
+      font-weight: 500; color: var(--text-muted); cursor: pointer;
+      border: none; background: transparent; width: 100%; text-align: left;
+      transition: all 0.18s; border-radius: 0; gap: 8px;
       border-left: 2px solid transparent;
     }
     .tab-btn:hover { background: var(--surface2); color: var(--text); }
+    .tab-btn.active                { color: var(--gold);     background: var(--gold-dim);   border-left-color: var(--gold); }
+    .tab-btn.active.purple-tab     { color: var(--purple);   background: var(--purple-dim); border-left-color: var(--purple); }
+    .tab-btn.active.pink-tab       { color: var(--pink);     background: var(--pink-dim);   border-left-color: var(--pink); }
+    .tab-btn.active.green-tab      { color: var(--green);    background: var(--green-dim);  border-left-color: var(--green); }
+    .tab-btn.active.orange-tab     { color: var(--orange);   background: var(--orange-dim); border-left-color: var(--orange); }
+    .tab-btn.active.gray-tab       { color: var(--text-mid); background: var(--surface3);   border-left-color: var(--text-mid); }
+    .tab-btn.active.blue-tab       { color: var(--blue);     background: var(--blue-dim);   border-left-color: var(--blue); }
+    .tab-btn.active.teal-tab       { color: var(--teal);     background: var(--teal-dim);   border-left-color: var(--teal); }
 
-    .tab-btn.active { color: var(--gold); background: var(--gold-dim); border-left-color: var(--gold); }
-    .tab-btn.active.purple-tab { color: var(--purple); background: var(--purple-dim); border-left-color: var(--purple); }
-    .tab-btn.active.pink-tab   { color: var(--pink);   background: var(--pink-dim);   border-left-color: var(--pink); }
-    .tab-btn.active.green-tab  { color: var(--green);  background: var(--green-dim);  border-left-color: var(--green); }
-    .tab-btn.active.orange-tab { color: var(--orange); background: var(--orange-dim); border-left-color: var(--orange); }
-    .tab-btn.active.gray-tab   { color: var(--text-mid); background: var(--surface3); border-left-color: var(--text-mid); }
-    .tab-btn.active.blue-tab   { color: var(--blue);   background: var(--blue-dim);   border-left-color: var(--blue); }
-    .tab-btn.active.teal-tab   { color: var(--teal);   background: var(--teal-dim);   border-left-color: var(--teal); }
-
-    .tab-dot {
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      flex-shrink: 0;
-      background: var(--text-muted);
-    }
-    .tab-btn.active .tab-dot { background: var(--gold); }
-    .tab-btn.active.purple-tab .tab-dot { background: var(--purple); }
-    .tab-btn.active.pink-tab   .tab-dot { background: var(--pink); }
-    .tab-btn.active.green-tab  .tab-dot { background: var(--green); }
-    .tab-btn.active.orange-tab .tab-dot { background: var(--orange); }
-    .tab-btn.active.gray-tab   .tab-dot { background: var(--text-mid); }
-    .tab-btn.active.blue-tab   .tab-dot { background: var(--blue); }
-    .tab-btn.active.teal-tab   .tab-dot { background: var(--teal); }
+    .tab-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; background: var(--text-muted); }
+    .tab-btn.active .tab-dot                { background: var(--gold); }
+    .tab-btn.active.purple-tab .tab-dot     { background: var(--purple); }
+    .tab-btn.active.pink-tab   .tab-dot     { background: var(--pink); }
+    .tab-btn.active.green-tab  .tab-dot     { background: var(--green); }
+    .tab-btn.active.orange-tab .tab-dot     { background: var(--orange); }
+    .tab-btn.active.gray-tab   .tab-dot     { background: var(--text-mid); }
+    .tab-btn.active.blue-tab   .tab-dot     { background: var(--blue); }
+    .tab-btn.active.teal-tab   .tab-dot     { background: var(--teal); }
 
     .tab-label { flex: 1; }
 
     .tab-badge {
-      font-family: var(--font);
-      font-size: 10px;
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      color: var(--text-muted);
-      border-radius: 20px;
-      padding: 1px 7px;
-      flex-shrink: 0;
-      min-width: 28px;
-      text-align: center;
+      font-family: var(--font); font-size: 10px;
+      background: var(--surface2); border: 1px solid var(--border);
+      color: var(--text-muted); border-radius: 20px;
+      padding: 1px 7px; flex-shrink: 0; min-width: 28px; text-align: center;
     }
-    .tab-btn.active .tab-badge { border-color: var(--gold); color: var(--gold); background: var(--gold-dim); }
-    .tab-btn.active.purple-tab .tab-badge { border-color: var(--purple); color: var(--purple); background: var(--purple-dim); }
-    .tab-btn.active.pink-tab   .tab-badge { border-color: var(--pink);   color: var(--pink);   background: var(--pink-dim); }
-    .tab-btn.active.green-tab  .tab-badge { border-color: var(--green);  color: var(--green);  background: var(--green-dim); }
-    .tab-btn.active.orange-tab .tab-badge { border-color: var(--orange); color: var(--orange); background: var(--orange-dim); }
-    .tab-btn.active.gray-tab   .tab-badge { border-color: var(--text-mid); color: var(--text-mid); background: var(--surface3); }
-    .tab-btn.active.blue-tab   .tab-badge { border-color: var(--blue);   color: var(--blue);   background: var(--blue-dim); }
-    .tab-btn.active.teal-tab   .tab-badge { border-color: var(--teal);   color: var(--teal);   background: var(--teal-dim); }
+    .tab-btn.active .tab-badge                { border-color: var(--gold);     color: var(--gold);     background: var(--gold-dim); }
+    .tab-btn.active.purple-tab .tab-badge     { border-color: var(--purple);   color: var(--purple);   background: var(--purple-dim); }
+    .tab-btn.active.pink-tab   .tab-badge     { border-color: var(--pink);     color: var(--pink);     background: var(--pink-dim); }
+    .tab-btn.active.green-tab  .tab-badge     { border-color: var(--green);    color: var(--green);    background: var(--green-dim); }
+    .tab-btn.active.orange-tab .tab-badge     { border-color: var(--orange);   color: var(--orange);   background: var(--orange-dim); }
+    .tab-btn.active.gray-tab   .tab-badge     { border-color: var(--text-mid); color: var(--text-mid); background: var(--surface3); }
+    .tab-btn.active.blue-tab   .tab-badge     { border-color: var(--blue);     color: var(--blue);     background: var(--blue-dim); }
+    .tab-btn.active.teal-tab   .tab-badge     { border-color: var(--teal);     color: var(--teal);     background: var(--teal-dim); }
 
-    /* ── MAIN CONTENT ── */
-    .main-area {
-      flex: 1;
-      min-width: 0;
-      padding: 28px;
-      overflow-y: auto;
-    }
+    /* ── MAIN ── */
+    .main-area { flex: 1; min-width: 0; padding: 28px; overflow-y: auto; }
 
-    /* ── SEARCH BAR (TOP) ── */
-    .search-section {
-      margin-bottom: 20px;
-    }
-    .search-wrap {
-      position: relative;
-    }
-    .search-icon {
-      position: absolute;
-      left: 14px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--text-muted);
-      pointer-events: none;
-    }
+    .search-section { margin-bottom: 20px; }
+    .search-wrap { position: relative; }
+    .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none; }
     .search-wrap input {
-      width: 100%;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 13px 44px 13px 42px;
-      font-size: 14px;
-      font-family: var(--font);
-      color: var(--text);
-      outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
+      width: 100%; background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; padding: 13px 44px 13px 42px; font-size: 14px;
+      font-family: var(--font); color: var(--text); outline: none; transition: border-color 0.2s, box-shadow 0.2s;
     }
     .search-wrap input::placeholder { color: var(--text-muted); }
-    .search-wrap input:focus {
-      border-color: var(--gold);
-      box-shadow: 0 0 0 3px var(--gold-dim);
-    }
+    .search-wrap input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px var(--gold-dim); }
     .search-clear {
-      position: absolute;
-      right: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: var(--surface3);
-      border: 1px solid var(--border);
-      border-radius: 50%;
-      width: 22px;
-      height: 22px;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      color: var(--text-muted);
-      font-size: 12px;
-      transition: all 0.15s;
+      position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+      background: var(--surface3); border: 1px solid var(--border); border-radius: 50%;
+      width: 22px; height: 22px; display: none; align-items: center; justify-content: center;
+      cursor: pointer; color: var(--text-muted); font-size: 12px; transition: all 0.15s;
     }
     .search-clear:hover { background: var(--border2); color: var(--text); }
     .search-clear.visible { display: flex; }
 
     /* ── NAV CARDS ── */
-    .nav-cards {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-bottom: 24px;
-    }
+    .nav-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 24px; }
 
     .nav-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 18px 20px;
-      cursor: pointer;
-      transition: all 0.2s;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      position: relative;
-      overflow: hidden;
+      background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+      padding: 18px 20px; cursor: pointer; transition: all 0.2s;
+      display: flex; flex-direction: column; gap: 6px; position: relative; overflow: hidden;
     }
     .nav-card::before {
-      content: '';
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      height: 2px;
-      background: var(--gold);
-      opacity: 0;
-      transition: opacity 0.2s;
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+      height: 2px; background: var(--gold); opacity: 0; transition: opacity 0.2s;
     }
     .nav-card:hover { border-color: var(--border2); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
     .nav-card:hover::before { opacity: 0.5; }
     .nav-card.active { border-color: var(--gold); background: var(--gold-dim); }
     .nav-card.active::before { opacity: 1; }
 
-    .nav-card.purple-card.active { border-color: var(--purple); background: var(--purple-dim); }
+    .nav-card.purple-card.active  { border-color: var(--purple);   background: var(--purple-dim); }
     .nav-card.purple-card::before { background: var(--purple); }
-    .nav-card.pink-card.active   { border-color: var(--pink);   background: var(--pink-dim); }
+    .nav-card.pink-card.active    { border-color: var(--pink);     background: var(--pink-dim); }
     .nav-card.pink-card::before   { background: var(--pink); }
-    .nav-card.green-card.active  { border-color: var(--green);  background: var(--green-dim); }
+    .nav-card.green-card.active   { border-color: var(--green);    background: var(--green-dim); }
     .nav-card.green-card::before  { background: var(--green); }
-    .nav-card.orange-card.active { border-color: var(--orange); background: var(--orange-dim); }
+    .nav-card.orange-card.active  { border-color: var(--orange);   background: var(--orange-dim); }
     .nav-card.orange-card::before { background: var(--orange); }
-    .nav-card.gray-card.active   { border-color: var(--text-mid); background: var(--surface3); }
+    .nav-card.gray-card.active    { border-color: var(--text-mid); background: var(--surface3); }
     .nav-card.gray-card::before   { background: var(--text-mid); }
-    .nav-card.blue-card.active   { border-color: var(--blue);   background: var(--blue-dim); }
+    .nav-card.blue-card.active    { border-color: var(--blue);     background: var(--blue-dim); }
     .nav-card.blue-card::before   { background: var(--blue); }
-    .nav-card.teal-card.active   { border-color: var(--teal);   background: var(--teal-dim); }
+    .nav-card.teal-card.active    { border-color: var(--teal);     background: var(--teal-dim); }
     .nav-card.teal-card::before   { background: var(--teal); }
 
-    .nav-card-en {
-      font-family: var(--font);
-      font-size: 9px;
-      letter-spacing: 2px;
-      color: var(--text-muted);
-      text-transform: uppercase;
-    }
-    .nav-card-count {
-      font-family: var(--font);
-      font-size: 28px;
-      font-weight: 700;
-      color: var(--gold);
-      line-height: 1;
-    }
+    .nav-card-en { font-family: var(--font); font-size: 9px; letter-spacing: 2px; color: var(--text-muted); text-transform: uppercase; }
+    .nav-card-count { font-family: var(--font); font-size: 28px; font-weight: 700; color: var(--gold); line-height: 1; }
     .nav-card.purple-card .nav-card-count { color: var(--purple); }
     .nav-card.pink-card   .nav-card-count { color: var(--pink); }
     .nav-card.green-card  .nav-card-count { color: var(--green); }
@@ -382,294 +240,113 @@
     .nav-card.gray-card   .nav-card-count { color: var(--text-mid); }
     .nav-card.blue-card   .nav-card-count { color: var(--blue); }
     .nav-card.teal-card   .nav-card-count { color: var(--teal); }
+    .nav-card-name { font-family: var(--font); font-size: 13px; font-weight: 700; color: var(--text); }
 
-    .nav-card-name {
-      font-family: var(--font);
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--text);
-    }
-
-    /* ── RESULT ROW ── */
-    .result-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 16px;
-    }
-    .result-info {
-      font-family: var(--font);
-      font-size: 11px;
-      color: var(--text-muted);
-    }
+    .result-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+    .result-info { font-family: var(--font); font-size: 11px; color: var(--text-muted); }
     .result-info strong { color: var(--gold); }
 
     .expand-all-btn {
-      font-family: var(--font);
-      font-size: 11px;
-      letter-spacing: 0.5px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 6px 14px;
-      color: var(--text-muted);
-      cursor: pointer;
-      transition: all 0.15s;
+      font-family: var(--font); font-size: 11px; letter-spacing: 0.5px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 6px; padding: 6px 14px; color: var(--text-muted);
+      cursor: pointer; transition: all 0.15s;
     }
     .expand-all-btn:hover { border-color: var(--border2); color: var(--text); }
 
-    /* ── ACCORDION CARDS ── */
+    /* ── ACCORDION ── */
     .reg-list, .jobgroup-list { display: flex; flex-direction: column; gap: 10px; }
 
-    .reg-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      overflow: hidden;
-      transition: border-color 0.2s;
-    }
+    .reg-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; transition: border-color 0.2s; }
     .reg-card:hover { border-color: var(--border2); }
-    .reg-card.expanded { border-color: var(--gold); }
-    .reg-card.blue-card.expanded   { border-color: var(--blue); }
-    .reg-card.teal-card.expanded   { border-color: var(--teal); }
-    .reg-card.purple-card.expanded { border-color: var(--purple); }
-    .reg-card.pink-card.expanded   { border-color: var(--pink); }
-    .reg-card.green-card.expanded  { border-color: var(--green); }
-    .reg-card.orange-card.expanded { border-color: var(--orange); }
-    .reg-card.gray-card.expanded   { border-color: var(--text-mid); }
+    .reg-card.expanded                { border-color: var(--gold); }
+    .reg-card.blue-card.expanded      { border-color: var(--blue); }
+    .reg-card.teal-card.expanded      { border-color: var(--teal); }
+    .reg-card.purple-card.expanded    { border-color: var(--purple); }
+    .reg-card.pink-card.expanded      { border-color: var(--pink); }
+    .reg-card.green-card.expanded     { border-color: var(--green); }
+    .reg-card.orange-card.expanded    { border-color: var(--orange); }
+    .reg-card.gray-card.expanded      { border-color: var(--text-mid); }
 
-    .reg-card-header {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 14px 18px;
-      cursor: pointer;
-      user-select: none;
-    }
-    .reg-num {
-      font-family: var(--font);
-      font-size: 11px;
-      color: var(--text-muted);
-      width: 22px;
-      flex-shrink: 0;
-    }
-    .reg-title {
-      font-family: var(--font);
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--text);
-      flex: 1;
-    }
+    .reg-card-header { display: flex; align-items: center; gap: 14px; padding: 14px 18px; cursor: pointer; user-select: none; }
+    .reg-num { font-family: var(--font); font-size: 11px; color: var(--text-muted); width: 22px; flex-shrink: 0; }
+    .reg-title { font-family: var(--font); font-size: 14px; font-weight: 700; color: var(--text); flex: 1; }
     .reg-count-badge {
-      font-family: var(--font);
-      font-size: 11px;
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      color: var(--text-muted);
-      border-radius: 6px;
-      padding: 3px 9px;
-      white-space: nowrap;
-      flex-shrink: 0;
+      font-family: var(--font); font-size: 11px; background: var(--surface2);
+      border: 1px solid var(--border); color: var(--text-muted); border-radius: 6px;
+      padding: 3px 9px; white-space: nowrap; flex-shrink: 0;
     }
-    .reg-card.expanded .reg-count-badge { border-color: var(--gold); color: var(--gold); background: var(--gold-dim); }
-    .reg-card.blue-card.expanded   .reg-count-badge { border-color: var(--blue);     color: var(--blue);     background: var(--blue-dim); }
-    .reg-card.teal-card.expanded   .reg-count-badge { border-color: var(--teal);     color: var(--teal);     background: var(--teal-dim); }
-    .reg-card.purple-card.expanded .reg-count-badge { border-color: var(--purple);   color: var(--purple);   background: var(--purple-dim); }
-    .reg-card.pink-card.expanded   .reg-count-badge { border-color: var(--pink);     color: var(--pink);     background: var(--pink-dim); }
-    .reg-card.green-card.expanded  .reg-count-badge { border-color: var(--green);    color: var(--green);    background: var(--green-dim); }
-    .reg-card.orange-card.expanded .reg-count-badge { border-color: var(--orange);   color: var(--orange);   background: var(--orange-dim); }
-    .reg-card.gray-card.expanded   .reg-count-badge { border-color: var(--text-mid); color: var(--text-mid); background: var(--surface3); }
+    .reg-card.expanded .reg-count-badge                { border-color: var(--gold);     color: var(--gold);     background: var(--gold-dim); }
+    .reg-card.blue-card.expanded   .reg-count-badge    { border-color: var(--blue);     color: var(--blue);     background: var(--blue-dim); }
+    .reg-card.teal-card.expanded   .reg-count-badge    { border-color: var(--teal);     color: var(--teal);     background: var(--teal-dim); }
+    .reg-card.purple-card.expanded .reg-count-badge    { border-color: var(--purple);   color: var(--purple);   background: var(--purple-dim); }
+    .reg-card.pink-card.expanded   .reg-count-badge    { border-color: var(--pink);     color: var(--pink);     background: var(--pink-dim); }
+    .reg-card.green-card.expanded  .reg-count-badge    { border-color: var(--green);    color: var(--green);    background: var(--green-dim); }
+    .reg-card.orange-card.expanded .reg-count-badge    { border-color: var(--orange);   color: var(--orange);   background: var(--orange-dim); }
+    .reg-card.gray-card.expanded   .reg-count-badge    { border-color: var(--text-mid); color: var(--text-mid); background: var(--surface3); }
 
-    .toggle-arrow {
-      width: 18px; height: 18px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      transition: transform 0.25s;
-    }
+    .toggle-arrow { width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: transform 0.25s; }
     .reg-card.expanded .toggle-arrow,
     .jg-card.expanded  .toggle-arrow { transform: rotate(180deg); }
 
-    .reg-card-body {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1);
-    }
-    .reg-card-body-inner {
-      padding: 0 18px 18px;
-      border-top: 1px solid var(--border);
-    }
+    .reg-card-body { max-height: 0; overflow: hidden; transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1); }
+    .reg-card-body-inner { padding: 0 18px 18px; border-top: 1px solid var(--border); }
 
-    /* ── JOB GROUP CARDS ── */
-    .jg-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      overflow: hidden;
-      transition: border-color 0.2s;
-    }
+    /* ── JOB GROUP ── */
+    .jg-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; transition: border-color 0.2s; }
     .jg-card:hover { border-color: var(--border2); }
     .jg-card.expanded { border-color: var(--gold); }
-
-    .jg-card-header {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 14px 18px;
-      cursor: pointer;
-      user-select: none;
-    }
+    .jg-card-header { display: flex; align-items: center; gap: 14px; padding: 14px 18px; cursor: pointer; user-select: none; }
     .jg-num  { font-family: var(--font); font-size: 11px; color: var(--text-muted); width: 22px; flex-shrink: 0; }
     .jg-name { font-family: var(--font); font-size: 14px; font-weight: 700; color: var(--text); flex: 1; }
-    .jg-count {
-      font-family: var(--font); font-size: 11px;
-      background: var(--surface2); border: 1px solid var(--border);
-      color: var(--text-muted); border-radius: 6px;
-      padding: 3px 9px; white-space: nowrap; flex-shrink: 0;
-    }
+    .jg-count { font-family: var(--font); font-size: 11px; background: var(--surface2); border: 1px solid var(--border); color: var(--text-muted); border-radius: 6px; padding: 3px 9px; white-space: nowrap; flex-shrink: 0; }
     .jg-card.expanded .jg-count { border-color: var(--gold); color: var(--gold); background: var(--gold-dim); }
-
-    .jg-card-body {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1);
-    }
-    .jg-card-body-inner {
-      padding: 0 18px 18px;
-      border-top: 1px solid var(--border);
-    }
-
+    .jg-card-body { max-height: 0; overflow: hidden; transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1); }
+    .jg-card-body-inner { padding: 0 18px 18px; border-top: 1px solid var(--border); }
     .jg-reg-group { margin-top: 14px; }
-    .jg-reg-title {
-      font-size: 12px; font-weight: 700; color: var(--gold);
-      margin-bottom: 8px; padding-bottom: 6px;
-      border-bottom: 1px solid var(--border);
-      font-family: var(--font);
-    }
+    .jg-reg-title { font-size: 12px; font-weight: 700; color: var(--gold); margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid var(--border); font-family: var(--font); }
 
     /* ── ITEM CARDS ── */
     .item-list { display: flex; flex-direction: column; gap: 10px; margin-top: 14px; }
-
-    .item-card {
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      overflow: hidden;
-    }
-    .item-card-header {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 12px;
-      background: var(--surface3);
-      border-bottom: 1px solid var(--border);
-      cursor: pointer;
-      user-select: none;
-    }
+    .item-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+    .item-card-header { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: var(--surface3); border-bottom: 1px solid var(--border); cursor: pointer; user-select: none; }
     .item-idx { font-family: var(--font); font-size: 10px; color: var(--text-muted); }
-    .grade-badge {
-      font-family: var(--font);
-      font-size: 10px;
-      font-weight: 500;
-      padding: 2px 7px;
-      border-radius: 4px;
-    }
+    .grade-badge { font-family: var(--font); font-size: 10px; font-weight: 500; padding: 2px 7px; border-radius: 4px; }
     .grade-A { background: rgba(109,185,138,0.15); color: var(--success); border: 1px solid rgba(109,185,138,0.3); }
     .grade-B { background: rgba(201,168,76,0.15);  color: var(--warning); border: 1px solid rgba(201,168,76,0.3); }
     .grade-C { background: rgba(201,122,109,0.15); color: var(--danger);  border: 1px solid rgba(201,122,109,0.3); }
     .grade-default { background: var(--surface2); color: var(--text-muted); border: 1px solid var(--border); }
-
     .item-division { font-size: 11px; color: var(--text-muted); font-family: var(--font); flex: 1; }
-    .item-toggle-arrow {
-      width: 16px; height: 16px;
-      display: flex; align-items: center; justify-content: center;
-      color: var(--text-muted);
-      transition: transform 0.2s;
-      flex-shrink: 0;
-    }
+    .item-toggle-arrow { width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); transition: transform 0.2s; flex-shrink: 0; }
     .item-card.item-expanded .item-toggle-arrow { transform: rotate(180deg); }
-
-    .item-body {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.3s cubic-bezier(0.4,0,0.2,1);
-    }
-    .item-card.item-expanded .item-body {
-      max-height: 2000px;
-    }
+    .item-body { max-height: 0; overflow: hidden; transition: max-height 0.3s cubic-bezier(0.4,0,0.2,1); }
+    .item-card.item-expanded .item-body { max-height: 2000px; }
 
     .field-rows { padding: 12px; display: flex; flex-direction: column; gap: 0; }
-    .field-row {
-      display: grid;
-      grid-template-columns: 90px 1fr;
-      gap: 0;
-      border-bottom: 1px solid var(--border);
-      min-height: 34px;
-    }
+    .field-row { display: grid; grid-template-columns: 90px 1fr; gap: 0; border-bottom: 1px solid var(--border); min-height: 34px; }
     .field-row:last-child { border-bottom: none; }
-    .field-label {
-      font-family: var(--font);
-      font-size: 10px;
-      color: var(--text-muted);
-      letter-spacing: 0.5px;
-      padding: 8px 10px 8px 0;
-      border-right: 1px solid var(--border);
-      display: flex;
-      align-items: flex-start;
-    }
-    .field-value {
-      font-size: 12px;
-      font-family: var(--font);
-      color: var(--text);
-      padding: 8px 0 8px 12px;
-      line-height: 1.6;
-      word-break: break-word;
-    }
+    .field-label { font-family: var(--font); font-size: 10px; color: var(--text-muted); letter-spacing: 0.5px; padding: 8px 10px 8px 0; border-right: 1px solid var(--border); display: flex; align-items: flex-start; }
+    .field-value { font-size: 12px; font-family: var(--font); color: var(--text); padding: 8px 0 8px 12px; line-height: 1.6; word-break: break-word; }
     .field-value.empty { color: var(--text-muted); font-style: italic; }
 
-    mark {
-      background: rgba(201,168,76,0.3);
-      color: var(--gold2);
-      border-radius: 2px;
-      padding: 0 1px;
+    mark { background: rgba(201,168,76,0.3); color: var(--gold2); border-radius: 2px; padding: 0 1px; }
+
+    /* ── 디버그 배지 ── */
+    .debug-note {
+      font-size: 9px; font-family: var(--font); color: var(--text-muted);
+      background: var(--surface3); border: 1px solid var(--border);
+      border-radius: 4px; padding: 2px 6px; margin-left: 6px;
+      display: inline-block; vertical-align: middle;
     }
 
     /* ── LOADING / ERROR ── */
-    .loading-screen, .error-screen {
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      min-height: 60vh; gap: 16px; text-align: center;
-    }
-    .spinner {
-      width: 36px; height: 36px;
-      border: 2px solid var(--border);
-      border-top-color: var(--gold);
-      border-radius: 50%;
-      animation: spin 0.9s linear infinite;
-    }
+    .loading-screen, .error-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 60vh; gap: 16px; text-align: center; }
+    .spinner { width: 36px; height: 36px; border: 2px solid var(--border); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.9s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
     .loading-text { color: var(--text-muted); font-size: 12px; font-family: var(--font); letter-spacing: 1px; }
+    .error-box { background: rgba(201,122,109,0.08); border: 1px solid rgba(201,122,109,0.3); border-radius: 12px; padding: 24px 32px; color: var(--danger); font-size: 13px; max-width: 480px; line-height: 1.7; }
+    .empty-state { text-align: center; padding: 48px; color: var(--text-muted); font-size: 13px; font-family: var(--font); }
 
-    .error-box {
-      background: rgba(201,122,109,0.08);
-      border: 1px solid rgba(201,122,109,0.3);
-      border-radius: 12px;
-      padding: 24px 32px;
-      color: var(--danger);
-      font-size: 13px;
-      max-width: 480px;
-      line-height: 1.7;
-    }
-    .empty-state {
-      text-align: center;
-      padding: 48px;
-      color: var(--text-muted);
-      font-size: 13px;
-      font-family: var(--font);
-    }
-
-    /* ── PRINT ── */
     @media print {
       .sidebar, header, .nav-cards, .search-section, .result-row, #scrollProgress { display: none !important; }
       .main-area { padding: 0; }
@@ -677,10 +354,7 @@
       body { background: white; color: black; }
     }
 
-    /* ── RESPONSIVE ── */
-    @media (max-width: 900px) {
-      .nav-cards { grid-template-columns: repeat(2, 1fr); }
-    }
+    @media (max-width: 900px) { .nav-cards { grid-template-columns: repeat(2, 1fr); } }
     @media (max-width: 768px) {
       .sidebar { display: none !important; }
       .main-area { padding: 16px; }
@@ -688,9 +362,7 @@
       .field-row { grid-template-columns: 70px 1fr; }
       .header-status .status-text { display: none; }
     }
-    @media (min-width: 769px) {
-      .sidebar { display: flex !important; }
-    }
+    @media (min-width: 769px) { .sidebar { display: flex !important; } }
   </style>
 </head>
 <body>
@@ -720,27 +392,25 @@
 
 <div class="app-body">
 
-  <!-- 데스크탑 사이드바 -->
   <nav class="sidebar" id="sidebar">
     <div class="sidebar-section-label">기본 보기</div>
-    <button class="tab-btn active"     data-tab="all">       <span class="tab-dot"></span><span class="tab-label">전체</span>      <span class="tab-badge" id="sb-all">0</span></button>
-    <button class="tab-btn teal-tab"   data-tab="review">    <span class="tab-dot"></span><span class="tab-label">규정 검토</span> <span class="tab-badge" id="sb-review">0</span></button>
+    <button class="tab-btn active"     data-tab="all">      <span class="tab-dot"></span><span class="tab-label">전체</span>      <span class="tab-badge" id="sb-all">0</span></button>
+    <button class="tab-btn teal-tab"   data-tab="review">   <span class="tab-dot"></span><span class="tab-label">규정 검토</span> <span class="tab-badge" id="sb-review">0</span></button>
 
     <div class="sidebar-sep"></div>
     <div class="sidebar-section-label">직군 분류</div>
-    <button class="tab-btn"            data-tab="jobgroup">  <span class="tab-dot"></span><span class="tab-label">직군별 보기</span><span class="tab-badge" id="sb-jobgroup">0</span></button>
-    <button class="tab-btn purple-tab" data-tab="doctor">    <span class="tab-dot"></span><span class="tab-label">의사</span>      <span class="tab-badge" id="sb-doctor">0</span></button>
-    <button class="tab-btn pink-tab"   data-tab="nurse">     <span class="tab-dot"></span><span class="tab-label">간호사</span>    <span class="tab-badge" id="sb-nurse">0</span></button>
-    <button class="tab-btn green-tab"  data-tab="pharm">     <span class="tab-dot"></span><span class="tab-label">약사</span>      <span class="tab-badge" id="sb-pharm">0</span></button>
-    <button class="tab-btn orange-tab" data-tab="guardian">  <span class="tab-dot"></span><span class="tab-label">보호자</span>    <span class="tab-badge" id="sb-guardian">0</span></button>
-    <button class="tab-btn gray-tab"   data-tab="etc">       <span class="tab-dot"></span><span class="tab-label">기타 직군</span> <span class="tab-badge" id="sb-etc">0</span></button>
+    <button class="tab-btn"            data-tab="jobgroup"> <span class="tab-dot"></span><span class="tab-label">직군별 보기</span><span class="tab-badge" id="sb-jobgroup">0</span></button>
+    <button class="tab-btn purple-tab" data-tab="doctor">   <span class="tab-dot"></span><span class="tab-label">의사</span>      <span class="tab-badge" id="sb-doctor">0</span></button>
+    <button class="tab-btn pink-tab"   data-tab="nurse">    <span class="tab-dot"></span><span class="tab-label">간호사</span>    <span class="tab-badge" id="sb-nurse">0</span></button>
+    <button class="tab-btn green-tab"  data-tab="pharm">    <span class="tab-dot"></span><span class="tab-label">약사</span>      <span class="tab-badge" id="sb-pharm">0</span></button>
+    <button class="tab-btn orange-tab" data-tab="guardian"> <span class="tab-dot"></span><span class="tab-label">보호자</span>    <span class="tab-badge" id="sb-guardian">0</span></button>
+    <button class="tab-btn gray-tab"   data-tab="etc">      <span class="tab-dot"></span><span class="tab-label">기타 직군</span> <span class="tab-badge" id="sb-etc">0</span></button>
 
     <div class="sidebar-sep"></div>
     <div class="sidebar-section-label">특수 분류</div>
-    <button class="tab-btn blue-tab"   data-tab="question">  <span class="tab-dot"></span><span class="tab-label">질문</span>      <span class="tab-badge" id="sb-question">0</span></button>
+    <button class="tab-btn blue-tab"   data-tab="question"> <span class="tab-dot"></span><span class="tab-label">질문</span>      <span class="tab-badge" id="sb-question">0</span></button>
   </nav>
 
-  <!-- 메인 콘텐츠 -->
   <div class="main-area" id="mainArea">
 
     <div class="loading-screen" id="loadingScreen">
@@ -753,7 +423,6 @@
 
     <div id="mainContent" style="display:none;">
 
-      <!-- 검색 (최상단) -->
       <div class="search-section">
         <div class="search-wrap">
           <span class="search-icon">
@@ -768,8 +437,6 @@
         </div>
       </div>
 
-      <!-- 탭 네비게이션 카드 -->
-      <!-- 순서: 전체, 규정검토, 직군별보기, 의사, 간호사, 약사, 보호자, 기타직군, 질문 -->
       <div class="nav-cards">
         <div class="nav-card active"       data-tab="all">
           <div class="nav-card-en">ALL</div>
@@ -823,16 +490,15 @@
         <button class="expand-all-btn" id="expandAllBtn">모두 펼치기</button>
       </div>
 
-      <!-- 뷰 컨테이너 -->
-      <div id="view-all">       <div class="reg-list"      id="regList"></div></div>
-      <div id="view-jobgroup"   style="display:none;"><div class="jobgroup-list" id="jobgroupList"></div></div>
-      <div id="view-doctor"     style="display:none;"><div class="reg-list"      id="doctorList"></div></div>
-      <div id="view-nurse"      style="display:none;"><div class="reg-list"      id="nurseList"></div></div>
-      <div id="view-pharm"      style="display:none;"><div class="reg-list"      id="pharmList"></div></div>
-      <div id="view-guardian"   style="display:none;"><div class="reg-list"      id="guardianList"></div></div>
-      <div id="view-etc"        style="display:none;"><div class="reg-list"      id="etcList"></div></div>
-      <div id="view-question"   style="display:none;"><div class="reg-list"      id="questionList"></div></div>
-      <div id="view-review"     style="display:none;"><div class="reg-list"      id="reviewList"></div></div>
+      <div id="view-all">      <div class="reg-list"      id="regList"></div></div>
+      <div id="view-jobgroup"  style="display:none;"><div class="jobgroup-list" id="jobgroupList"></div></div>
+      <div id="view-doctor"    style="display:none;"><div class="reg-list"      id="doctorList"></div></div>
+      <div id="view-nurse"     style="display:none;"><div class="reg-list"      id="nurseList"></div></div>
+      <div id="view-pharm"     style="display:none;"><div class="reg-list"      id="pharmList"></div></div>
+      <div id="view-guardian"  style="display:none;"><div class="reg-list"      id="guardianList"></div></div>
+      <div id="view-etc"       style="display:none;"><div class="reg-list"      id="etcList"></div></div>
+      <div id="view-question"  style="display:none;"><div class="reg-list"      id="questionList"></div></div>
+      <div id="view-review"    style="display:none;"><div class="reg-list"      id="reviewList"></div></div>
 
     </div>
   </div>
@@ -842,28 +508,50 @@
 (function () {
   'use strict';
 
-  const SPREADSHEET_ID = '18dDgxsczklu9FRm053w2rqLDFDjqm7C18rijuyJdrkI';
-  const DIRECT_URL = 'https://docs.google.com/spreadsheets/d/' + SPREADSHEET_ID + '/export?format=csv&gid=0';
-  const PROXY_URL  = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(DIRECT_URL);
+  var SPREADSHEET_ID = '18dDgxsczklu9FRm053w2rqLDFDjqm7C18rijuyJdrkI';
+  var DIRECT_URL = 'https://docs.google.com/spreadsheets/d/' + SPREADSHEET_ID + '/export?format=csv&gid=0';
+  var PROXY_URL  = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(DIRECT_URL);
 
-  const COL = {
+  var COL = {
     규정제목: 0, 직군: 1, 조사항목등급: 2, 조사항목구분: 3,
     조사항목장: 4, 기준제목: 5, 기준: 6, 조사항목: 7,
     기준이해: 8, 조사내용: 9, 조사목적: 10, 참고자료: 11,
   };
 
-  const JOB_TABS = {
-    doctor:   '의사',
-    nurse:    '간호사',
-    pharm:    '약사',
-    guardian: '보호자',
+  /*
+   * ================================================================
+   * 직군 키워드 정의
+   * ================================================================
+   * B열(직군)에 해당 키워드가 포함되면 해당 탭에 표시합니다.
+   * 하나의 행이 여러 탭에 동시에 나타날 수 있습니다.
+   * (예: "간호사, 약사" → 간호사 탭 + 약사 탭 모두 표시)
+   * ================================================================
+   */
+  var JOB_KEYWORDS = {
+    doctor:   ['의사'],
+    nurse:    ['간호사'],
+    pharm:    ['약사'],
+    guardian: ['보호자'],
   };
-  const SPECIAL_JOBS = Object.values(JOB_TABS);
 
-  let allRows     = [];
-  let currentView = 'all';
-  let searchQuery = '';
-  let allExpanded = false;
+  /*
+   * ================================================================
+   * 분류 함수 설계 원칙
+   * ================================================================
+   * - isReview : B열에 "규정검토" 또는 "규정 검토" 포함
+   * - isQuestion: A열(규정제목)에 "질문" 포함
+   * - isDoctor/isNurse/isPharm/isGuardian:
+   *     B열에 해당 키워드 포함이면 무조건 해당 탭에 포함
+   *     (isQuestion, isReview 여부와 무관)
+   * - isEtc: B열에 어떤 직군 키워드도 없고, isReview도 아닌 행
+   * - isAll: 모든 행
+   * ================================================================
+   */
+
+  var allRows     = [];
+  var currentView = 'all';
+  var searchQuery = '';
+  var allExpanded = false;
 
   /* ── 문자열 정규화 ── */
   function norm(s) {
@@ -873,10 +561,10 @@
 
   /* ── CSV 파서 ── */
   function parseCSV(text) {
-    const lines = [];
-    let cur = '', inQ = false, row = [];
-    for (let i = 0; i < text.length; i++) {
-      const ch = text[i];
+    var lines = [];
+    var cur = '', inQ = false, row = [];
+    for (var i = 0; i < text.length; i++) {
+      var ch = text[i];
       if (ch === '"') {
         if (inQ && text[i+1] === '"') { cur += '"'; i++; }
         else { inQ = !inQ; }
@@ -893,26 +581,56 @@
   }
 
   /* ── 분류 함수 ── */
-  function isQuestion(r) { return norm(r[COL.규정제목]).indexOf('질문') !== -1; }
-  function isReview(r)   {
+
+  /* 규정 검토: B열에 "규정검토" 또는 "규정 검토" 포함 */
+  function isReview(r) {
     var v = norm(r[COL.직군]);
     return v.indexOf('규정검토') !== -1 || v.indexOf('규정 검토') !== -1;
   }
-  function isDoctor(r)   { return !isQuestion(r) && !isReview(r) && norm(r[COL.직군]).indexOf(norm(JOB_TABS.doctor))   !== -1; }
-  function isNurse(r)    { return !isQuestion(r) && !isReview(r) && norm(r[COL.직군]).indexOf(norm(JOB_TABS.nurse))    !== -1; }
-  function isPharm(r)    { return !isQuestion(r) && !isReview(r) && norm(r[COL.직군]).indexOf(norm(JOB_TABS.pharm))    !== -1; }
-  function isGuardian(r) { return !isQuestion(r) && !isReview(r) && norm(r[COL.직군]).indexOf(norm(JOB_TABS.guardian)) !== -1; }
-  function isEtc(r) {
-    if (isQuestion(r) || isReview(r)) return false;
-    var v = norm(r[COL.직군]);
-    for (var i = 0; i < SPECIAL_JOBS.length; i++) {
-      if (v.indexOf(norm(SPECIAL_JOBS[i])) !== -1) return false;
-    }
-    return true;
+
+  /* 질문: A열(규정제목)에 "질문" 포함 */
+  function isQuestion(r) {
+    return norm(r[COL.규정제목]).indexOf('질문') !== -1;
   }
-  function isGeneral(r)  { return !isQuestion(r) && !isReview(r); }
-  /* 전체: 모든 행 포함 */
-  function isAll(r)      { return true; }
+
+  /*
+   * 직군 탭 필터: B열에 해당 키워드가 하나라도 포함되면 해당 탭에 표시
+   * isQuestion, isReview 여부를 따지지 않음 → 데이터 누락 방지
+   */
+  function hasJobKeyword(r, keywords) {
+    var v = norm(r[COL.직군]);
+    for (var i = 0; i < keywords.length; i++) {
+      if (v.indexOf(norm(keywords[i])) !== -1) return true;
+    }
+    return false;
+  }
+
+  function isDoctor(r)   { return hasJobKeyword(r, JOB_KEYWORDS.doctor); }
+  function isNurse(r)    { return hasJobKeyword(r, JOB_KEYWORDS.nurse); }
+  function isPharm(r)    { return hasJobKeyword(r, JOB_KEYWORDS.pharm); }
+  function isGuardian(r) { return hasJobKeyword(r, JOB_KEYWORDS.guardian); }
+
+  /*
+   * 기타 직군: 어떤 직군 키워드도 없고, 규정검토도 아닌 행
+   * (질문 탭 행이라도 직군 키워드가 없으면 기타에 포함)
+   */
+  function isEtc(r) {
+    if (isReview(r)) return false;
+    var allKeywords = [].concat(
+      JOB_KEYWORDS.doctor, JOB_KEYWORDS.nurse,
+      JOB_KEYWORDS.pharm,  JOB_KEYWORDS.guardian
+    );
+    return !hasJobKeyword(r, allKeywords);
+  }
+
+  /*
+   * 직군별 보기: 규정검토가 아닌 모든 행 (직군 정보가 있는 행)
+   * 직군별 보기는 B열 값 기준으로 그룹핑
+   */
+  function isGeneral(r) { return !isReview(r); }
+
+  /* 전체 탭: 모든 행 */
+  function isAll(r) { return true; }
 
   /* ── HTML 이스케이프 ── */
   function esc(str) {
@@ -930,9 +648,9 @@
   }
 
   /* ── 유틸 ── */
-  function el(id)          { return document.getElementById(id); }
-  function setText(id, v)  { var e = el(id); if (e) e.textContent = v; }
-  function pad(n)          { return String(n).padStart(2, '0'); }
+  function el(id)         { return document.getElementById(id); }
+  function setText(id, v) { var e = el(id); if (e) e.textContent = v; }
+  function pad(n)         { return String(n).padStart(2, '0'); }
 
   /* ── 스크롤 진행 바 ── */
   el('mainArea').addEventListener('scroll', function() {
@@ -943,7 +661,7 @@
 
   /* ── 데이터 로드 ── */
   async function loadData() {
-    let text = null;
+    var text = null;
     try {
       var res = await fetch(DIRECT_URL);
       if (res.ok) text = await res.text();
@@ -972,12 +690,9 @@
     el('loadingScreen').style.display = 'none';
     el('mainContent').style.display   = 'block';
 
-    /* URL 해시로 탭 복원 */
     var hash = location.hash.replace('#','');
     var validTabs = ['all','jobgroup','doctor','nurse','pharm','guardian','etc','question','review'];
-    if (hash && validTabs.indexOf(hash) !== -1) {
-      switchTab(hash);
-    }
+    if (hash && validTabs.indexOf(hash) !== -1) switchTab(hash);
 
     rerender();
   }
@@ -992,51 +707,48 @@
 
   /* ── 배지 업데이트 ── */
   function updateBadges() {
-    var genRows = allRows.filter(isGeneral);
-    var qRows   = allRows.filter(isQuestion);
-    var rvRows  = allRows.filter(isReview);
-    var drRows  = allRows.filter(isDoctor);
-    var nuRows  = allRows.filter(isNurse);
-    var phRows  = allRows.filter(isPharm);
-    var guRows  = allRows.filter(isGuardian);
-    var etRows  = allRows.filter(isEtc);
-
-    /* 전체 탭: A열(규정제목)의 고유 값 개수 */
     var allRegSet = new Set(allRows.map(function(r) { return r[COL.규정제목]; }).filter(Boolean));
-    var genRegSet = new Set(genRows.map(function(r) { return r[COL.규정제목]; }).filter(Boolean));
-    var grpSet    = new Set(genRows.map(function(r) { return r[COL.직군]; }).filter(Boolean));
+
+    /*
+     * 직군별 보기: 고유 B열 값 개수 (규정검토 제외)
+     * 직군 탭: 해당 키워드를 가진 행 수 (중복 허용)
+     */
+    var genRows  = allRows.filter(isGeneral);
+    var grpSet   = new Set(genRows.map(function(r) { return r[COL.직군]; }).filter(Boolean));
 
     var counts = {
-      all:      allRegSet.size,   /* 전체: A열 고유 규정제목 수 */
+      all:      allRegSet.size,
       jobgroup: grpSet.size,
-      doctor:   drRows.length,
-      nurse:    nuRows.length,
-      pharm:    phRows.length,
-      guardian: guRows.length,
-      etc:      etRows.length,
-      question: qRows.length,
-      review:   rvRows.length,
+      doctor:   allRows.filter(isDoctor).length,
+      nurse:    allRows.filter(isNurse).length,
+      pharm:    allRows.filter(isPharm).length,
+      guardian: allRows.filter(isGuardian).length,
+      etc:      allRows.filter(isEtc).length,
+      question: allRows.filter(isQuestion).length,
+      review:   allRows.filter(isReview).length,
     };
 
     Object.keys(counts).forEach(function(k) {
-      setText('sb-' + k,  counts[k]);
-      setText('nc-' + k,  counts[k]);
+      setText('sb-' + k, counts[k]);
+      setText('nc-' + k, counts[k]);
     });
   }
 
-  /* ── 필터 헬퍼 ── */
+  /* ── 검색 필터 적용 ── */
+  function applySearch(rows) {
+    if (!searchQuery) return rows;
+    var q = searchQuery.toLowerCase();
+    return rows.filter(function(r) {
+      return (r[COL.규정제목]    || '').toLowerCase().indexOf(q) !== -1 ||
+             (r[COL.기준제목]    || '').toLowerCase().indexOf(q) !== -1 ||
+             (r[COL.조사항목]    || '').toLowerCase().indexOf(q) !== -1 ||
+             (r[COL.직군]        || '').toLowerCase().indexOf(q) !== -1 ||
+             (r[COL.조사항목구분]|| '').toLowerCase().indexOf(q) !== -1;
+    });
+  }
+
   function getFiltered(filterFn) {
-    var rows = allRows.filter(filterFn);
-    if (searchQuery) {
-      var q = searchQuery.toLowerCase();
-      rows = rows.filter(function(r) {
-        return (r[COL.규정제목] || '').toLowerCase().indexOf(q) !== -1 ||
-               (r[COL.기준제목] || '').toLowerCase().indexOf(q) !== -1 ||
-               (r[COL.조사항목] || '').toLowerCase().indexOf(q) !== -1 ||
-               (r[COL.직군]     || '').toLowerCase().indexOf(q) !== -1;
-      });
-    }
-    return rows;
+    return applySearch(allRows.filter(filterFn));
   }
 
   /* ── 규정제목 그룹 아코디언 렌더 ── */
@@ -1045,7 +757,8 @@
     container.innerHTML = '';
     if (!rows.length) {
       container.innerHTML = '<div class="empty-state">표시할 데이터가 없습니다.</div>';
-      updateResultInfo(0); return;
+      updateResultInfo(0);
+      return;
     }
 
     var order = [], groups = {};
@@ -1071,12 +784,12 @@
         '<div class="reg-card-body"><div class="reg-card-body-inner"><div class="item-list">' +
           rowSet.map(function(r, i) { return itemCardHtml(r, i); }).join('') +
         '</div></div></div>';
+
       card.querySelector('.reg-card-header').addEventListener('click', function() { toggleCard(card); });
-      /* 항목 카드 개별 토글 */
       card.querySelectorAll('.item-card-header').forEach(function(hdr) {
         hdr.addEventListener('click', function(e) {
           e.stopPropagation();
-          var ic = hdr.closest('.item-card');
+          var ic   = hdr.closest('.item-card');
           var body = ic.querySelector('.item-body');
           ic.classList.toggle('item-expanded');
           body.style.maxHeight = ic.classList.contains('item-expanded') ? (body.scrollHeight + 500) + 'px' : '0';
@@ -1091,7 +804,10 @@
     var container = el('jobgroupList');
     container.innerHTML = '';
     var filtered = getFiltered(isGeneral);
-    if (!filtered.length) { container.innerHTML = '<div class="empty-state">표시할 데이터가 없습니다.</div>'; return; }
+    if (!filtered.length) {
+      container.innerHTML = '<div class="empty-state">표시할 데이터가 없습니다.</div>';
+      return;
+    }
 
     var order = [], byGroup = {};
     filtered.forEach(function(r) {
@@ -1125,6 +841,7 @@
               '<div class="item-list">' + byReg[regTitle].map(function(r,i) { return itemCardHtml(r,i); }).join('') + '</div></div>';
           }).join('') +
         '</div></div>';
+
       card.querySelector('.jg-card-header').addEventListener('click', function() { toggleCard(card); });
       card.querySelectorAll('.item-card-header').forEach(function(hdr) {
         hdr.addEventListener('click', function(e) {
@@ -1236,15 +953,15 @@
   function rerender() {
     allExpanded = false;
     setText('expandAllBtn', '모두 펼치기');
-    /* 전체 탭: isAll (모든 행) */
+
     renderAccordion('regList',      getFiltered(isAll),      '');
+    renderAccordion('reviewList',   getFiltered(isReview),   'teal-card');
     renderAccordion('doctorList',   getFiltered(isDoctor),   'purple-card');
     renderAccordion('nurseList',    getFiltered(isNurse),    'pink-card');
     renderAccordion('pharmList',    getFiltered(isPharm),    'green-card');
     renderAccordion('guardianList', getFiltered(isGuardian), 'orange-card');
     renderAccordion('etcList',      getFiltered(isEtc),      'gray-card');
     renderAccordion('questionList', getFiltered(isQuestion), 'blue-card');
-    renderAccordion('reviewList',   getFiltered(isReview),   'teal-card');
     renderJobGroup();
   }
 
@@ -1261,8 +978,7 @@
   /* ── 이벤트 바인딩 ── */
   el('searchInput').addEventListener('input', function(e) {
     searchQuery = e.target.value;
-    var clearBtn = el('searchClear');
-    clearBtn.classList.toggle('visible', searchQuery.length > 0);
+    el('searchClear').classList.toggle('visible', searchQuery.length > 0);
     rerender();
   });
 
@@ -1279,12 +995,10 @@
   document.querySelectorAll('.tab-btn').forEach(function(btn) {
     btn.addEventListener('click', function() { switchTab(btn.dataset.tab); });
   });
-
   document.querySelectorAll('.nav-card').forEach(function(card) {
     card.addEventListener('click', function() { switchTab(card.dataset.tab); });
   });
 
-  /* 키보드 단축키 */
   document.addEventListener('keydown', function(e) {
     if (e.key === '/' && document.activeElement !== el('searchInput')) {
       e.preventDefault();
@@ -1297,12 +1011,11 @@
       el('searchClear').classList.remove('visible');
       rerender();
     }
-    if (e.key === 'e' || e.key === 'E') {
-      if (document.activeElement.tagName !== 'INPUT') toggleExpandAll();
+    if ((e.key === 'e' || e.key === 'E') && document.activeElement.tagName !== 'INPUT') {
+      toggleExpandAll();
     }
   });
 
-  /* ── 시작 ── */
   loadData();
 })();
 </script>
