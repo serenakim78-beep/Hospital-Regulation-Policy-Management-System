@@ -26,8 +26,8 @@
       --danger: #c97a6d;
       --blue: #7a9fc9;
       --blue-dim: rgba(122,159,201,0.15);
-      --teal: #6dbfb8;
-      --teal-dim: rgba(109,191,184,0.15);
+      --teal: #6db9b0;
+      --teal-dim: rgba(109,185,176,0.15);
     }
 
     body {
@@ -98,7 +98,7 @@
 
     .stats-bar {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap: 12px;
       margin-bottom: 28px;
     }
@@ -235,11 +235,11 @@
       border-radius: 20px;
       padding: 1px 7px;
     }
-    .main-tab-btn.active .tab-count-badge { background: rgba(201,168,76,0.3); }
     .tab-count-badge.blue { background: rgba(122,159,201,0.2); color: var(--blue); }
+    .tab-count-badge.teal { background: rgba(109,185,176,0.2); color: var(--teal); }
+    .main-tab-btn.active .tab-count-badge { background: rgba(201,168,76,0.3); }
     .main-tab-btn.active.blue-tab .tab-count-badge { background: rgba(122,159,201,0.3); color: var(--blue); }
-    .tab-count-badge.teal { background: rgba(109,191,184,0.2); color: var(--teal); }
-    .main-tab-btn.active.teal-tab .tab-count-badge { background: rgba(109,191,184,0.3); color: var(--teal); }
+    .main-tab-btn.active.teal-tab .tab-count-badge { background: rgba(109,185,176,0.3); color: var(--teal); }
 
     .spacer { flex: 1; }
 
@@ -265,32 +265,37 @@
     }
     .expand-all-btn:hover { border-color: var(--border2); color: var(--text); }
 
-    /* ---- 안내 배너 ---- */
-    .view-banner {
+    /* 탭 안내 배너 */
+    .tab-info-banner {
       display: flex;
       align-items: center;
       gap: 10px;
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-left: 3px solid var(--blue);
-      border-radius: 8px;
       padding: 10px 16px;
-      margin-bottom: 14px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      font-size: 12px;
       font-family: 'DM Mono', monospace;
-      font-size: 11px;
-      color: var(--text-muted);
     }
-    .view-banner.teal { border-left-color: var(--teal); }
-    .view-banner-dot {
+    .tab-info-banner.blue {
+      background: rgba(122,159,201,0.08);
+      border: 1px solid rgba(122,159,201,0.25);
+      color: var(--blue);
+    }
+    .tab-info-banner.teal {
+      background: rgba(109,185,176,0.08);
+      border: 1px solid rgba(109,185,176,0.25);
+      color: var(--teal);
+    }
+    .tab-info-dot {
       width: 6px; height: 6px;
       border-radius: 50%;
-      background: var(--blue);
       flex-shrink: 0;
     }
-    .view-banner-dot.teal { background: var(--teal); }
+    .tab-info-dot.blue { background: var(--blue); }
+    .tab-info-dot.teal { background: var(--teal); }
 
-    /* ---- 공통 카드 ---- */
     .reg-list { display: flex; flex-direction: column; gap: 10px; }
+
     .reg-card {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -300,6 +305,8 @@
     }
     .reg-card:hover { border-color: var(--border2); }
     .reg-card.expanded { border-color: var(--gold); }
+    .reg-card.blue-card.expanded { border-color: var(--blue); }
+    .reg-card.teal-card.expanded { border-color: var(--teal); }
 
     .reg-card-header {
       display: flex;
@@ -334,11 +341,41 @@
       white-space: nowrap;
       flex-shrink: 0;
     }
-    .reg-card.expanded .reg-count-badge { border-color: var(--gold); color: var(--gold); background: var(--gold-dim); }
+    .reg-card.expanded .reg-count-badge {
+      border-color: var(--gold);
+      color: var(--gold);
+      background: var(--gold-dim);
+    }
+    .reg-card.blue-card.expanded .reg-count-badge {
+      border-color: var(--blue);
+      color: var(--blue);
+      background: var(--blue-dim);
+    }
+    .reg-card.teal-card.expanded .reg-count-badge {
+      border-color: var(--teal);
+      color: var(--teal);
+      background: var(--teal-dim);
+    }
+
+    /* 규정검토 배지 */
+    .review-badge {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      font-weight: 500;
+      padding: 3px 10px;
+      border-radius: 6px;
+      background: var(--teal-dim);
+      border: 1px solid rgba(109,185,176,0.4);
+      color: var(--teal);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
 
     .toggle-arrow {
       width: 20px; height: 20px;
-      display: flex; align-items: center; justify-content: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       flex-shrink: 0;
       transition: transform 0.25s;
     }
@@ -349,65 +386,120 @@
       stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
     }
 
-    .reg-card-body { max-height: 0; overflow: hidden; transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-    .reg-card-body-inner { padding: 0 20px 20px; border-top: 1px solid var(--border); }
+    .reg-card-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .reg-card-body-inner {
+      padding: 0 20px 20px;
+      border-top: 1px solid var(--border);
+    }
 
-    /* ---- 항목 카드 ---- */
     .item-list { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
-    .item-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+
+    .item-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
     .item-card-header {
-      display: flex; align-items: center; gap: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
       padding: 10px 14px;
       background: var(--surface3);
       border-bottom: 1px solid var(--border);
     }
-    .item-idx { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-muted); }
-    .grade-badge { font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500; padding: 2px 8px; border-radius: 4px; }
+    .item-idx {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+    .grade-badge {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      font-weight: 500;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
     .grade-A { background: rgba(109,185,138,0.15); color: var(--success); border: 1px solid rgba(109,185,138,0.3); }
     .grade-B { background: rgba(201,168,76,0.15);  color: var(--warning); border: 1px solid rgba(201,168,76,0.3); }
     .grade-C { background: rgba(201,122,109,0.15); color: var(--danger);  border: 1px solid rgba(201,122,109,0.3); }
     .grade-default { background: var(--surface2); color: var(--text-muted); border: 1px solid var(--border); }
 
-    .item-type-badge {
-      font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500;
-      padding: 2px 8px; border-radius: 4px; margin-left: auto;
-    }
-    .type-question { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(122,159,201,0.3); }
-    .type-review { background: var(--teal-dim); color: var(--teal); border: 1px solid rgba(109,191,184,0.3); }
-
     .item-division { font-size: 11px; color: var(--text-muted); font-weight: 400; }
 
     .field-rows { padding: 14px; display: flex; flex-direction: column; gap: 0; }
     .field-row {
-      display: grid; grid-template-columns: 100px 1fr;
-      gap: 0; border-bottom: 1px solid var(--border); min-height: 36px;
+      display: grid;
+      grid-template-columns: 100px 1fr;
+      gap: 0;
+      border-bottom: 1px solid var(--border);
+      min-height: 36px;
     }
     .field-row:last-child { border-bottom: none; }
     .field-label {
-      font-family: 'DM Mono', monospace; font-size: 10px;
-      color: var(--text-muted); letter-spacing: 0.5px;
-      padding: 10px 12px 10px 0; border-right: 1px solid var(--border);
-      display: flex; align-items: flex-start; text-transform: uppercase;
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+      padding: 10px 12px 10px 0;
+      border-right: 1px solid var(--border);
+      display: flex;
+      align-items: flex-start;
+      text-transform: uppercase;
     }
-    .field-value { font-size: 13px; color: var(--text); padding: 10px 0 10px 14px; line-height: 1.6; word-break: break-word; }
+    .field-value {
+      font-size: 13px;
+      color: var(--text);
+      padding: 10px 0 10px 14px;
+      line-height: 1.6;
+      word-break: break-word;
+    }
     .field-value.empty { color: var(--text-muted); font-style: italic; }
 
-    /* ---- 직군 카드 ---- */
     .jobgroup-list { display: flex; flex-direction: column; gap: 10px; }
-    .jg-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; transition: border-color 0.2s; }
+
+    .jg-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
     .jg-card:hover { border-color: var(--border2); }
     .jg-card.expanded { border-color: var(--gold); }
-    .jg-card-header { display: flex; align-items: center; gap: 14px; padding: 16px 20px; cursor: pointer; user-select: none; }
+
+    .jg-card-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px 20px;
+      cursor: pointer;
+      user-select: none;
+    }
     .jg-num { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-muted); width: 24px; flex-shrink: 0; }
     .jg-name { font-family: 'Noto Serif KR', serif; font-size: 15px; font-weight: 700; color: var(--text); flex: 1; }
     .jg-count {
       font-family: 'DM Mono', monospace; font-size: 11px;
       background: var(--surface2); border: 1px solid var(--border);
-      color: var(--text-muted); border-radius: 6px; padding: 3px 10px; white-space: nowrap; flex-shrink: 0;
+      color: var(--text-muted); border-radius: 6px;
+      padding: 3px 10px; white-space: nowrap; flex-shrink: 0;
     }
     .jg-card.expanded .jg-count { border-color: var(--gold); color: var(--gold); background: var(--gold-dim); }
-    .jg-card-body { max-height: 0; overflow: hidden; transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-    .jg-card-body-inner { padding: 0 20px 20px; border-top: 1px solid var(--border); }
+
+    .jg-card-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .jg-card-body-inner {
+      padding: 0 20px 20px;
+      border-top: 1px solid var(--border);
+    }
+
     .jg-reg-group { margin-top: 14px; }
     .jg-reg-title {
       font-size: 12px; font-weight: 700; color: var(--gold);
@@ -416,28 +508,6 @@
       font-family: 'Noto Serif KR', serif;
     }
 
-    /* ---- 규정 검토: 평면 목록 ---- */
-    .review-list { display: flex; flex-direction: column; gap: 10px; }
-    .review-row-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-left: 3px solid var(--teal);
-      border-radius: 10px;
-      overflow: hidden;
-      transition: border-color 0.2s;
-    }
-    .review-row-card:hover { border-color: var(--teal); }
-    .review-row-header {
-      display: flex; align-items: center; gap: 12px;
-      padding: 12px 18px;
-      background: var(--surface2);
-      border-bottom: 1px solid var(--border);
-    }
-    .review-row-num { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-muted); width: 28px; flex-shrink: 0; }
-    .review-row-regtitle { font-family: 'Noto Serif KR', serif; font-size: 13px; font-weight: 700; color: var(--text); flex: 1; }
-    .review-row-grade { font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500; padding: 2px 8px; border-radius: 4px; flex-shrink: 0; }
-
-    /* ---- 로딩 / 에러 ---- */
     .loading-screen, .error-screen {
       display: flex; flex-direction: column;
       align-items: center; justify-content: center;
@@ -452,14 +522,24 @@
     }
     @keyframes spin { to { transform: rotate(360deg); } }
     .loading-text { color: var(--text-muted); font-size: 13px; font-family: 'DM Mono', monospace; letter-spacing: 1px; }
+
     .error-box {
-      background: rgba(201,122,109,0.08); border: 1px solid rgba(201,122,109,0.3);
-      border-radius: 12px; padding: 24px 32px; color: var(--danger);
-      font-size: 13px; max-width: 480px; line-height: 1.7;
+      background: rgba(201,122,109,0.08);
+      border: 1px solid rgba(201,122,109,0.3);
+      border-radius: 12px;
+      padding: 24px 32px;
+      color: var(--danger);
+      font-size: 13px;
+      max-width: 480px;
+      line-height: 1.7;
     }
+
     .empty-state {
-      text-align: center; padding: 48px;
-      color: var(--text-muted); font-size: 13px; font-family: 'DM Mono', monospace;
+      text-align: center;
+      padding: 48px;
+      color: var(--text-muted);
+      font-size: 13px;
+      font-family: 'DM Mono', monospace;
     }
     .empty-state span { display: block; font-size: 22px; margin-bottom: 10px; color: var(--border2); }
 
@@ -504,7 +584,6 @@
 
   <div id="mainContent" style="display:none;">
 
-    <!-- STATS -->
     <div class="stats-bar">
       <div class="stat-card">
         <div class="stat-label">Total Items</div>
@@ -528,7 +607,6 @@
       </div>
     </div>
 
-    <!-- TOOLBAR -->
     <div class="toolbar">
       <div class="search-wrap">
         <span class="search-icon">
@@ -547,7 +625,6 @@
       </div>
     </div>
 
-    <!-- TABS ROW -->
     <div class="tabs-row">
       <div class="main-tabs">
         <button class="main-tab-btn active" id="tabAll" onclick="switchTab('all')">
@@ -574,32 +651,32 @@
       </button>
     </div>
 
-    <!-- VIEW: 전체 -->
+    <!-- 전체 뷰 -->
     <div id="view-all">
       <div class="reg-list" id="regList"></div>
     </div>
 
-    <!-- VIEW: 직군 -->
+    <!-- 직군 뷰 -->
     <div id="view-jobgroup" style="display:none;">
       <div class="jobgroup-list" id="jobgroupList"></div>
     </div>
 
-    <!-- VIEW: 질문 -->
+    <!-- 질문 뷰 -->
     <div id="view-question" style="display:none;">
-      <div class="view-banner">
-        <div class="view-banner-dot"></div>
-        조사항목구분이 "질문"인 항목들만 표시됩니다.
+      <div class="tab-info-banner blue">
+        <div class="tab-info-dot blue"></div>
+        <span>조사항목구분에 "질문"이 포함된 항목들만 표시됩니다.</span>
       </div>
       <div class="reg-list" id="questionList"></div>
     </div>
 
-    <!-- VIEW: 규정 검토 -->
+    <!-- 규정 검토 뷰 -->
     <div id="view-review" style="display:none;">
-      <div class="view-banner teal">
-        <div class="view-banner-dot teal"></div>
-        직군(B열)이 "규정검토"인 행들만 표시됩니다.
+      <div class="tab-info-banner teal">
+        <div class="tab-info-dot teal"></div>
+        <span>직군(B열) 값이 "규정검토"인 항목들만 표시됩니다.</span>
       </div>
-      <div class="review-list" id="reviewList"></div>
+      <div class="reg-list" id="reviewList"></div>
     </div>
 
   </div>
@@ -621,7 +698,6 @@
   let gradeFilter = '';
   let allExpanded = false;
 
-  /* ---- CSV 파싱 ---- */
   function parseCSV(text) {
     const lines = [];
     let cur = '', inQ = false, row = [];
@@ -642,19 +718,21 @@
     return lines;
   }
 
-  /* ---- 행 분류 헬퍼 ---- */
+  /* ── 행 분류 함수 ──────────────────────────────────────────
+     질문 탭 : 조사항목구분(COL 3) 에 "질문" 포함
+     규정검토 탭 : 직군(COL 1) 이 "규정검토" 와 정확히 일치
+     전체/직군 탭 : 위 두 조건에 해당하지 않는 나머지
+  ─────────────────────────────────────────────────────────── */
   function isQuestion(r) {
     return (r[COL.조사항목구분] || '').includes('질문');
   }
   function isReview(r) {
-    return (r[COL.직군] || '').replace(/\s/g,'') === '규정검토';
+    return (r[COL.직군] || '').trim() === '규정검토';
   }
-  /* 전체 탭: 질문도 규정검토도 아닌 일반 행 */
   function isGeneral(r) {
     return !isQuestion(r) && !isReview(r);
   }
 
-  /* ---- 데이터 로드 ---- */
   async function loadData() {
     try {
       const res = await fetch(CSV_URL);
@@ -669,8 +747,10 @@
       const questionRows = allRows.filter(isQuestion);
       const reviewRows   = allRows.filter(isReview);
 
-      const regSet      = new Set(generalRows.map(r => r[COL.규정제목]).filter(Boolean));
-      const groupSet    = new Set(generalRows.map(r => r[COL.직군]).filter(Boolean));
+      const regSet   = new Set(generalRows.map(r => r[COL.규정제목]).filter(Boolean));
+      const groupSet = new Set(generalRows.map(r => r[COL.직군]).filter(Boolean));
+      const qRegSet  = new Set(questionRows.map(r => r[COL.규정제목]).filter(Boolean));
+      const rvRegSet = new Set(reviewRows.map(r => r[COL.규정제목]).filter(Boolean));
 
       document.getElementById('statTotal').textContent     = allRows.length.toLocaleString();
       document.getElementById('statRegs').textContent      = regSet.size.toLocaleString();
@@ -680,18 +760,18 @@
 
       document.getElementById('badgeAll').textContent      = regSet.size;
       document.getElementById('badgeJobGroup').textContent = groupSet.size;
-      document.getElementById('badgeQuestion').textContent = questionRows.length;
-      document.getElementById('badgeReview').textContent   = reviewRows.length;
+      document.getElementById('badgeQuestion').textContent = qRegSet.size;
+      document.getElementById('badgeReview').textContent   = rvRegSet.size;
 
-      document.getElementById('statusDot').style.background = '#6db98a';
-      document.getElementById('statusText').textContent = `${allRows.length}개 항목 로드 완료`;
-      document.getElementById('loadingScreen').style.display = 'none';
-      document.getElementById('mainContent').style.display = 'block';
+      document.getElementById('statusDot').style.background   = '#6db98a';
+      document.getElementById('statusText').textContent       = `${allRows.length}개 항목 로드 완료`;
+      document.getElementById('loadingScreen').style.display  = 'none';
+      document.getElementById('mainContent').style.display    = 'block';
 
       rerender();
     } catch (err) {
       document.getElementById('loadingScreen').style.display = 'none';
-      document.getElementById('errorScreen').style.display = 'flex';
+      document.getElementById('errorScreen').style.display   = 'flex';
       document.getElementById('errorMsg').innerHTML =
         `<strong>데이터를 불러오지 못했습니다.</strong><br/><br/>${err.message}<br/><br/>
         <small>구글 시트가 "링크가 있는 모든 사용자" 공개 설정인지 확인해주세요.</small>`;
@@ -700,61 +780,49 @@
     }
   }
 
-  /* ---- 탭 전환 ---- */
   function switchTab(tab) {
     currentView = tab;
-    const tabs = {
-      all: 'tabAll', jobgroup: 'tabJobGroup',
-      question: 'tabQuestion', review: 'tabReview'
-    };
-    Object.entries(tabs).forEach(([key, id]) => {
-      const btn = document.getElementById(id);
-      btn.classList.toggle('active', key === tab);
+    ['all','jobgroup','question','review'].forEach(t => {
+      document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1))
+        ?.classList.toggle('active', t === tab);
+      document.getElementById('view-' + t).style.display = t === tab ? 'block' : 'none';
     });
-    const views = ['all','jobgroup','question','review'];
-    views.forEach(v => {
-      document.getElementById('view-' + v).style.display = (v === tab) ? 'block' : 'none';
-    });
-
-    /* 확장/접기 버튼: 규정검토 탭은 평면 목록이므로 숨김 */
-    document.getElementById('expandAllBtn').style.display =
-      (tab === 'review') ? 'none' : 'inline-block';
+    // 탭 id 예외 처리
+    document.getElementById('tabAll').classList.toggle('active', tab === 'all');
+    document.getElementById('tabJobGroup').classList.toggle('active', tab === 'jobgroup');
+    document.getElementById('tabQuestion').classList.toggle('active', tab === 'question');
+    document.getElementById('tabReview').classList.toggle('active', tab === 'review');
 
     allExpanded = false;
     document.getElementById('expandAllBtn').textContent = '모두 펼치기';
   }
 
-  /* ---- 등급 필터 ---- */
   function setGradeFilter(g) {
     gradeFilter = g;
     ['gradeAll','gradeA','gradeB','gradeC'].forEach(id => {
       const btn = document.getElementById(id);
       btn.className = 'grade-btn';
-      btn.style.background = '';
-      btn.style.color = '';
-      btn.style.borderColor = '';
+      btn.style.background = btn.style.color = btn.style.borderColor = '';
     });
     if (!g) {
       const btn = document.getElementById('gradeAll');
-      btn.style.background = 'var(--gold-dim)';
-      btn.style.color = 'var(--gold)';
-      btn.style.borderColor = 'rgba(201,168,76,0.5)';
+      btn.style.background   = 'var(--gold-dim)';
+      btn.style.color        = 'var(--gold)';
+      btn.style.borderColor  = 'rgba(201,168,76,0.5)';
     } else {
       document.getElementById('grade' + g).classList.add('active-' + g);
     }
     rerender();
   }
 
-  /* ---- 전체 펼치기/접기 ---- */
   function toggleExpandAll() {
     allExpanded = !allExpanded;
     document.getElementById('expandAllBtn').textContent = allExpanded ? '모두 접기' : '모두 펼치기';
-    const containerMap = {
-      all: 'regList', jobgroup: 'jobgroupList', question: 'questionList'
+    const viewMap = {
+      all: 'regList', jobgroup: 'jobgroupList',
+      question: 'questionList', review: 'reviewList'
     };
-    const containerId = containerMap[currentView];
-    if (!containerId) return;
-    const container = document.getElementById(containerId);
+    const container = document.getElementById(viewMap[currentView]);
     container.querySelectorAll('.reg-card, .jg-card').forEach(card => {
       const body  = card.querySelector('.reg-card-body, .jg-card-body');
       const inner = card.querySelector('.reg-card-body-inner, .jg-card-body-inner');
@@ -768,22 +836,22 @@
     });
   }
 
-  /* ---- 필터링 공통 ---- */
-  function applyFilter(rows) {
-    let r = rows;
+  /* 검색 + 등급 필터 적용 후 각 탭용 행 반환 */
+  function getFilteredBy(filterFn) {
+    let rows = allRows.filter(filterFn);
     if (gradeFilter) {
-      r = r.filter(row => (row[COL.조사항목등급]||'').toUpperCase() === gradeFilter);
+      rows = rows.filter(r => (r[COL.조사항목등급] || '').toUpperCase() === gradeFilter);
     }
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
-      r = r.filter(row =>
-        (row[COL.규정제목]||'').toLowerCase().includes(q) ||
-        (row[COL.기준제목]||'').toLowerCase().includes(q) ||
-        (row[COL.조사항목]||'').toLowerCase().includes(q) ||
-        (row[COL.직군]||'').toLowerCase().includes(q)
+      rows = rows.filter(r =>
+        (r[COL.규정제목]  || '').toLowerCase().includes(q) ||
+        (r[COL.기준제목]  || '').toLowerCase().includes(q) ||
+        (r[COL.조사항목]  || '').toLowerCase().includes(q) ||
+        (r[COL.직군]      || '').toLowerCase().includes(q)
       );
     }
-    return r;
+    return rows;
   }
 
   function updateResultInfo(count, label) {
@@ -795,36 +863,75 @@
     }
   }
 
-  /* ---- 전체 뷰 렌더링 (질문/규정검토 제외) ---- */
-  function renderAll() {
-    const container = document.getElementById('regList');
+  /* ── 공통 아코디언 렌더러 ── */
+  function renderAccordion(containerId, rows, cardClass) {
+    const container = document.getElementById(containerId);
     container.innerHTML = '';
-    const filtered = applyFilter(allRows.filter(isGeneral));
 
-    if (!filtered.length) {
+    if (!rows.length) {
       container.innerHTML = '<div class="empty-state"><span>/ /</span>표시할 데이터가 없습니다.</div>';
       updateResultInfo(0, '규정');
       return;
     }
 
     const grouped = {};
-    filtered.forEach(r => {
+    rows.forEach(r => {
       const t = r[COL.규정제목] || '(제목 없음)';
       if (!grouped[t]) grouped[t] = [];
       grouped[t].push(r);
     });
 
     updateResultInfo(Object.keys(grouped).length, '규정');
-    Object.entries(grouped).forEach(([title, rows], idx) => {
-      container.appendChild(buildRegCard(title, rows, idx, false));
+
+    Object.entries(grouped).forEach(([title, rowSet], idx) => {
+      const card = document.createElement('div');
+      card.className = 'reg-card' + (cardClass ? ' ' + cardClass : '');
+
+      const reviewBadge = cardClass === 'teal-card'
+        ? `<span class="review-badge">규정검토</span>` : '';
+
+      card.innerHTML = `
+        <div class="reg-card-header">
+          <span class="reg-num">${String(idx + 1).padStart(2, '0')}</span>
+          <span class="reg-title">${esc(title)}</span>
+          <span class="reg-count-badge">${rowSet.length} 항목</span>
+          ${reviewBadge}
+          <span class="toggle-arrow">
+            <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+          </span>
+        </div>
+        <div class="reg-card-body">
+          <div class="reg-card-body-inner">
+            <div class="item-list">
+              ${rowSet.map((r, i) => itemCardHtml(r, i)).join('')}
+            </div>
+          </div>
+        </div>
+      `;
+      card.querySelector('.reg-card-header').addEventListener('click', () => toggleCard(card));
+      container.appendChild(card);
     });
   }
 
-  /* ---- 직군 뷰 렌더링 (질문/규정검토 제외) ---- */
+  function renderAll() {
+    const rows = getFilteredBy(isGeneral);
+    renderAccordion('regList', rows, '');
+  }
+
+  function renderQuestion() {
+    const rows = getFilteredBy(isQuestion);
+    renderAccordion('questionList', rows, 'blue-card');
+  }
+
+  function renderReview() {
+    const rows = getFilteredBy(isReview);
+    renderAccordion('reviewList', rows, 'teal-card');
+  }
+
   function renderJobGroup() {
     const container = document.getElementById('jobgroupList');
     container.innerHTML = '';
-    const filtered = applyFilter(allRows.filter(isGeneral));
+    const filtered = getFilteredBy(isGeneral);
 
     if (!filtered.length) {
       container.innerHTML = '<div class="empty-state"><span>/ /</span>표시할 데이터가 없습니다.</div>';
@@ -838,7 +945,7 @@
       byGroup[g].push(r);
     });
 
-    Object.entries(byGroup).sort((a,b) => a[0].localeCompare(b[0])).forEach(([group, rows], idx) => {
+    Object.entries(byGroup).sort((a, b) => a[0].localeCompare(b[0])).forEach(([group, rows], idx) => {
       const byReg = {};
       rows.forEach(r => {
         const t = r[COL.규정제목] || '(제목 없음)';
@@ -850,7 +957,7 @@
       card.className = 'jg-card';
       card.innerHTML = `
         <div class="jg-card-header">
-          <span class="jg-num">${String(idx+1).padStart(2,'0')}</span>
+          <span class="jg-num">${String(idx + 1).padStart(2, '0')}</span>
           <span class="jg-name">${esc(group)}</span>
           <span class="jg-count">${rows.length} 항목</span>
           <span class="toggle-arrow">
@@ -877,114 +984,10 @@
     });
   }
 
-  /* ---- 질문 뷰 렌더링 ---- */
-  function renderQuestion() {
-    const container = document.getElementById('questionList');
-    container.innerHTML = '';
-    const filtered = applyFilter(allRows.filter(isQuestion));
-
-    if (!filtered.length) {
-      container.innerHTML = '<div class="empty-state"><span>/ /</span>표시할 데이터가 없습니다.</div>';
-      return;
-    }
-
-    const grouped = {};
-    filtered.forEach(r => {
-      const t = r[COL.규정제목] || '(제목 없음)';
-      if (!grouped[t]) grouped[t] = [];
-      grouped[t].push(r);
-    });
-
-    Object.entries(grouped).forEach(([title, rows], idx) => {
-      container.appendChild(buildRegCard(title, rows, idx, true));
-    });
-  }
-
-  /* ---- 규정 검토 뷰 렌더링 (평면 목록) ---- */
-  function renderReview() {
-    const container = document.getElementById('reviewList');
-    container.innerHTML = '';
-    const filtered = applyFilter(allRows.filter(isReview));
-
-    if (!filtered.length) {
-      container.innerHTML = '<div class="empty-state"><span>/ /</span>규정검토 항목이 없습니다.</div>';
-      return;
-    }
-
-    filtered.forEach((r, idx) => {
-      const grade = r[COL.조사항목등급] || '';
-      const gradeClass = ['A','B','C'].includes(grade.toUpperCase())
-        ? 'grade-' + grade.toUpperCase() : 'grade-default';
-
-      const fields = [
-        { label: '규정 제목',  val: r[COL.규정제목] },
-        { label: '등급',       val: grade },
-        { label: '구분',       val: r[COL.조사항목구분] },
-        { label: 'Chapter',    val: r[COL.조사항목장] },
-        { label: '기준 제목',  val: r[COL.기준제목] },
-        { label: '기준',       val: r[COL.기준] },
-        { label: '조사 항목',  val: r[COL.조사항목] },
-        { label: '기준 이해',  val: r[COL.기준이해] },
-        { label: '조사 내용',  val: r[COL.조사내용] },
-        { label: '조사 목적',  val: r[COL.조사목적] },
-        { label: '참고 자료',  val: r[COL.참고자료] },
-      ];
-
-      const card = document.createElement('div');
-      card.className = 'review-row-card';
-      card.innerHTML = `
-        <div class="review-row-header">
-          <span class="review-row-num">${String(idx+1).padStart(3,'0')}</span>
-          <span class="review-row-regtitle">${esc(r[COL.규정제목] || '(제목 없음)')}</span>
-          <span class="review-row-grade ${gradeClass}">${esc(grade) || '-'}</span>
-          <span class="item-type-badge type-review">규정검토</span>
-        </div>
-        <div class="field-rows" style="padding:14px;">
-          ${fields.map(f => `
-            <div class="field-row">
-              <div class="field-label">${f.label}</div>
-              <div class="field-value ${f.val ? '' : 'empty'}">${esc(f.val)}</div>
-            </div>
-          `).join('')}
-        </div>
-      `;
-      container.appendChild(card);
-    });
-  }
-
-  /* ---- reg-card 빌더 공통 ---- */
-  function buildRegCard(title, rows, idx, isQ) {
-    const card = document.createElement('div');
-    card.className = 'reg-card';
-    card.innerHTML = `
-      <div class="reg-card-header">
-        <span class="reg-num">${String(idx+1).padStart(2,'0')}</span>
-        <span class="reg-title">${esc(title)}</span>
-        <span class="reg-count-badge">${rows.length} 항목</span>
-        <span class="toggle-arrow">
-          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
-        </span>
-      </div>
-      <div class="reg-card-body">
-        <div class="reg-card-body-inner">
-          <div class="item-list">
-            ${rows.map((r, i) => itemCardHtml(r, i, isQ)).join('')}
-          </div>
-        </div>
-      </div>
-    `;
-    card.querySelector('.reg-card-header').addEventListener('click', () => toggleCard(card));
-    return card;
-  }
-
-  /* ---- 항목 카드 HTML ---- */
-  function itemCardHtml(r, i, isQ) {
+  function itemCardHtml(r, i) {
     const grade = r[COL.조사항목등급] || '';
     const gradeClass = ['A','B','C'].includes(grade.toUpperCase())
       ? 'grade-' + grade.toUpperCase() : 'grade-default';
-
-    const typeBadge = isQ
-      ? `<span class="item-type-badge type-question">질문</span>` : '';
 
     const fields = [
       { label: '직군',      val: r[COL.직군] },
@@ -1002,10 +1005,9 @@
     return `
       <div class="item-card">
         <div class="item-card-header">
-          <span class="item-idx">#${String(i+1).padStart(2,'0')}</span>
+          <span class="item-idx">#${String(i + 1).padStart(2, '0')}</span>
           <span class="grade-badge ${gradeClass}">${esc(grade) || '-'}</span>
           <span class="item-division">${esc(r[COL.조사항목구분])}</span>
-          ${typeBadge}
         </div>
         <div class="field-rows">
           ${fields.map(f => `
@@ -1019,7 +1021,6 @@
     `;
   }
 
-  /* ---- 아코디언 토글 ---- */
   function toggleCard(card) {
     const body  = card.querySelector('.reg-card-body, .jg-card-body');
     const inner = card.querySelector('.reg-card-body-inner, .jg-card-body-inner');
@@ -1032,7 +1033,6 @@
     }
   }
 
-  /* ---- 전체 재렌더링 ---- */
   function rerender() {
     allExpanded = false;
     document.getElementById('expandAllBtn').textContent = '모두 펼치기';
@@ -1042,23 +1042,35 @@
     renderReview();
   }
 
-  /* ---- 유틸 ---- */
   function esc(str) {
     if (!str) return '-';
-    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   }
 
-  /* ---- 검색 ---- */
   document.getElementById('searchInput').addEventListener('input', e => {
     searchQuery = e.target.value;
     rerender();
   });
 
-  /* ---- 초기화 ---- */
-  (function() {
+  // switchTab 헬퍼: 초기화
+  function switchTab(tab) {
+    currentView = tab;
+    const tabMap = { all: 'tabAll', jobgroup: 'tabJobGroup', question: 'tabQuestion', review: 'tabReview' };
+    const viewMap = { all: 'view-all', jobgroup: 'view-jobgroup', question: 'view-question', review: 'view-review' };
+    Object.entries(tabMap).forEach(([k, id]) => {
+      document.getElementById(id).classList.toggle('active', k === tab);
+    });
+    Object.entries(viewMap).forEach(([k, id]) => {
+      document.getElementById(id).style.display = k === tab ? 'block' : 'none';
+    });
+    allExpanded = false;
+    document.getElementById('expandAllBtn').textContent = '모두 펼치기';
+  }
+
+  (function () {
     const btn = document.getElementById('gradeAll');
-    btn.style.background = 'var(--gold-dim)';
-    btn.style.color = 'var(--gold)';
+    btn.style.background  = 'var(--gold-dim)';
+    btn.style.color       = 'var(--gold)';
     btn.style.borderColor = 'rgba(201,168,76,0.5)';
   })();
 
