@@ -3,25 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>구글 시트 데이터</title>
+    <title>구글 시트 데이터 표시</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-        .container {
-            width: 80%;
-            margin: auto;
-        }
-        .card {
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 15px;
-            margin: 10px 0;
-        }
-        .label {
-            font-weight: bold;
-        }
-        /* 추가적인 스타일 필요 시 수정 */
+        body { font-family: Arial, sans-serif; }
+        .container { width: 80%; margin: auto; }
+        .data-card { border: 1px solid #ccc; margin: 10px 0; padding: 10px; }
+        .data-card h3 { margin: 0; }
     </style>
 </head>
 <body>
@@ -31,36 +18,32 @@
     </div>
 
     <script>
-        const SHEET_ID = "1aBcDeFgHiJkLmNoPqRstUvWxYz";  // 여기에 스프레드시트 ID 입력
-        const URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
+        const SHEET_ID = "18dDgxsczklu9FRm053w2rqLDFDjqm7C18rijuyJdrkI";
+        const RANGE = "A1:G"; // 필요한 범위로 조정하세요.
 
-        fetch(URL)
-            .then(response => response.text())
-            .then(data => {
-                const jsonData = JSON.parse(data.substr(47).slice(0, -2));
-                const tableData = jsonData.table.rows;
+        async function fetchData() {
+            const response = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&tq=SELECT * WHERE Col1 IS NOT NULL`);
+            const json = await response.json();
+            const data = json.table.rows;
 
-                const container = document.getElementById('data-container');
-                tableData.forEach(row => {
-                    const card = document.createElement('div');
-                    card.className = 'card';
-                    const cols = row.c;
-
-                    card.innerHTML = `
-                        <div class="label">직군:</div> ${cols[0]?.v || '정보 없음'}<br>
-                        <div class="label">등급:</div> ${cols[1]?.v || '정보 없음'}<br>
-                        <div class="label">구분:</div> ${cols[2]?.v || '정보 없음'}<br>
-                        <div class="label">CHAPTER:</div> ${cols[3]?.v || '정보 없음'}<br>
-                        <div class="label">기준제목:</div> ${cols[4]?.v || '정보 없음'}<br>
-                        <div class="label">조사항목:</div> ${cols[5]?.v || '정보 없음'}<br>
-                        <div class="label">조사내용:</div> ${cols[6]?.v || '정보 없음'}<br>
-                    `;
-                    container.appendChild(card);
-                });
-            })
-            .catch(error => {
-                console.error('데이터 로딩 중 오류 발생:', error);
+            const container = document.getElementById('data-container');
+            data.forEach(row => {
+                const card = document.createElement('div');
+                card.className = 'data-card';
+                card.innerHTML = `
+                    <h3>직군: ${row.c[0]?.v}</h3>
+                    <p>등급: ${row.c[1]?.v}</p>
+                    <p>구분: ${row.c[2]?.v}</p>
+                    <p>CHAPTER: ${row.c[3]?.v}</p>
+                    <p>기준제목: ${row.c[4]?.v}</p>
+                    <p>조사항목: ${row.c[5]?.v}</p>
+                    <p>조사내용: ${row.c[6]?.v}</p>
+                `;
+                container.appendChild(card);
             });
+        }
+
+        fetchData();
     </script>
 </body>
 </html>
