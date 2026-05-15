@@ -1,675 +1,474 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>규정 조사 항목 뷰어</title>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet"/>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>규정 조사 항목 뷰어</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap');
 
-    :root {
-      --bg: #0f1117;
-      --surface: #1a1d27;
-      --surface2: #22263a;
-      --accent: #4f8ef7;
-      --accent2: #a78bfa;
-      --text: #e8eaf0;
-      --text-muted: #8891a8;
-      --border: #2e3348;
-      --success: #34d399;
-      --warning: #fbbf24;
-      --danger: #f87171;
-    }
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --surface2: #22263a;
+    --border: #2e3247;
+    --accent: #4f7dff;
+    --accent2: #7c5cff;
+    --text: #e8eaf6;
+    --text-muted: #8b90a7;
+    --success: #34d399;
+    --warning: #fbbf24;
+    --danger: #f87171;
+  }
 
-    body {
-      font-family: 'Noto Sans KR', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-    }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    /* ---- HEADER ---- */
-    header {
-      background: linear-gradient(135deg, #1a1d27 0%, #12162a 100%);
-      border-bottom: 1px solid var(--border);
-      padding: 24px 32px;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      backdrop-filter: blur(10px);
-    }
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
 
-    header .logo-icon {
-      width: 40px;
-      height: 40px;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      font-weight: 700;
-      color: white;
-      flex-shrink: 0;
-    }
+  /* HEADER */
+  .header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-left { display: flex; align-items: center; gap: 10px; }
+  .logo {
+    width: 32px; height: 32px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 14px;
+  }
+  .header h1 { font-size: 15px; font-weight: 600; }
+  .load-status { font-size: 11px; color: var(--success); }
 
-    header h1 {
-      font-size: 20px;
-      font-weight: 700;
-      letter-spacing: -0.5px;
-    }
+  /* STATS */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    padding: 14px 16px;
+  }
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+  }
+  .stat-label { font-size: 11px; color: var(--text-muted); margin-bottom: 4px; }
+  .stat-value { font-size: 22px; font-weight: 700; color: var(--accent); }
 
-    header h1 span {
-      color: var(--accent);
-    }
+  /* SEARCH */
+  .search-wrap { padding: 0 16px 12px; }
+  .search-input {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    color: var(--text);
+    font-size: 13px;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .search-input:focus { border-color: var(--accent); }
+  .search-input::placeholder { color: var(--text-muted); }
 
-    .header-status {
-      margin-left: auto;
-      font-size: 12px;
-      color: var(--text-muted);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
+  /* TABS */
+  .tabs-wrap {
+    padding: 0 16px 12px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .tabs-wrap::-webkit-scrollbar { display: none; }
+  .tabs {
+    display: flex;
+    gap: 6px;
+    width: max-content;
+  }
+  .tab-btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 6px 14px;
+    color: var(--text-muted);
+    font-size: 12px;
+    font-family: inherit;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+  }
+  .tab-btn.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
 
-    .status-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--success);
-      animation: pulse 2s infinite;
-    }
+  /* LIST */
+  .list { padding: 0 16px 80px; display: flex; flex-direction: column; gap: 8px; }
 
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.4; }
-    }
+  /* REGULATION ITEM */
+  .reg-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .reg-item.open { border-color: var(--accent); }
 
-    /* ---- MAIN LAYOUT ---- */
-    .container {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 32px;
-    }
+  .reg-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    cursor: pointer;
+    user-select: none;
+    gap: 10px;
+  }
+  .reg-title { font-size: 14px; font-weight: 500; flex: 1; line-height: 1.4; }
+  .reg-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .badge {
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 20px;
+    background: var(--surface2);
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+  .chevron {
+    width: 18px; height: 18px;
+    border: 1.5px solid var(--text-muted);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: transform 0.25s;
+    font-size: 10px;
+    color: var(--text-muted);
+  }
+  .reg-item.open .chevron { transform: rotate(180deg); border-color: var(--accent); color: var(--accent); }
 
-    /* ---- STATS ---- */
-    .stats-bar {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 16px;
-      margin-bottom: 32px;
-    }
+  /* EXPANDED CARDS — 세로 카드 레이아웃 */
+  .reg-body {
+    display: none;
+    padding: 0 12px 12px;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .reg-item.open .reg-body { display: flex; }
 
-    .stat-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 16px 20px;
-    }
+  .detail-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    animation: slideDown 0.2s ease;
+  }
 
-    .stat-card .stat-label {
-      font-size: 11px;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      margin-bottom: 6px;
-    }
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
 
-    .stat-card .stat-value {
-      font-size: 26px;
-      font-weight: 700;
-      color: var(--accent);
-    }
+  /* 카드 상단 배지 행 */
+  .card-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .card-badge {
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-weight: 500;
+  }
+  .badge-job   { background: rgba(79,125,255,0.15); color: var(--accent); border: 1px solid rgba(79,125,255,0.3); }
+  .badge-grade { background: rgba(251,191,36,0.15); color: var(--warning); border: 1px solid rgba(251,191,36,0.3); }
+  .badge-type  { background: rgba(52,211,153,0.15); color: var(--success); border: 1px solid rgba(52,211,153,0.3); }
+  .badge-chap  { background: rgba(124,92,255,0.15); color: #a78bfa; border: 1px solid rgba(124,92,255,0.3); }
 
-    /* ---- TABS ---- */
-    .tabs-wrapper {
-      margin-bottom: 24px;
-      overflow-x: auto;
-      scrollbar-width: none;
-    }
-    .tabs-wrapper::-webkit-scrollbar { display: none; }
+  /* 카드 필드 행 */
+  .card-row {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    border-top: 1px solid var(--border);
+    padding-top: 8px;
+  }
+  .card-row:first-child { border-top: none; padding-top: 0; }
+  .card-row-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .card-row-value {
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.6;
+  }
 
-    .tabs {
-      display: flex;
-      gap: 8px;
-      flex-wrap: nowrap;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 0;
-    }
-
-    .tab-btn {
-      background: none;
-      border: none;
-      padding: 10px 20px;
-      font-size: 13px;
-      font-family: 'Noto Sans KR', sans-serif;
-      font-weight: 500;
-      color: var(--text-muted);
-      cursor: pointer;
-      border-bottom: 2px solid transparent;
-      margin-bottom: -1px;
-      transition: all 0.2s;
-      white-space: nowrap;
-    }
-
-    .tab-btn:hover {
-      color: var(--text);
-    }
-
-    .tab-btn.active {
-      color: var(--accent);
-      border-bottom-color: var(--accent);
-    }
-
-    /* ---- SEARCH ---- */
-    .search-bar {
-      margin-bottom: 24px;
-    }
-
-    .search-bar input {
-      width: 100%;
-      max-width: 480px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 10px 16px;
-      font-size: 14px;
-      font-family: 'Noto Sans KR', sans-serif;
-      color: var(--text);
-      outline: none;
-      transition: border-color 0.2s;
-    }
-
-    .search-bar input::placeholder { color: var(--text-muted); }
-    .search-bar input:focus { border-color: var(--accent); }
-
-    /* ---- REGULATION TITLE LIST ---- */
-    .reg-list {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .reg-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      overflow: hidden;
-      transition: border-color 0.2s;
-    }
-
-    .reg-card:hover {
-      border-color: var(--accent);
-    }
-
-    .reg-card-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 16px 20px;
-      cursor: pointer;
-      user-select: none;
-      gap: 12px;
-    }
-
-    .reg-card-header h3 {
-      font-size: 15px;
-      font-weight: 700;
-      color: var(--text);
-      flex: 1;
-    }
-
-    .reg-meta {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-      flex-shrink: 0;
-    }
-
-    .badge {
-      font-size: 11px;
-      padding: 3px 10px;
-      border-radius: 20px;
-      font-weight: 500;
-    }
-
-    .badge-count {
-      background: rgba(79, 142, 247, 0.15);
-      color: var(--accent);
-      border: 1px solid rgba(79, 142, 247, 0.3);
-    }
-
-    .toggle-icon {
-      color: var(--text-muted);
-      font-size: 18px;
-      transition: transform 0.2s;
-      font-weight: 300;
-    }
-
-    .reg-card.expanded .toggle-icon {
-      transform: rotate(180deg);
-    }
-
-    .reg-card-body {
-      display: none;
-      padding: 0 20px 20px;
-    }
-
-    .reg-card.expanded .reg-card-body {
-      display: block;
-    }
-
-    /* ---- TABLE ---- */
-    .table-wrapper {
-      overflow-x: auto;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 13px;
-    }
-
-    thead th {
-      background: var(--surface2);
-      padding: 10px 14px;
-      text-align: left;
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.6px;
-      white-space: nowrap;
-      border-bottom: 1px solid var(--border);
-    }
-
-    tbody tr {
-      border-bottom: 1px solid var(--border);
-      transition: background 0.15s;
-    }
-
-    tbody tr:last-child { border-bottom: none; }
-    tbody tr:hover { background: rgba(79, 142, 247, 0.05); }
-
-    tbody td {
-      padding: 10px 14px;
-      color: var(--text);
-      vertical-align: top;
-      line-height: 1.5;
-    }
-
-    .grade-badge {
-      display: inline-block;
-      padding: 2px 8px;
-      border-radius: 4px;
-      font-size: 11px;
-      font-weight: 600;
-      white-space: nowrap;
-    }
-
-    .grade-A { background: rgba(52, 211, 153, 0.15); color: var(--success); border: 1px solid rgba(52, 211, 153, 0.3); }
-    .grade-B { background: rgba(251, 191, 36, 0.15); color: var(--warning); border: 1px solid rgba(251, 191, 36, 0.3); }
-    .grade-C { background: rgba(248, 113, 113, 0.15); color: var(--danger); border: 1px solid rgba(248, 113, 113, 0.3); }
-    .grade-default { background: rgba(139, 145, 168, 0.15); color: var(--text-muted); border: 1px solid var(--border); }
-
-    /* ---- LOADING / ERROR ---- */
-    .loading-screen, .error-screen {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 60vh;
-      gap: 16px;
-      text-align: center;
-    }
-
-    .spinner {
-      width: 48px;
-      height: 48px;
-      border: 3px solid var(--border);
-      border-top-color: var(--accent);
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-    }
-
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    .loading-text {
-      color: var(--text-muted);
-      font-size: 14px;
-    }
-
-    .error-box {
-      background: rgba(248, 113, 113, 0.1);
-      border: 1px solid rgba(248, 113, 113, 0.3);
-      border-radius: 12px;
-      padding: 24px 32px;
-      color: var(--danger);
-      font-size: 14px;
-      max-width: 500px;
-    }
-
-    .empty-state {
-      text-align: center;
-      padding: 48px;
-      color: var(--text-muted);
-      font-size: 14px;
-    }
-
-    @media (max-width: 768px) {
-      .container { padding: 16px; }
-      header { padding: 16px; }
-    }
-  </style>
+  /* LOADING / EMPTY */
+  .loading {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-muted);
+    font-size: 14px;
+  }
+  .spinner {
+    width: 36px; height: 36px;
+    border: 3px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 14px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
 </head>
 <body>
 
-<header>
-  <div class="logo-icon">R</div>
-  <h1>규정 조사 항목 <span>뷰어</span></h1>
-  <div class="header-status">
-    <div class="status-dot" id="statusDot"></div>
-    <span id="statusText">데이터 로딩 중...</span>
+<!-- HEADER -->
+<div class="header">
+  <div class="header-left">
+    <div class="logo">R</div>
+    <h1>규정 조사 항목 뷰어</h1>
   </div>
-</header>
+  <span class="load-status" id="loadStatus">로딩 중...</span>
+</div>
 
-<div class="container">
+<!-- STATS -->
+<div class="stats">
+  <div class="stat-card">
+    <div class="stat-label">전체 항목</div>
+    <div class="stat-value" id="totalCount">-</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">규정 수</div>
+    <div class="stat-value" id="regCount">-</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">직군 수</div>
+    <div class="stat-value" id="jobCount">-</div>
+  </div>
+</div>
 
-  <!-- LOADING -->
-  <div class="loading-screen" id="loadingScreen">
+<!-- SEARCH -->
+<div class="search-wrap">
+  <input class="search-input" type="text" id="searchInput" placeholder="규정 제목, 조사 항목, 기준 제목으로 검색..." />
+</div>
+
+<!-- TABS -->
+<div class="tabs-wrap">
+  <div class="tabs" id="tabsContainer">
+    <button class="tab-btn active" data-job="전체">전체</button>
+  </div>
+</div>
+
+<!-- LIST -->
+<div class="list" id="mainList">
+  <div class="loading">
     <div class="spinner"></div>
-    <div class="loading-text">구글 시트에서 데이터를 불러오는 중...</div>
-  </div>
-
-  <!-- ERROR -->
-  <div class="error-screen" id="errorScreen" style="display:none;">
-    <div class="error-box" id="errorMsg"></div>
-  </div>
-
-  <!-- MAIN CONTENT -->
-  <div id="mainContent" style="display:none;">
-
-    <!-- STATS -->
-    <div class="stats-bar">
-      <div class="stat-card">
-        <div class="stat-label">전체 항목</div>
-        <div class="stat-value" id="statTotal">0</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">규정 수</div>
-        <div class="stat-value" id="statRegs">0</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">직군 수</div>
-        <div class="stat-value" id="statGroups">0</div>
-      </div>
-    </div>
-
-    <!-- SEARCH -->
-    <div class="search-bar">
-      <input type="text" id="searchInput" placeholder="규정 제목, 조사 항목, 기준 제목으로 검색..." />
-    </div>
-
-    <!-- TABS (직군) -->
-    <div class="tabs-wrapper">
-      <div class="tabs" id="tabsContainer"></div>
-    </div>
-
-    <!-- REG LIST -->
-    <div class="reg-list" id="regList"></div>
-
+    데이터를 불러오는 중입니다...
   </div>
 </div>
 
 <script>
-  // =============================================
-  // 스프레드시트 ID (이미 설정 완료)
-  // =============================================
-  const SPREADSHEET_ID = '18dDgxsczklu9FRm053w2rqLDFDjqm7C18rijuyJdrkI';
+const SPREADSHEET_ID = '18dDgxsczklu9FRm053w2rqLDFDjqm7C18rijuyJdrkI';
+const SHEET_NAME = encodeURIComponent('Sheet1');
+const API_URL = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}`;
 
-  // 컬럼 인덱스 (0부터 시작)
-  const COL = {
-    규정제목: 0,
-    직군: 1,
-    조사항목등급: 2,
-    조사항목구분: 3,
-    조사항목장: 4,
-    기준제목: 5,
-    기준: 6,
-    조사항목: 7,
-    기준이해: 8,
-    조사내용: 9,
-    조사목적: 10,
-    참고자료: 11,
-  };
+let allData = [];
+let activeJob = '전체';
+let searchQuery = '';
 
-  const CSV_URL = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/export?format=csv&gid=0`;
+// ── 데이터 로드 ──────────────────────────────────
+async function loadData() {
+  try {
+    const res = await fetch(API_URL);
+    const text = await res.text();
+    const json = JSON.parse(text.match(/google\.visualization\.Query\.setResponse\(([\s\S]*?)\);/)[1]);
+    const rows = json.table.rows;
+    const cols = json.table.cols;
 
-  let allRows = [];
-  let currentTab = '전체';
-  let searchQuery = '';
-
-  // =============================================
-  // CSV 파싱 (따옴표 포함 처리)
-  // =============================================
-  function parseCSV(text) {
-    const lines = [];
-    let cur = '';
-    let inQ = false;
-    let row = [];
-
-    for (let i = 0; i < text.length; i++) {
-      const ch = text[i];
-      if (ch === '"') {
-        if (inQ && text[i+1] === '"') { cur += '"'; i++; }
-        else { inQ = !inQ; }
-      } else if (ch === ',' && !inQ) {
-        row.push(cur.trim()); cur = '';
-      } else if ((ch === '\n' || ch === '\r') && !inQ) {
-        if (ch === '\r' && text[i+1] === '\n') i++;
-        row.push(cur.trim()); cur = '';
-        lines.push(row); row = [];
-      } else {
-        cur += ch;
-      }
-    }
-    if (cur || row.length) { row.push(cur.trim()); lines.push(row); }
-    return lines;
-  }
-
-  // =============================================
-  // 데이터 로드
-  // =============================================
-  async function loadData() {
-    try {
-      const res = await fetch(CSV_URL);
-      if (!res.ok) throw new Error(`HTTP 오류: ${res.status}`);
-      const text = await res.text();
-      const rows = parseCSV(text);
-
-      if (rows.length < 2) throw new Error('데이터가 없습니다. 구글 시트를 확인해주세요.');
-
-      // 첫 번째 행은 헤더이므로 제거
-      allRows = rows.slice(1).filter(r => r.some(c => c !== ''));
-
-      // 통계 업데이트
-      const regSet = new Set(allRows.map(r => r[COL.규정제목]).filter(Boolean));
-      const groupSet = new Set(allRows.map(r => r[COL.직군]).filter(Boolean));
-
-      document.getElementById('statTotal').textContent = allRows.length.toLocaleString();
-      document.getElementById('statRegs').textContent = regSet.size.toLocaleString();
-      document.getElementById('statGroups').textContent = groupSet.size.toLocaleString();
-
-      // 탭 생성
-      buildTabs(groupSet);
-
-      // 상태 업데이트
-      document.getElementById('statusDot').style.background = '#34d399';
-      document.getElementById('statusText').textContent = `${allRows.length}개 항목 로드 완료`;
-
-      // 화면 전환
-      document.getElementById('loadingScreen').style.display = 'none';
-      document.getElementById('mainContent').style.display = 'block';
-
-      render();
-    } catch (err) {
-      document.getElementById('loadingScreen').style.display = 'none';
-      document.getElementById('errorScreen').style.display = 'flex';
-      document.getElementById('errorMsg').innerHTML = `
-        <strong>데이터를 불러오지 못했습니다.</strong><br/><br/>
-        ${err.message}<br/><br/>
-        <small>구글 시트가 "링크가 있는 모든 사용자" 공개 설정인지 확인해주세요.</small>
-      `;
-      document.getElementById('statusDot').style.background = '#f87171';
-      document.getElementById('statusText').textContent = '로드 실패';
-    }
-  }
-
-  // =============================================
-  // 탭 생성
-  // =============================================
-  function buildTabs(groupSet) {
-    const container = document.getElementById('tabsContainer');
-    const groups = ['전체', ...Array.from(groupSet).sort()];
-
-    groups.forEach(g => {
-      const btn = document.createElement('button');
-      btn.className = 'tab-btn' + (g === '전체' ? ' active' : '');
-      btn.textContent = g;
-      btn.addEventListener('click', () => {
-        currentTab = g;
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        render();
+    allData = rows.map(row => {
+      const obj = {};
+      cols.forEach((col, i) => {
+        obj[col.label] = row.c[i]?.v ?? '';
       });
-      container.appendChild(btn);
-    });
-  }
+      return obj;
+    }).filter(r => r['규정제목'] || r['조사항목']);
 
-  // =============================================
-  // 필터링
-  // =============================================
-  function getFiltered() {
-    return allRows.filter(r => {
-      const tabMatch = currentTab === '전체' || r[COL.직군] === currentTab;
-      if (!tabMatch) return false;
-      if (!searchQuery) return true;
-      const q = searchQuery.toLowerCase();
-      return (
-        (r[COL.규정제목] || '').toLowerCase().includes(q) ||
-        (r[COL.기준제목] || '').toLowerCase().includes(q) ||
-        (r[COL.조사항목] || '').toLowerCase().includes(q) ||
-        (r[COL.직군] || '').toLowerCase().includes(q)
-      );
-    });
-  }
-
-  // =============================================
-  // 렌더링
-  // =============================================
-  function render() {
-    const filtered = getFiltered();
-    const container = document.getElementById('regList');
-    container.innerHTML = '';
-
-    if (filtered.length === 0) {
-      container.innerHTML = '<div class="empty-state">표시할 데이터가 없습니다.</div>';
-      return;
-    }
-
-    // 규정제목별로 그룹화
-    const grouped = {};
-    filtered.forEach(r => {
-      const title = r[COL.규정제목] || '(제목 없음)';
-      if (!grouped[title]) grouped[title] = [];
-      grouped[title].push(r);
-    });
-
-    Object.entries(grouped).forEach(([title, rows]) => {
-      const card = document.createElement('div');
-      card.className = 'reg-card';
-
-      card.innerHTML = `
-        <div class="reg-card-header">
-          <h3>${escHtml(title)}</h3>
-          <div class="reg-meta">
-            <span class="badge badge-count">${rows.length}개 항목</span>
-            <span class="toggle-icon">v</span>
-          </div>
-        </div>
-        <div class="reg-card-body">
-          <div class="table-wrapper">
-            <table>
-              <thead>
-                <tr>
-                  <th>직군</th>
-                  <th>등급</th>
-                  <th>구분</th>
-                  <th>Chapter</th>
-                  <th>기준 제목</th>
-                  <th>조사 항목</th>
-                  <th>조사 내용</th>
-                  <th>조사 목적</th>
-                </tr>
-              </thead>
-              <tbody>
-                ${rows.map(r => `
-                  <tr>
-                    <td>${escHtml(r[COL.직군])}</td>
-                    <td>${gradeHtml(r[COL.조사항목등급])}</td>
-                    <td>${escHtml(r[COL.조사항목구분])}</td>
-                    <td>${escHtml(r[COL.조사항목장])}</td>
-                    <td>${escHtml(r[COL.기준제목])}</td>
-                    <td>${escHtml(r[COL.조사항목])}</td>
-                    <td>${escHtml(r[COL.조사내용])}</td>
-                    <td>${escHtml(r[COL.조사목적])}</td>
-                  </tr>
-                `).join('')}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      `;
-
-      card.querySelector('.reg-card-header').addEventListener('click', () => {
-        card.classList.toggle('expanded');
-      });
-
-      container.appendChild(card);
-    });
-  }
-
-  function escHtml(str) {
-    if (!str) return '-';
-    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  }
-
-  function gradeHtml(grade) {
-    if (!grade) return '-';
-    const cls = ['A','B','C'].includes(grade.toUpperCase())
-      ? `grade-${grade.toUpperCase()}`
-      : 'grade-default';
-    return `<span class="grade-badge ${cls}">${escHtml(grade)}</span>`;
-  }
-
-  // =============================================
-  // 검색
-  // =============================================
-  document.getElementById('searchInput').addEventListener('input', e => {
-    searchQuery = e.target.value;
+    document.getElementById('loadStatus').textContent = `${allData.length}개 항목 로드 완료`;
+    updateStats();
+    buildTabs();
     render();
+  } catch (e) {
+    document.getElementById('mainList').innerHTML = `<div class="loading">데이터 로드 실패. 구글 시트 공유 설정을 확인해주세요.</div>`;
+    document.getElementById('loadStatus').textContent = '오류 발생';
+    console.error(e);
+  }
+}
+
+// ── 통계 ─────────────────────────────────────────
+function updateStats() {
+  document.getElementById('totalCount').textContent = allData.length;
+  const regs = new Set(allData.map(r => r['규정제목']).filter(Boolean));
+  const jobs = new Set(allData.map(r => r['직군']).filter(Boolean));
+  document.getElementById('regCount').textContent = regs.size;
+  document.getElementById('jobCount').textContent = jobs.size;
+}
+
+// ── 탭 생성 ──────────────────────────────────────
+function buildTabs() {
+  const jobs = ['전체', ...new Set(allData.map(r => r['직군']).filter(Boolean))];
+  const container = document.getElementById('tabsContainer');
+  container.innerHTML = '';
+  jobs.forEach(job => {
+    const btn = document.createElement('button');
+    btn.className = 'tab-btn' + (job === '전체' ? ' active' : '');
+    btn.dataset.job = job;
+    btn.textContent = job;
+    btn.addEventListener('click', () => {
+      activeJob = job;
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      render();
+    });
+    container.appendChild(btn);
+  });
+}
+
+// ── 필터 ─────────────────────────────────────────
+function getFiltered() {
+  return allData.filter(r => {
+    const jobOk = activeJob === '전체' || r['직군'] === activeJob;
+    const q = searchQuery.toLowerCase();
+    const searchOk = !q ||
+      (r['규정제목'] || '').toLowerCase().includes(q) ||
+      (r['조사항목'] || '').toLowerCase().includes(q) ||
+      (r['기준 제목'] || '').toLowerCase().includes(q);
+    return jobOk && searchOk;
+  });
+}
+
+// ── 렌더 ─────────────────────────────────────────
+function render() {
+  const filtered = getFiltered();
+  const container = document.getElementById('mainList');
+
+  if (filtered.length === 0) {
+    container.innerHTML = '<div class="loading">검색 결과가 없습니다.</div>';
+    return;
+  }
+
+  // 규정제목별 그룹핑
+  const groups = {};
+  filtered.forEach(row => {
+    const key = row['규정제목'] || '(제목 없음)';
+    if (!groups[key]) groups[key] = [];
+    groups[key].push(row);
   });
 
-  // =============================================
-  // 시작
-  // =============================================
-  loadData();
+  container.innerHTML = '';
+
+  Object.entries(groups).forEach(([title, rows]) => {
+    const item = document.createElement('div');
+    item.className = 'reg-item';
+
+    // 헤더
+    const header = document.createElement('div');
+    header.className = 'reg-header';
+    header.innerHTML = `
+      <div class="reg-title">${title}</div>
+      <div class="reg-meta">
+        <span class="badge">${rows.length}개 항목</span>
+        <div class="chevron">&#8964;</div>
+      </div>
+    `;
+
+    // 바디 — 세로 카드
+    const body = document.createElement('div');
+    body.className = 'reg-body';
+
+    rows.forEach(row => {
+      const card = document.createElement('div');
+      card.className = 'detail-card';
+
+      // 배지 행
+      const badges = [];
+      if (row['직군'])   badges.push(`<span class="card-badge badge-job">${row['직군']}</span>`);
+      if (row['등급'])   badges.push(`<span class="card-badge badge-grade">등급: ${row['등급']}</span>`);
+      if (row['구분'])   badges.push(`<span class="card-badge badge-type">${row['구분']}</span>`);
+      if (row['CHAPTER']) badges.push(`<span class="card-badge badge-chap">CH ${row['CHAPTER']}</span>`);
+
+      // 필드 목록
+      const fields = [
+        { label: '기준 제목',  key: '기준 제목' },
+        { label: '조사 항목',  key: '조사항목' },
+        { label: '조사 내용',  key: '조사내용' },
+        { label: '조사 부문',  key: '조사부문' },
+      ];
+
+      let html = '';
+      if (badges.length) {
+        html += `<div class="card-badges">${badges.join('')}</div>`;
+      }
+      fields.forEach(f => {
+        const val = row[f.key];
+        if (val) {
+          html += `
+            <div class="card-row">
+              <div class="card-row-label">${f.label}</div>
+              <div class="card-row-value">${val}</div>
+            </div>`;
+        }
+      });
+
+      card.innerHTML = html;
+      body.appendChild(card);
+    });
+
+    // 토글
+    header.addEventListener('click', () => {
+      item.classList.toggle('open');
+    });
+
+    item.appendChild(header);
+    item.appendChild(body);
+    container.appendChild(item);
+  });
+}
+
+// ── 검색 ─────────────────────────────────────────
+document.getElementById('searchInput').addEventListener('input', e => {
+  searchQuery = e.target.value;
+  render();
+});
+
+// ── 시작 ─────────────────────────────────────────
+loadData();
 </script>
 </body>
 </html>
