@@ -1,300 +1,66 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>규정 조회 시스템</title>
-<style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: 'Noto Sans KR', sans-serif;
-    background: #f0f4f8;
-    color: #222;
-  }
-  header {
-    background: #1a3a5c;
-    color: white;
-    padding: 16px 20px;
-    font-size: 18px;
-    font-weight: bold;
-    text-align: center;
-    letter-spacing: 1px;
-  }
-
-  /* 직군 탭 */
-  #tab-bar {
-    display: flex;
-    overflow-x: auto;
-    background: #fff;
-    border-bottom: 2px solid #1a3a5c;
-    padding: 0 8px;
-    gap: 4px;
-  }
-  .tab-btn {
-    flex-shrink: 0;
-    padding: 10px 16px;
-    border: none;
-    background: transparent;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 600;
-    color: #555;
-    border-bottom: 3px solid transparent;
-    transition: all 0.2s;
-  }
-  .tab-btn.active {
-    color: #1a3a5c;
-    border-bottom: 3px solid #1a3a5c;
-  }
-
-  /* 규정제목 리스트 */
-  #content {
-    padding: 12px 16px;
-    max-width: 760px;
-    margin: 0 auto;
-  }
-
-  .reg-group {
-    background: #fff;
-    border-radius: 10px;
-    margin-bottom: 10px;
-    overflow: hidden;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-  }
-  .reg-title-btn {
-    width: 100%;
-    text-align: left;
-    background: #1a3a5c;
-    color: #fff;
-    border: none;
-    padding: 14px 16px;
-    font-size: 15px;
-    font-weight: bold;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: background 0.2s;
-  }
-  .reg-title-btn:hover { background: #24527a; }
-  .reg-title-btn .arrow {
-    font-size: 18px;
-    transition: transform 0.3s;
-  }
-  .reg-title-btn.open .arrow {
-    transform: rotate(180deg);
-  }
-
-  /* 세부 항목 카드 목록 */
-  .reg-items {
-    display: none;
-    padding: 12px;
-    background: #f8fafc;
-    gap: 10px;
-    flex-direction: column;
-  }
-  .reg-items.open {
-    display: flex;
-  }
-
-  /* 개별 항목 세로 카드 */
-  .item-card {
-    background: #fff;
-    border-radius: 8px;
-    border: 1px solid #dce6f0;
-    overflow: hidden;
-  }
-  .item-card-header {
-    background: #e8f0fa;
-    padding: 8px 12px;
-    font-size: 13px;
-    font-weight: bold;
-    color: #1a3a5c;
-    border-bottom: 1px solid #dce6f0;
-  }
-
-  /* 세로 필드 행 */
-  .field-row {
-    display: flex;
-    border-bottom: 1px solid #f0f0f0;
-  }
-  .field-row:last-child {
-    border-bottom: none;
-  }
-  .field-label {
-    background: #f4f8ff;
-    color: #1a3a5c;
-    font-size: 12px;
-    font-weight: bold;
-    padding: 9px 12px;
-    min-width: 90px;
-    max-width: 90px;
-    border-right: 2px solid #dce6f0;
-    display: flex;
-    align-items: flex-start;
-    line-height: 1.4;
-  }
-  .field-value {
-    padding: 9px 12px;
-    font-size: 13px;
-    color: #333;
-    flex: 1;
-    line-height: 1.6;
-    word-break: keep-all;
-  }
-
-  /* 로딩/에러 */
-  #status {
-    text-align: center;
-    padding: 40px;
-    font-size: 15px;
-    color: #888;
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>구글 시트 데이터</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+        }
+        .card {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 10px 0;
+        }
+        .label {
+            font-weight: bold;
+        }
+        /* 추가적인 스타일 필요 시 수정 */
+    </style>
 </head>
 <body>
+    <div class="container">
+        <h1>구글 시트 데이터</h1>
+        <div id="data-container"></div>
+    </div>
 
-<header>규정 조회 시스템</header>
-<div id="tab-bar"></div>
-<div id="content"><div id="status">데이터를 불러오는 중...</div></div>
+    <script>
+        const SHEET_ID = "1aBcDeFgHiJkLmNoPqRstUvWxYz";  // 여기에 스프레드시트 ID 입력
+        const URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
 
-<script>
-// =============================================
-// ** 아래 ID를 본인 구글시트 ID로 교체하세요 **
-const SHEET_ID = "여기에_스프레드시트_ID_입력";
-// =============================================
-const SHEET_NAME = "Sheet1"; // 시트 이름 확인 후 수정
+        fetch(URL)
+            .then(response => response.text())
+            .then(data => {
+                const jsonData = JSON.parse(data.substr(47).slice(0, -2));
+                const tableData = jsonData.table.rows;
 
-let allData = [];
-let currentTab = "전체";
+                const container = document.getElementById('data-container');
+                tableData.forEach(row => {
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    const cols = row.c;
 
-const FIELDS = [
-  { label: "직군",     key: "직군" },
-  { label: "등급",     key: "조사항목 등급" },
-  { label: "구분",     key: "구분" },
-  { label: "CHAPTER", key: "CHAPTER" },
-  { label: "기준제목", key: "기준제목" },
-  { label: "조사항목", key: "조사항목" },
-  { label: "조사내용", key: "조사내용" },
-  { label: "조사목적", key: "조사목적" },
-];
-
-// 구글 시트 JSON 방식으로 데이터 로딩
-async function loadData() {
-  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(SHEET_NAME)}`;
-  try {
-    const res = await fetch(url);
-    const text = await res.text();
-    const json = JSON.parse(text.match(/google\.visualization\.Query\.setResponse\(([\s\S]*)\)/)[1]);
-
-    const cols = json.table.cols.map(c => c.label);
-    const rows = json.table.rows.map(row => {
-      const obj = {};
-      row.c.forEach((cell, i) => {
-        obj[cols[i]] = cell ? (cell.v !== null && cell.v !== undefined ? String(cell.v) : "") : "";
-      });
-      return obj;
-    });
-
-    allData = rows;
-    buildTabs();
-    renderContent();
-  } catch(e) {
-    document.getElementById("status").innerHTML =
-      "<b style='color:red'>데이터 로드 실패!</b><br>구글 시트 공유 설정을 확인하세요.<br>(링크가 있는 모든 사용자 - 뷰어)";
-    console.error(e);
-  }
-}
-
-// 직군 탭 생성
-function buildTabs() {
-  const bar = document.getElementById("tab-bar");
-  bar.innerHTML = "";
-  const tabs = ["전체", ...new Set(allData.map(r => r["직군"]).filter(Boolean))];
-  tabs.forEach(tab => {
-    const btn = document.createElement("button");
-    btn.className = "tab-btn" + (tab === currentTab ? " active" : "");
-    btn.textContent = tab;
-    btn.onclick = () => {
-      currentTab = tab;
-      document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-      renderContent();
-    };
-    bar.appendChild(btn);
-  });
-}
-
-// 본문 렌더링
-function renderContent() {
-  const content = document.getElementById("content");
-  const filtered = currentTab === "전체"
-    ? allData
-    : allData.filter(r => r["직군"] === currentTab);
-
-  if (filtered.length === 0) {
-    content.innerHTML = "<div id='status'>해당 직군의 데이터가 없습니다.</div>";
-    return;
-  }
-
-  // 규정제목 그룹핑
-  const groups = {};
-  filtered.forEach(row => {
-    const title = row["규정제목"] || "미분류";
-    if (!groups[title]) groups[title] = [];
-    groups[title].push(row);
-  });
-
-  content.innerHTML = "";
-
-  Object.entries(groups).forEach(([title, items], gi) => {
-    const group = document.createElement("div");
-    group.className = "reg-group";
-
-    const btn = document.createElement("button");
-    btn.className = "reg-title-btn";
-    btn.innerHTML = `<span>${title}</span><span class="arrow">&#9660;</span>`;
-
-    const itemsDiv = document.createElement("div");
-    itemsDiv.className = "reg-items";
-
-    items.forEach((row, idx) => {
-      const card = document.createElement("div");
-      card.className = "item-card";
-
-      // 카드 헤더
-      const cardHeader = document.createElement("div");
-      cardHeader.className = "item-card-header";
-      cardHeader.textContent = `항목 ${idx + 1}`;
-      card.appendChild(cardHeader);
-
-      // 세로 필드들
-      FIELDS.forEach(field => {
-        const val = row[field.key] || "-";
-        const row_el = document.createElement("div");
-        row_el.className = "field-row";
-        row_el.innerHTML = `
-          <div class="field-label">${field.label}</div>
-          <div class="field-value">${val}</div>
-        `;
-        card.appendChild(row_el);
-      });
-
-      itemsDiv.appendChild(card);
-    });
-
-    btn.onclick = () => {
-      btn.classList.toggle("open");
-      itemsDiv.classList.toggle("open");
-    };
-
-    group.appendChild(btn);
-    group.appendChild(itemsDiv);
-    content.appendChild(group);
-  });
-}
-
-loadData();
-</script>
+                    card.innerHTML = `
+                        <div class="label">직군:</div> ${cols[0]?.v || '정보 없음'}<br>
+                        <div class="label">등급:</div> ${cols[1]?.v || '정보 없음'}<br>
+                        <div class="label">구분:</div> ${cols[2]?.v || '정보 없음'}<br>
+                        <div class="label">CHAPTER:</div> ${cols[3]?.v || '정보 없음'}<br>
+                        <div class="label">기준제목:</div> ${cols[4]?.v || '정보 없음'}<br>
+                        <div class="label">조사항목:</div> ${cols[5]?.v || '정보 없음'}<br>
+                        <div class="label">조사내용:</div> ${cols[6]?.v || '정보 없음'}<br>
+                    `;
+                    container.appendChild(card);
+                });
+            })
+            .catch(error => {
+                console.error('데이터 로딩 중 오류 발생:', error);
+            });
+    </script>
 </body>
 </html>
