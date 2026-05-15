@@ -7,500 +7,174 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700&family=Noto+Sans+KR:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --bg: #0c0b09;
-      --surface: #141210;
-      --surface2: #1c1916;
-      --surface3: #242018;
-      --gold: #c9a84c;
-      --gold2: #e8c97a;
-      --gold-dim: rgba(201,168,76,0.15);
-      --text: #ede8df;
-      --text-muted: #7a7060;
-      --text-mid: #a89880;
-      --border: #2a2520;
-      --border2: #3a342c;
-      --success: #6db98a;
-      --warning: #c9a84c;
-      --danger: #c97a6d;
-      --blue: #7a9fc9;
-      --blue-dim: rgba(122,159,201,0.15);
-      --teal: #6dbfb8;
-      --teal-dim: rgba(109,191,184,0.15);
+      --bg: #0c0b09; --surface: #141210; --surface2: #1c1916; --surface3: #242018;
+      --gold: #c9a84c; --gold2: #e8c97a; --gold-dim: rgba(201,168,76,0.15);
+      --text: #ede8df; --text-muted: #7a7060; --text-mid: #a89880;
+      --border: #2a2520; --border2: #3a342c;
+      --success: #6db98a; --warning: #c9a84c; --danger: #c97a6d;
+      --blue: #7a9fc9; --blue-dim: rgba(122,159,201,0.15);
+      --teal: #6db9b0; --teal-dim: rgba(109,185,176,0.15);
     }
-
-    body {
-      font-family: 'Noto Sans KR', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-    }
-
+    body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
     body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
+      content: ''; position: fixed; inset: 0;
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-      pointer-events: none;
-      z-index: 999;
-      opacity: 0.35;
+      pointer-events: none; z-index: 999; opacity: 0.35;
     }
-
-    /* HEADER */
     header {
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
-      padding: 20px 32px;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      position: sticky;
-      top: 0;
-      z-index: 100;
+      background: var(--surface); border-bottom: 1px solid var(--border);
+      padding: 20px 32px; display: flex; align-items: center; gap: 14px;
+      position: sticky; top: 0; z-index: 100;
     }
-    .logo-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3px;
-      width: 32px; height: 32px;
-      flex-shrink: 0;
-    }
+    .logo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; width: 32px; height: 32px; flex-shrink: 0; }
     .logo-grid span { border-radius: 2px; background: var(--gold); }
     .logo-grid span:nth-child(2) { background: var(--gold2); opacity: 0.6; }
     .logo-grid span:nth-child(3) { background: var(--gold2); opacity: 0.4; }
     .logo-grid span:nth-child(4) { background: var(--gold); opacity: 0.8; }
-
     .header-titles { display: flex; flex-direction: column; gap: 1px; }
     .header-sub { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2.5px; color: var(--text-muted); text-transform: uppercase; }
     .header-main { font-family: 'Noto Serif KR', serif; font-size: 18px; font-weight: 700; color: var(--text); letter-spacing: -0.5px; }
-
-    .header-status {
-      margin-left: auto;
-      font-family: 'DM Mono', monospace;
-      font-size: 11px;
-      color: var(--text-muted);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .status-dot {
-      width: 7px; height: 7px;
-      border-radius: 50%;
-      background: var(--warning);
-      animation: pulse 2.5s infinite;
-      flex-shrink: 0;
-    }
+    .header-status { margin-left: auto; font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-muted); display: flex; align-items: center; gap: 6px; }
+    .status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--warning); animation: pulse 2.5s infinite; flex-shrink: 0; }
     @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
-
-    /* CONTAINER */
     .container { max-width: 1100px; margin: 0 auto; padding: 32px; }
 
-    /* STATS */
-    .stats-bar {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 12px;
-      margin-bottom: 28px;
+    /* ── 디버그 배너 ── */
+    .debug-banner {
+      background: rgba(201,168,76,0.07); border: 1px solid rgba(201,168,76,0.25);
+      border-radius: 8px; padding: 10px 16px; margin-bottom: 20px;
+      font-family: 'DM Mono', monospace; font-size: 11px; color: var(--gold);
+      cursor: pointer; user-select: none;
     }
-    .stat-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 18px 22px;
-      position: relative;
-      overflow: hidden;
-    }
-    .stat-card::after {
-      content: '';
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, var(--gold), transparent);
-    }
+    .debug-banner summary { list-style: none; display: flex; align-items: center; gap: 8px; }
+    .debug-banner summary::-webkit-details-marker { display: none; }
+    .debug-content { margin-top: 10px; display: flex; flex-direction: column; gap: 6px; }
+    .debug-row { display: flex; gap: 8px; align-items: flex-start; }
+    .debug-label { color: var(--text-muted); min-width: 180px; flex-shrink: 0; }
+    .debug-vals { color: var(--text); line-height: 1.7; }
+
+    .stats-bar { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 28px; }
+    @media (max-width: 900px) { .stats-bar { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 600px) { .stats-bar { grid-template-columns: repeat(2, 1fr); } }
+    .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 18px 22px; position: relative; overflow: hidden; }
+    .stat-card::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--gold), transparent); }
     .stat-card.blue-accent::after { background: linear-gradient(90deg, var(--blue), transparent); }
     .stat-card.teal-accent::after { background: linear-gradient(90deg, var(--teal), transparent); }
-    .stat-label {
-      font-family: 'DM Mono', monospace;
-      font-size: 9px;
-      letter-spacing: 2px;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      margin-bottom: 8px;
-    }
-    .stat-value {
-      font-family: 'Noto Serif KR', serif;
-      font-size: 32px;
-      font-weight: 700;
-      color: var(--gold);
-      line-height: 1;
-    }
+    .stat-label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; }
+    .stat-value { font-family: 'Noto Serif KR', serif; font-size: 28px; font-weight: 700; color: var(--gold); line-height: 1; }
     .stat-value.blue { color: var(--blue); }
     .stat-value.teal { color: var(--teal); }
 
-    /* TOOLBAR */
-    .toolbar {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 24px;
-      flex-wrap: wrap;
-    }
+    .toolbar { display: flex; align-items: center; gap: 10px; margin-bottom: 24px; flex-wrap: wrap; }
     .search-wrap { position: relative; flex: 1; min-width: 200px; }
-    .search-icon {
-      position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
-      color: var(--text-muted); font-size: 13px; pointer-events: none;
-    }
+    .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none; }
     .search-wrap input {
-      width: 100%;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 11px 16px 11px 38px;
-      font-size: 13px;
-      font-family: 'Noto Sans KR', sans-serif;
-      color: var(--text);
-      outline: none;
-      transition: border-color 0.2s;
+      width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+      padding: 11px 16px 11px 38px; font-size: 13px; font-family: 'Noto Sans KR', sans-serif;
+      color: var(--text); outline: none; transition: border-color 0.2s;
     }
     .search-wrap input::placeholder { color: var(--text-muted); }
     .search-wrap input:focus { border-color: var(--gold); }
-
     .grade-filter { display: flex; gap: 6px; align-items: center; }
-    .grade-filter-label {
-      font-family: 'DM Mono', monospace;
-      font-size: 9px; letter-spacing: 1.5px;
-      color: var(--text-muted); text-transform: uppercase;
-    }
-    .grade-btn {
-      font-family: 'DM Mono', monospace;
-      font-size: 11px; font-weight: 500;
-      padding: 5px 12px;
-      border-radius: 6px;
-      border: 1px solid var(--border);
-      background: var(--surface);
-      color: var(--text-muted);
-      cursor: pointer;
-      transition: all 0.15s;
-    }
+    .grade-filter-label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 1.5px; color: var(--text-muted); text-transform: uppercase; }
+    .grade-btn { font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500; padding: 5px 12px; border-radius: 6px; border: 1px solid var(--border); background: var(--surface); color: var(--text-muted); cursor: pointer; transition: all 0.15s; }
     .grade-btn:hover { border-color: var(--border2); color: var(--text); }
+    .grade-btn.active-ALL { background: var(--gold-dim); color: var(--gold); border-color: rgba(201,168,76,0.5); }
     .grade-btn.active-A { background: rgba(109,185,138,0.15); color: var(--success); border-color: rgba(109,185,138,0.5); }
     .grade-btn.active-B { background: rgba(201,168,76,0.15); color: var(--warning); border-color: rgba(201,168,76,0.5); }
     .grade-btn.active-C { background: rgba(201,122,109,0.15); color: var(--danger); border-color: rgba(201,122,109,0.5); }
 
-    /* TABS ROW */
-    .tabs-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 16px;
-      flex-wrap: wrap;
-    }
+    .tabs-row { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
     .main-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
     .main-tab-btn {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 8px 16px;
-      font-size: 13px;
-      font-family: 'Noto Sans KR', sans-serif;
-      font-weight: 500;
-      color: var(--text-muted);
-      cursor: pointer;
-      transition: all 0.2s;
+      display: flex; align-items: center; gap: 8px;
+      background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+      padding: 8px 16px; font-size: 13px; font-family: 'Noto Sans KR', sans-serif;
+      font-weight: 500; color: var(--text-muted); cursor: pointer; transition: all 0.2s;
     }
     .main-tab-btn:hover { border-color: var(--border2); color: var(--text); }
     .main-tab-btn.active { background: var(--gold-dim); border-color: var(--gold); color: var(--gold); }
     .main-tab-btn.active.blue-tab { background: var(--blue-dim); border-color: var(--blue); color: var(--blue); }
     .main-tab-btn.active.teal-tab { background: var(--teal-dim); border-color: var(--teal); color: var(--teal); }
-
-    .tab-count-badge {
-      font-family: 'DM Mono', monospace;
-      font-size: 10px;
-      background: rgba(201,168,76,0.2);
-      color: var(--gold);
-      border-radius: 20px;
-      padding: 1px 7px;
-    }
-    .blue-tab .tab-count-badge { background: rgba(122,159,201,0.2); color: var(--blue); }
-    .teal-tab .tab-count-badge { background: rgba(109,191,184,0.2); color: var(--teal); }
-
+    .tab-count-badge { font-family: 'DM Mono', monospace; font-size: 10px; background: rgba(201,168,76,0.2); color: var(--gold); border-radius: 20px; padding: 1px 7px; }
+    .tab-count-badge.blue { background: rgba(122,159,201,0.2); color: var(--blue); }
+    .tab-count-badge.teal { background: rgba(109,185,176,0.2); color: var(--teal); }
     .spacer { flex: 1; }
-    .result-info {
-      font-family: 'DM Mono', monospace;
-      font-size: 11px;
-      color: var(--text-muted);
-    }
+    .result-info { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-muted); }
     .result-info strong { color: var(--gold); }
-
-    .expand-all-btn {
-      font-family: 'DM Mono', monospace;
-      font-size: 10px; letter-spacing: 1px;
-      text-transform: uppercase;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 6px 12px;
-      color: var(--text-muted);
-      cursor: pointer;
-      transition: all 0.15s;
-    }
+    .expand-all-btn { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 6px 12px; color: var(--text-muted); cursor: pointer; transition: all 0.15s; }
     .expand-all-btn:hover { border-color: var(--border2); color: var(--text); }
 
-    /* REG CARDS (전체 / 규정검토 공통) */
-    .reg-list { display: flex; flex-direction: column; gap: 10px; }
+    .tab-info-banner { display: flex; align-items: center; gap: 10px; padding: 10px 16px; border-radius: 8px; margin-bottom: 16px; font-size: 12px; font-family: 'DM Mono', monospace; }
+    .tab-info-banner.blue { background: rgba(122,159,201,0.08); border: 1px solid rgba(122,159,201,0.25); color: var(--blue); }
+    .tab-info-banner.teal { background: rgba(109,185,176,0.08); border: 1px solid rgba(109,185,176,0.25); color: var(--teal); }
+    .tab-info-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+    .tab-info-dot.blue { background: var(--blue); }
+    .tab-info-dot.teal { background: var(--teal); }
 
-    .reg-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      overflow: hidden;
-      transition: border-color 0.2s;
-    }
+    .reg-list { display: flex; flex-direction: column; gap: 10px; }
+    .reg-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; transition: border-color 0.2s; }
     .reg-card:hover { border-color: var(--border2); }
     .reg-card.expanded { border-color: var(--gold); }
+    .reg-card.blue-card.expanded { border-color: var(--blue); }
     .reg-card.teal-card.expanded { border-color: var(--teal); }
-
-    .reg-card-header {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      padding: 16px 20px;
-      cursor: pointer;
-      user-select: none;
-    }
-    .reg-num {
-      font-family: 'DM Mono', monospace;
-      font-size: 11px; color: var(--text-muted);
-      width: 24px; flex-shrink: 0;
-    }
-    .reg-title {
-      font-family: 'Noto Serif KR', serif;
-      font-size: 15px; font-weight: 700;
-      color: var(--text); flex: 1;
-    }
-    .reg-count-badge {
-      font-family: 'DM Mono', monospace;
-      font-size: 11px;
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      color: var(--text-muted);
-      border-radius: 6px;
-      padding: 3px 10px;
-      white-space: nowrap; flex-shrink: 0;
-    }
-    .reg-card.expanded .reg-count-badge {
-      border-color: var(--gold); color: var(--gold); background: var(--gold-dim);
-    }
-    .reg-card.teal-card.expanded .reg-count-badge {
-      border-color: var(--teal); color: var(--teal); background: var(--teal-dim);
-    }
-
-    /* teal 라벨 배지 */
-    .teal-label-badge {
-      font-family: 'DM Mono', monospace;
-      font-size: 10px;
-      background: var(--teal-dim);
-      color: var(--teal);
-      border: 1px solid rgba(109,191,184,0.4);
-      border-radius: 5px;
-      padding: 2px 8px;
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-
-    .toggle-arrow {
-      width: 20px; height: 20px;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0; transition: transform 0.25s;
-    }
+    .reg-card-header { display: flex; align-items: center; gap: 16px; padding: 16px 20px; cursor: pointer; user-select: none; }
+    .reg-num { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-muted); width: 24px; flex-shrink: 0; }
+    .reg-title { font-family: 'Noto Serif KR', serif; font-size: 15px; font-weight: 700; color: var(--text); flex: 1; }
+    .reg-count-badge { font-family: 'DM Mono', monospace; font-size: 11px; background: var(--surface2); border: 1px solid var(--border); color: var(--text-muted); border-radius: 6px; padding: 3px 10px; white-space: nowrap; flex-shrink: 0; }
+    .reg-card.expanded .reg-count-badge { border-color: var(--gold); color: var(--gold); background: var(--gold-dim); }
+    .reg-card.blue-card.expanded .reg-count-badge { border-color: var(--blue); color: var(--blue); background: var(--blue-dim); }
+    .reg-card.teal-card.expanded .reg-count-badge { border-color: var(--teal); color: var(--teal); background: var(--teal-dim); }
+    .review-badge { font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500; padding: 3px 10px; border-radius: 6px; background: var(--teal-dim); border: 1px solid rgba(109,185,176,0.4); color: var(--teal); white-space: nowrap; flex-shrink: 0; }
+    .toggle-arrow { width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: transform 0.25s; }
     .reg-card.expanded .toggle-arrow { transform: rotate(180deg); }
-    .toggle-arrow svg {
-      width: 12px; height: 12px;
-      fill: none; stroke: var(--text-muted);
-      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
-    }
+    .jg-card.expanded .toggle-arrow { transform: rotate(180deg); }
+    .reg-card-body { max-height: 0; overflow: hidden; transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1); }
+    .reg-card-body-inner { padding: 0 20px 20px; border-top: 1px solid var(--border); }
 
-    .reg-card-body {
-      max-height: 0; overflow: hidden;
-      transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .reg-card-body-inner {
-      padding: 0 20px 20px;
-      border-top: 1px solid var(--border);
-    }
-
-    /* ITEM CARDS */
     .item-list { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
-    .item-card {
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      overflow: hidden;
-    }
-    .item-card-header {
-      display: flex; align-items: center; gap: 10px;
-      padding: 10px 14px;
-      background: var(--surface3);
-      border-bottom: 1px solid var(--border);
-    }
+    .item-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+    .item-card-header { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: var(--surface3); border-bottom: 1px solid var(--border); }
     .item-idx { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-muted); }
-    .grade-badge {
-      font-family: 'DM Mono', monospace;
-      font-size: 10px; font-weight: 500;
-      padding: 2px 8px; border-radius: 4px;
-    }
+    .grade-badge { font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500; padding: 2px 8px; border-radius: 4px; }
     .grade-A { background: rgba(109,185,138,0.15); color: var(--success); border: 1px solid rgba(109,185,138,0.3); }
-    .grade-B { background: rgba(201,168,76,0.15);  color: var(--warning); border: 1px solid rgba(201,168,76,0.3); }
-    .grade-C { background: rgba(201,122,109,0.15); color: var(--danger);  border: 1px solid rgba(201,122,109,0.3); }
+    .grade-B { background: rgba(201,168,76,0.15); color: var(--warning); border: 1px solid rgba(201,168,76,0.3); }
+    .grade-C { background: rgba(201,122,109,0.15); color: var(--danger); border: 1px solid rgba(201,122,109,0.3); }
     .grade-default { background: var(--surface2); color: var(--text-muted); border: 1px solid var(--border); }
     .item-division { font-size: 11px; color: var(--text-muted); font-weight: 400; }
-
-    .field-rows { padding: 14px; display: flex; flex-direction: column; gap: 0; }
-    .field-row {
-      display: grid; grid-template-columns: 100px 1fr;
-      gap: 0; border-bottom: 1px solid var(--border); min-height: 36px;
-    }
+    .field-rows { padding: 14px; display: flex; flex-direction: column; }
+    .field-row { display: grid; grid-template-columns: 100px 1fr; border-bottom: 1px solid var(--border); min-height: 36px; }
     .field-row:last-child { border-bottom: none; }
-    .field-label {
-      font-family: 'DM Mono', monospace;
-      font-size: 10px; color: var(--text-muted);
-      letter-spacing: 0.5px;
-      padding: 10px 12px 10px 0;
-      border-right: 1px solid var(--border);
-      display: flex; align-items: flex-start;
-      text-transform: uppercase;
-    }
-    .field-value {
-      font-size: 13px; color: var(--text);
-      padding: 10px 0 10px 14px;
-      line-height: 1.6; word-break: break-word;
-    }
+    .field-label { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-muted); letter-spacing: 0.5px; padding: 10px 12px 10px 0; border-right: 1px solid var(--border); display: flex; align-items: flex-start; text-transform: uppercase; }
+    .field-value { font-size: 13px; color: var(--text); padding: 10px 0 10px 14px; line-height: 1.6; word-break: break-word; }
     .field-value.empty { color: var(--text-muted); font-style: italic; }
 
-    /* JOB GROUP */
     .jobgroup-list { display: flex; flex-direction: column; gap: 10px; }
-    .jg-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      overflow: hidden;
-      transition: border-color 0.2s;
-    }
+    .jg-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; transition: border-color 0.2s; }
     .jg-card:hover { border-color: var(--border2); }
     .jg-card.expanded { border-color: var(--gold); }
-    .jg-card-header {
-      display: flex; align-items: center; gap: 14px;
-      padding: 16px 20px; cursor: pointer; user-select: none;
-    }
+    .jg-card-header { display: flex; align-items: center; gap: 14px; padding: 16px 20px; cursor: pointer; user-select: none; }
     .jg-num { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-muted); width: 24px; flex-shrink: 0; }
     .jg-name { font-family: 'Noto Serif KR', serif; font-size: 15px; font-weight: 700; color: var(--text); flex: 1; }
-    .jg-count {
-      font-family: 'DM Mono', monospace; font-size: 11px;
-      background: var(--surface2); border: 1px solid var(--border);
-      color: var(--text-muted); border-radius: 6px;
-      padding: 3px 10px; white-space: nowrap; flex-shrink: 0;
-    }
+    .jg-count { font-family: 'DM Mono', monospace; font-size: 11px; background: var(--surface2); border: 1px solid var(--border); color: var(--text-muted); border-radius: 6px; padding: 3px 10px; white-space: nowrap; flex-shrink: 0; }
     .jg-card.expanded .jg-count { border-color: var(--gold); color: var(--gold); background: var(--gold-dim); }
-    .jg-card-body { max-height: 0; overflow: hidden; transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+    .jg-card-body { max-height: 0; overflow: hidden; transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1); }
     .jg-card-body-inner { padding: 0 20px 20px; border-top: 1px solid var(--border); }
     .jg-reg-group { margin-top: 14px; }
-    .jg-reg-title {
-      font-size: 12px; font-weight: 700; color: var(--gold);
-      margin-bottom: 8px; padding-bottom: 6px;
-      border-bottom: 1px solid var(--border);
-      font-family: 'Noto Serif KR', serif;
-    }
+    .jg-reg-title { font-size: 12px; font-weight: 700; color: var(--gold); margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid var(--border); font-family: 'Noto Serif KR', serif; }
 
-    /* 질문 탭 */
-    .question-list { display: flex; flex-direction: column; gap: 10px; }
-    .q-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      overflow: hidden;
-      transition: border-color 0.2s;
-    }
-    .q-card:hover { border-color: var(--border2); }
-    .q-card.expanded { border-color: var(--blue); }
-    .q-card-header {
-      display: flex; align-items: center; gap: 16px;
-      padding: 16px 20px; cursor: pointer; user-select: none;
-    }
-    .q-num { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-muted); width: 24px; flex-shrink: 0; }
-    .q-title { font-family: 'Noto Serif KR', serif; font-size: 15px; font-weight: 700; color: var(--text); flex: 1; }
-    .q-count-badge {
-      font-family: 'DM Mono', monospace; font-size: 11px;
-      background: var(--surface2); border: 1px solid var(--border);
-      color: var(--text-muted); border-radius: 6px;
-      padding: 3px 10px; white-space: nowrap; flex-shrink: 0;
-    }
-    .q-card.expanded .q-count-badge { border-color: var(--blue); color: var(--blue); background: var(--blue-dim); }
-    .q-card-body { max-height: 0; overflow: hidden; transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-    .q-card-body-inner { padding: 0 20px 20px; border-top: 1px solid var(--border); }
-
-    /* 안내 배너 */
-    .info-banner {
-      display: flex; align-items: center; gap: 10px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-left-width: 3px;
-      border-radius: 8px;
-      padding: 10px 16px;
-      margin-bottom: 16px;
-      font-family: 'DM Mono', monospace;
-      font-size: 11px;
-      color: var(--text-muted);
-    }
-    .info-banner.blue  { border-left-color: var(--blue); }
-    .info-banner.teal  { border-left-color: var(--teal); }
-    .info-banner-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
-    .info-banner.blue  .info-banner-dot { background: var(--blue); }
-    .info-banner.teal  .info-banner-dot { background: var(--teal); }
-
-    /* LOADING / ERROR */
-    .loading-screen, .error-screen {
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      min-height: 60vh; gap: 16px; text-align: center;
-    }
-    .spinner {
-      width: 40px; height: 40px;
-      border: 2px solid var(--border);
-      border-top-color: var(--gold);
-      border-radius: 50%;
-      animation: spin 0.9s linear infinite;
-    }
+    .loading-screen, .error-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 60vh; gap: 16px; text-align: center; }
+    .spinner { width: 40px; height: 40px; border: 2px solid var(--border); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.9s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
     .loading-text { color: var(--text-muted); font-size: 13px; font-family: 'DM Mono', monospace; letter-spacing: 1px; }
+    .error-box { background: rgba(201,122,109,0.08); border: 1px solid rgba(201,122,109,0.3); border-radius: 12px; padding: 24px 32px; color: var(--danger); font-size: 13px; max-width: 480px; line-height: 1.7; }
+    .empty-state { text-align: center; padding: 48px; color: var(--text-muted); font-size: 13px; font-family: 'DM Mono', monospace; }
 
-    .error-box {
-      background: rgba(201,122,109,0.08);
-      border: 1px solid rgba(201,122,109,0.3);
-      border-radius: 12px;
-      padding: 24px 32px;
-      color: var(--danger); font-size: 13px;
-      max-width: 480px; line-height: 1.7;
-    }
-
-    .empty-state {
-      text-align: center; padding: 48px;
-      color: var(--text-muted); font-size: 13px;
-      font-family: 'DM Mono', monospace;
-    }
-    .empty-state span { display: block; font-size: 22px; margin-bottom: 10px; color: var(--border2); }
-
-    @media (max-width: 900px) {
-      .stats-bar { grid-template-columns: repeat(3, 1fr); }
-    }
     @media (max-width: 768px) {
       .container { padding: 16px; }
       header { padding: 14px 16px; }
       .header-status .status-text { display: none; }
-      .stats-bar { grid-template-columns: 1fr 1fr; }
       .field-row { grid-template-columns: 72px 1fr; }
       .grade-filter-label { display: none; }
       .result-info { display: none; }
@@ -510,10 +184,7 @@
 <body>
 
 <header>
-  <div class="logo-grid">
-    <span></span><span></span>
-    <span></span><span></span>
-  </div>
+  <div class="logo-grid"><span></span><span></span><span></span><span></span></div>
   <div class="header-titles">
     <div class="header-sub">Regulation Viewer</div>
     <div class="header-main">한서재활요양병원 규정</div>
@@ -529,14 +200,21 @@
     <div class="spinner"></div>
     <div class="loading-text">loading data...</div>
   </div>
-
   <div class="error-screen" id="errorScreen" style="display:none;">
     <div class="error-box" id="errorMsg"></div>
   </div>
 
   <div id="mainContent" style="display:none;">
 
-    <!-- STATS -->
+    <!-- 디버그 배너 -->
+    <details class="debug-banner" id="debugBanner">
+      <summary>
+        <span style="font-size:10px;margin-right:4px;">&#9654;</span>
+        데이터 분류 현황 (클릭하여 펼치기)
+      </summary>
+      <div class="debug-content" id="debugContent"></div>
+    </details>
+
     <div class="stats-bar">
       <div class="stat-card">
         <div class="stat-label">Total Items</div>
@@ -560,7 +238,6 @@
       </div>
     </div>
 
-    <!-- TOOLBAR -->
     <div class="toolbar">
       <div class="search-wrap">
         <span class="search-icon">
@@ -572,62 +249,50 @@
       </div>
       <div class="grade-filter">
         <span class="grade-filter-label">Grade</span>
-        <button class="grade-btn" id="gradeAll" onclick="setGradeFilter('')">ALL</button>
-        <button class="grade-btn" id="gradeA" onclick="setGradeFilter('A')">A</button>
-        <button class="grade-btn" id="gradeB" onclick="setGradeFilter('B')">B</button>
-        <button class="grade-btn" id="gradeC" onclick="setGradeFilter('C')">C</button>
+        <button class="grade-btn active-ALL" id="gradeAll" data-grade="">ALL</button>
+        <button class="grade-btn" id="gradeA" data-grade="A">A</button>
+        <button class="grade-btn" id="gradeB" data-grade="B">B</button>
+        <button class="grade-btn" id="gradeC" data-grade="C">C</button>
       </div>
     </div>
 
-    <!-- TABS ROW -->
     <div class="tabs-row">
       <div class="main-tabs">
-        <button class="main-tab-btn active" id="tabAll" onclick="switchTab('all')">
-          전체
-          <span class="tab-count-badge" id="badgeAll">0</span>
+        <button class="main-tab-btn active" id="tabAll" data-tab="all">
+          전체 <span class="tab-count-badge" id="badgeAll">0</span>
         </button>
-        <button class="main-tab-btn" id="tabJobGroup" onclick="switchTab('jobgroup')">
-          직군
-          <span class="tab-count-badge" id="badgeJobGroup">0</span>
+        <button class="main-tab-btn" id="tabJobgroup" data-tab="jobgroup">
+          직군 <span class="tab-count-badge" id="badgeJobgroup">0</span>
         </button>
-        <button class="main-tab-btn blue-tab" id="tabQuestion" onclick="switchTab('question')">
-          질문
-          <span class="tab-count-badge" id="badgeQuestion">0</span>
+        <button class="main-tab-btn blue-tab" id="tabQuestion" data-tab="question">
+          질문 <span class="tab-count-badge blue" id="badgeQuestion">0</span>
         </button>
-        <button class="main-tab-btn teal-tab" id="tabReview" onclick="switchTab('review')">
-          규정 검토
-          <span class="tab-count-badge" id="badgeReview">0</span>
+        <button class="main-tab-btn teal-tab" id="tabReview" data-tab="review">
+          규정 검토 <span class="tab-count-badge teal" id="badgeReview">0</span>
         </button>
       </div>
       <div class="spacer"></div>
       <span class="result-info" id="resultInfo"></span>
-      <button class="expand-all-btn" id="expandAllBtn" onclick="toggleExpandAll()">모두 펼치기</button>
+      <button class="expand-all-btn" id="expandAllBtn">모두 펼치기</button>
     </div>
 
-    <!-- VIEW: 전체 -->
     <div id="view-all">
       <div class="reg-list" id="regList"></div>
     </div>
-
-    <!-- VIEW: 직군 -->
     <div id="view-jobgroup" style="display:none;">
       <div class="jobgroup-list" id="jobgroupList"></div>
     </div>
-
-    <!-- VIEW: 질문 -->
     <div id="view-question" style="display:none;">
-      <div class="info-banner blue">
-        <div class="info-banner-dot"></div>
-        조사항목구분에 "질문"이 포함된 항목들만 표시됩니다.
+      <div class="tab-info-banner blue">
+        <div class="tab-info-dot blue"></div>
+        <span id="questionBannerText">A열(규정제목)에 "질문"이 포함된 항목들만 표시됩니다.</span>
       </div>
-      <div class="question-list" id="questionList"></div>
+      <div class="reg-list" id="questionList"></div>
     </div>
-
-    <!-- VIEW: 규정 검토 -->
     <div id="view-review" style="display:none;">
-      <div class="info-banner teal">
-        <div class="info-banner-dot"></div>
-        직군(B열) 값이 "규정검토"인 항목들만 표시됩니다.
+      <div class="tab-info-banner teal">
+        <div class="tab-info-dot teal"></div>
+        <span id="reviewBannerText">B열(직군)에 "규정 검토"가 포함된 항목들만 표시됩니다.</span>
       </div>
       <div class="reg-list" id="reviewList"></div>
     </div>
@@ -636,336 +301,302 @@
 </div>
 
 <script>
-  const SPREADSHEET_ID = '18dDgxsczklu9FRm053w2rqLDFDjqm7C18rijuyJdrkI';
-  const CSV_URL = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/export?format=csv&gid=0`;
+(function () {
+  'use strict';
 
-  const COL = {
+  const SPREADSHEET_ID = '18dDgxsczklu9FRm053w2rqLDFDjqm7C18rijuyJdrkI';
+  const DIRECT_URL = 'https://docs.google.com/spreadsheets/d/' + SPREADSHEET_ID + '/export?format=csv&gid=0';
+  const PROXY_URL  = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(DIRECT_URL);
+
+  /* ── 열 인덱스 (0-based) ──
+     A=0 규정제목  B=1 직군  C=2 등급  D=3 구분  E=4 장
+     F=5 기준제목  G=6 기준  H=7 조사항목  I=8 기준이해
+     J=9 조사내용  K=10 조사목적  L=11 참고자료
+  ── */
+  var COL = {
     규정제목: 0, 직군: 1, 조사항목등급: 2, 조사항목구분: 3,
     조사항목장: 4, 기준제목: 5, 기준: 6, 조사항목: 7,
-    기준이해: 8, 조사내용: 9, 조사목적: 10, 참고자료: 11,
+    기준이해: 8, 조사내용: 9, 조사목적: 10, 참고자료: 11
   };
 
-  let allRows       = [];
-  let baseRows      = [];   // 전체+직군+질문용 (규정검토 제외)
-  let reviewRows    = [];   // 규정검토 전용
-  let questionRows  = [];   // 질문 전용
+  var allRows     = [];
+  var currentView = 'all';
+  var searchQuery = '';
+  var gradeFilter = '';
+  var allExpanded = false;
 
-  let currentView  = 'all';
-  let searchQuery  = '';
-  let gradeFilter  = '';
-  let allExpanded  = false;
+  /* ── 정규화: BOM / NBSP / 전각공백 / 줄바꿈 제거 후 trim ── */
+  function norm(s) {
+    if (!s) return '';
+    return s
+      .replace(/^\uFEFF/, '')
+      .replace(/\u00A0/g, ' ')
+      .replace(/\u3000/g, ' ')
+      .replace(/[\r\n]+/g, ' ')
+      .trim()
+      .toLowerCase();
+  }
 
-  /* ---- CSV 파싱 ---- */
+  /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     핵심 분류 함수
+     질문  : A열(규정제목, index 0)에 "질문" 포함
+     규정검토 : B열(직군,   index 1)에 "규정 검토" 또는 "규정검토" 포함
+     전체/직군 : 위 두 조건 모두 해당하지 않는 행
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+  function isQuestion(r) {
+    var a = norm(r[COL.규정제목]);   /* A열 */
+    return a.indexOf('질문') !== -1;
+  }
+
+  function isReview(r) {
+    var b = norm(r[COL.직군]);       /* B열 */
+    /* "규정 검토" (공백 있는 것) 와 "규정검토" (공백 없는 것) 모두 허용 */
+    return b.indexOf('규정검토') !== -1 || b.indexOf('규정 검토') !== -1;
+  }
+
+  function isGeneral(r) {
+    return !isQuestion(r) && !isReview(r);
+  }
+
+  /* ── CSV 파서 ── */
   function parseCSV(text) {
-    const lines = [];
-    let cur = '', inQ = false, row = [];
-    for (let i = 0; i < text.length; i++) {
-      const ch = text[i];
+    var lines = [], cur = '', inQ = false, row = [];
+    for (var i = 0; i < text.length; i++) {
+      var ch = text[i];
       if (ch === '"') {
-        if (inQ && text[i+1] === '"') { cur += '"'; i++; }
+        if (inQ && text[i + 1] === '"') { cur += '"'; i++; }
         else { inQ = !inQ; }
       } else if (ch === ',' && !inQ) {
         row.push(cur.trim()); cur = '';
       } else if ((ch === '\n' || ch === '\r') && !inQ) {
-        if (ch === '\r' && text[i+1] === '\n') i++;
+        if (ch === '\r' && text[i + 1] === '\n') i++;
         row.push(cur.trim()); cur = '';
         lines.push(row); row = [];
-      } else { cur += ch; }
+      } else {
+        cur += ch;
+      }
     }
-    if (cur || row.length) { row.push(cur.trim()); lines.push(row); }
+    if (cur !== '' || row.length) { row.push(cur.trim()); lines.push(row); }
     return lines;
   }
 
-  /* ---- 데이터 로드 ---- */
+  /* ── HTML 이스케이프 ── */
+  function esc(str) {
+    if (!str) return '-';
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+  function pad(n) { return String(n).padStart(2,'0'); }
+  function el(id) { return document.getElementById(id); }
+  function setText(id, v) { el(id).textContent = v; }
+
+  /* ── 데이터 로드 ── */
   async function loadData() {
+    var text = null;
+
     try {
-      const res = await fetch(CSV_URL);
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-      const text = await res.text();
-      const rows = parseCSV(text);
-      if (rows.length < 2) throw new Error('데이터가 없습니다.');
+      var r1 = await fetch(DIRECT_URL);
+      if (r1.ok) text = await r1.text();
+    } catch(_) {}
 
-      allRows = rows.slice(1).filter(r => r.some(c => c !== ''));
-
-      // 규정검토 분리
-      reviewRows   = allRows.filter(r => (r[COL.직군]||'').replace(/\s/g,'') === '규정검토');
-      // 질문 분리 (규정검토 제외된 행 중 조사항목구분에 "질문" 포함)
-      baseRows     = allRows.filter(r => (r[COL.직군]||'').replace(/\s/g,'') !== '규정검토');
-      questionRows = baseRows.filter(r => (r[COL.조사항목구분]||'').includes('질문'));
-
-      const regSet      = new Set(baseRows.filter(r => !questionRows.includes(r)).map(r => r[COL.규정제목]).filter(Boolean));
-      const groupSet    = new Set(baseRows.map(r => r[COL.직군]).filter(Boolean));
-      const qRegSet     = new Set(questionRows.map(r => r[COL.규정제목]).filter(Boolean));
-      const reviewRegSet= new Set(reviewRows.map(r => r[COL.규정제목]).filter(Boolean));
-
-      document.getElementById('statTotal').textContent     = allRows.length.toLocaleString();
-      document.getElementById('statRegs').textContent      = regSet.size.toLocaleString();
-      document.getElementById('statGroups').textContent    = groupSet.size.toLocaleString();
-      document.getElementById('statQuestions').textContent = questionRows.length.toLocaleString();
-      document.getElementById('statReviews').textContent   = reviewRows.length.toLocaleString();
-
-      document.getElementById('badgeAll').textContent      = regSet.size;
-      document.getElementById('badgeJobGroup').textContent = groupSet.size;
-      document.getElementById('badgeQuestion').textContent = qRegSet.size;
-      document.getElementById('badgeReview').textContent   = reviewRegSet.size;
-
-      document.getElementById('statusDot').style.background = '#6db98a';
-      document.getElementById('statusText').textContent = `${allRows.length}개 항목 로드 완료`;
-      document.getElementById('loadingScreen').style.display = 'none';
-      document.getElementById('mainContent').style.display  = 'block';
-
-      rerender();
-    } catch (err) {
-      document.getElementById('loadingScreen').style.display = 'none';
-      document.getElementById('errorScreen').style.display   = 'flex';
-      document.getElementById('errorMsg').innerHTML =
-        `<strong>데이터를 불러오지 못했습니다.</strong><br/><br/>${err.message}<br/><br/>
-        <small>구글 시트가 "링크가 있는 모든 사용자" 공개 설정인지 확인해주세요.</small>`;
-      document.getElementById('statusDot').style.background = '#c97a6d';
-      document.getElementById('statusText').textContent = '로드 실패';
+    if (!text) {
+      try {
+        var r2 = await fetch(PROXY_URL);
+        if (r2.ok) text = await r2.text();
+      } catch(e) { showError('네트워크 오류: ' + e.message); return; }
     }
-  }
 
-  /* ---- 탭 전환 ---- */
-  function switchTab(tab) {
-    currentView = tab;
-    ['all','jobgroup','question','review'].forEach(t => {
-      const btn = document.getElementById('tab' + capitalize(t));
-      if (btn) btn.classList.toggle('active', t === tab);
-      const view = document.getElementById('view-' + t);
-      if (view) view.style.display = t === tab ? 'block' : 'none';
-    });
-    allExpanded = false;
-    document.getElementById('expandAllBtn').textContent = '모두 펼치기';
-  }
+    if (!text) { showError('데이터를 불러오지 못했습니다.'); return; }
 
-  function capitalize(s) {
-    if (s === 'all') return 'All';
-    if (s === 'jobgroup') return 'JobGroup';
-    if (s === 'question') return 'Question';
-    if (s === 'review') return 'Review';
-    return s;
-  }
+    var rows = parseCSV(text);
+    if (rows.length < 2) { showError('시트에 데이터가 없습니다.'); return; }
 
-  /* ---- 등급 필터 ---- */
-  function setGradeFilter(g) {
-    gradeFilter = g;
-    ['gradeAll','gradeA','gradeB','gradeC'].forEach(id => {
-      const btn = document.getElementById(id);
-      btn.className = 'grade-btn';
-      btn.style.background = btn.style.color = btn.style.borderColor = '';
-    });
-    if (!g) {
-      const btn = document.getElementById('gradeAll');
-      btn.style.background = 'var(--gold-dim)';
-      btn.style.color = 'var(--gold)';
-      btn.style.borderColor = 'rgba(201,168,76,0.5)';
-    } else {
-      document.getElementById('grade' + g).classList.add('active-' + g);
-    }
+    allRows = rows.slice(1).filter(function(r){ return r.some(function(c){ return c !== ''; }); });
+    if (!allRows.length) { showError('유효한 데이터 행이 없습니다.'); return; }
+
+    var generalRows  = allRows.filter(isGeneral);
+    var questionRows = allRows.filter(isQuestion);
+    var reviewRows   = allRows.filter(isReview);
+
+    /* 고유 규정제목 집합 */
+    var regSet   = {};
+    var groupSet = {};
+    generalRows.forEach(function(r){ if(r[COL.규정제목]) regSet[r[COL.규정제목]]=1; if(r[COL.직군]) groupSet[r[COL.직군]]=1; });
+    var qRegSet = {};
+    questionRows.forEach(function(r){ if(r[COL.규정제목]) qRegSet[r[COL.규정제목]]=1; });
+    var rvRegSet = {};
+    reviewRows.forEach(function(r){ if(r[COL.규정제목]) rvRegSet[r[COL.규정제목]]=1; });
+
+    setText('statTotal',     allRows.length.toLocaleString());
+    setText('statRegs',      Object.keys(regSet).length.toLocaleString());
+    setText('statGroups',    Object.keys(groupSet).length.toLocaleString());
+    setText('statQuestions', questionRows.length.toLocaleString());
+    setText('statReviews',   reviewRows.length.toLocaleString());
+
+    setText('badgeAll',      Object.keys(regSet).length);
+    setText('badgeJobgroup', Object.keys(groupSet).length);
+    setText('badgeQuestion', Object.keys(qRegSet).length);
+    setText('badgeReview',   Object.keys(rvRegSet).length);
+
+    /* 디버그 정보 출력 */
+    buildDebug(generalRows, questionRows, reviewRows);
+
+    el('statusDot').style.background = '#6db98a';
+    el('statusDot').style.animation  = 'none';
+    setText('statusText', allRows.length + '개 항목 로드 완료');
+    el('loadingScreen').style.display = 'none';
+    el('mainContent').style.display   = 'block';
+
     rerender();
   }
 
-  /* ---- 전체 펼치기/접기 ---- */
-  function toggleExpandAll() {
-    allExpanded = !allExpanded;
-    document.getElementById('expandAllBtn').textContent = allExpanded ? '모두 접기' : '모두 펼치기';
-    const viewMap = {
-      all: 'regList', jobgroup: 'jobgroupList',
-      question: 'questionList', review: 'reviewList'
-    };
-    const container = document.getElementById(viewMap[currentView]);
-    container.querySelectorAll('.reg-card, .jg-card, .q-card').forEach(card => {
-      const body  = card.querySelector('.reg-card-body, .jg-card-body, .q-card-body');
-      const inner = card.querySelector('.reg-card-body-inner, .jg-card-body-inner, .q-card-body-inner');
-      if (!body || !inner) return;
-      if (allExpanded) {
-        card.classList.add('expanded');
-        body.style.maxHeight = inner.scrollHeight + 200000 + 'px';
-      } else {
-        card.classList.remove('expanded');
-        body.style.maxHeight = '0';
-      }
-    });
+  /* ── 디버그 배너 내용 구성 ── */
+  function buildDebug(generalRows, questionRows, reviewRows) {
+    /* A열 고유값 샘플 (처음 10개) */
+    var aVals = {};
+    allRows.forEach(function(r){ if(r[COL.규정제목]) aVals[r[COL.규정제목]] = 1; });
+    var aSample = Object.keys(aVals).slice(0, 10).map(function(v){ return '"' + v + '"'; }).join(', ');
+
+    /* B열 고유값 전체 */
+    var bVals = {};
+    allRows.forEach(function(r){ if(r[COL.직군]) bVals[r[COL.직군]] = 1; });
+    var bAll = Object.keys(bVals).map(function(v){ return '"' + v + '"'; }).join(', ');
+
+    var dc = el('debugContent');
+    dc.innerHTML =
+      '<div class="debug-row"><span class="debug-label">전체 행 수:</span><span class="debug-vals">' + allRows.length + '행</span></div>' +
+      '<div class="debug-row"><span class="debug-label">일반 탭 (전체/직군):</span><span class="debug-vals">' + generalRows.length + '행</span></div>' +
+      '<div class="debug-row"><span class="debug-label">질문 탭 (A열 "질문" 포함):</span><span class="debug-vals">' + questionRows.length + '행</span></div>' +
+      '<div class="debug-row"><span class="debug-label">규정검토 탭 (B열 "규정검토" 포함):</span><span class="debug-vals">' + reviewRows.length + '행</span></div>' +
+      '<div class="debug-row"><span class="debug-label">A열 고유값 샘플:</span><span class="debug-vals">' + aSample + '</span></div>' +
+      '<div class="debug-row"><span class="debug-label">B열 고유값 전체:</span><span class="debug-vals">' + bAll + '</span></div>';
   }
 
-  /* ---- 필터링 헬퍼 ---- */
-  function applyFilters(rows) {
-    let r = rows;
+  function showError(msg) {
+    el('loadingScreen').style.display = 'none';
+    el('errorScreen').style.display   = 'flex';
+    el('errorMsg').innerHTML = '<strong>데이터를 불러오지 못했습니다.</strong><br/><br/>' + msg +
+      '<br/><br/><small>구글 시트가 "링크가 있는 모든 사용자" 공개 설정인지 확인해주세요.</small>';
+    el('statusDot').style.background = '#c97a6d';
+    setText('statusText', '로드 실패');
+  }
+
+  /* ── 필터 ── */
+  function getFilteredBy(filterFn) {
+    var rows = allRows.filter(filterFn);
     if (gradeFilter) {
-      r = r.filter(row => (row[COL.조사항목등급]||'').toUpperCase() === gradeFilter);
+      rows = rows.filter(function(r){ return norm(r[COL.조사항목등급]) === gradeFilter.toLowerCase(); });
     }
     if (searchQuery) {
-      const q = searchQuery.toLowerCase();
-      r = r.filter(row =>
-        (row[COL.규정제목]||'').toLowerCase().includes(q) ||
-        (row[COL.기준제목]||'').toLowerCase().includes(q) ||
-        (row[COL.조사항목]||'').toLowerCase().includes(q) ||
-        (row[COL.직군]||'').toLowerCase().includes(q)
-      );
+      var q = searchQuery.toLowerCase();
+      rows = rows.filter(function(r){
+        return (r[COL.규정제목] || '').toLowerCase().indexOf(q) !== -1 ||
+               (r[COL.기준제목] || '').toLowerCase().indexOf(q) !== -1 ||
+               (r[COL.조사항목] || '').toLowerCase().indexOf(q) !== -1 ||
+               (r[COL.직군]     || '').toLowerCase().indexOf(q) !== -1;
+      });
     }
-    return r;
+    return rows;
   }
 
-  function updateResultInfo(count, label) {
-    const el = document.getElementById('resultInfo');
-    if (searchQuery || gradeFilter) {
-      el.innerHTML = `<strong>${count}</strong> ${label} 검색됨`;
-    } else {
-      el.textContent = '';
-    }
-  }
-
-  /* ---- 전체 뷰 렌더링 (질문 제외) ---- */
-  function renderAll() {
-    const container = document.getElementById('regList');
+  /* ── 공통 아코디언 렌더 ── */
+  function renderAccordion(containerId, rows, cardClass) {
+    var container = el(containerId);
     container.innerHTML = '';
-    // 전체 탭: 규정검토 제외 + 질문 제외
-    const nonQuestion = baseRows.filter(r => !(r[COL.조사항목구분]||'').includes('질문'));
-    const filtered = applyFilters(nonQuestion);
-
-    if (!filtered.length) {
-      container.innerHTML = '<div class="empty-state"><span>/ /</span>표시할 데이터가 없습니다.</div>';
-      updateResultInfo(0, '규정');
-      return;
+    if (!rows.length) {
+      container.innerHTML = '<div class="empty-state">표시할 데이터가 없습니다.</div>';
+      updateResultInfo(0); return;
     }
-    const grouped = groupBy(filtered, COL.규정제목);
-    updateResultInfo(Object.keys(grouped).length, '규정');
-    Object.entries(grouped).forEach(([title, rows], idx) => {
-      container.appendChild(buildRegCard(title, rows, idx, false));
+    var order = [], groups = {};
+    rows.forEach(function(r){
+      var t = r[COL.규정제목] || '(제목 없음)';
+      if (!groups[t]) { groups[t] = []; order.push(t); }
+      groups[t].push(r);
+    });
+    updateResultInfo(order.length);
+    order.forEach(function(title, idx){
+      var rowSet = groups[title];
+      var card = document.createElement('div');
+      card.className = 'reg-card' + (cardClass ? ' ' + cardClass : '');
+      var reviewBadge = cardClass === 'teal-card' ? '<span class="review-badge">규정검토</span>' : '';
+      card.innerHTML =
+        '<div class="reg-card-header">' +
+          '<span class="reg-num">' + pad(idx+1) + '</span>' +
+          '<span class="reg-title">' + esc(title) + '</span>' +
+          '<span class="reg-count-badge">' + rowSet.length + ' 항목</span>' +
+          reviewBadge +
+          '<span class="toggle-arrow">' +
+            '<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+              '<polyline points="6 9 12 15 18 9"/>' +
+            '</svg>' +
+          '</span>' +
+        '</div>' +
+        '<div class="reg-card-body">' +
+          '<div class="reg-card-body-inner">' +
+            '<div class="item-list">' + rowSet.map(itemCardHtml).join('') + '</div>' +
+          '</div>' +
+        '</div>';
+      card.querySelector('.reg-card-header').addEventListener('click', function(){ toggleCard(card); });
+      container.appendChild(card);
     });
   }
 
-  /* ---- 직군 뷰 렌더링 ---- */
+  function renderAll()      { renderAccordion('regList',      getFilteredBy(isGeneral),  ''); }
+  function renderQuestion() { renderAccordion('questionList', getFilteredBy(isQuestion), 'blue-card'); }
+  function renderReview()   { renderAccordion('reviewList',   getFilteredBy(isReview),   'teal-card'); }
+
   function renderJobGroup() {
-    const container = document.getElementById('jobgroupList');
+    var container = el('jobgroupList');
     container.innerHTML = '';
-    const filtered = applyFilters(baseRows);
-
-    if (!filtered.length) {
-      container.innerHTML = '<div class="empty-state"><span>/ /</span>표시할 데이터가 없습니다.</div>';
-      return;
-    }
-    const byGroup = groupBy(filtered, COL.직군);
-    Object.entries(byGroup).sort((a,b) => a[0].localeCompare(b[0])).forEach(([group, rows], idx) => {
-      const byReg = groupBy(rows, COL.규정제목);
-      const card = document.createElement('div');
+    var filtered = getFilteredBy(isGeneral);
+    if (!filtered.length) { container.innerHTML = '<div class="empty-state">표시할 데이터가 없습니다.</div>'; return; }
+    var order = [], byGroup = {};
+    filtered.forEach(function(r){
+      var g = r[COL.직군] || '(직군 없음)';
+      if (!byGroup[g]) { byGroup[g] = []; order.push(g); }
+      byGroup[g].push(r);
+    });
+    order.sort(function(a,b){ return a.localeCompare(b); });
+    order.forEach(function(group, idx){
+      var rows = byGroup[group];
+      var rOrder = [], byReg = {};
+      rows.forEach(function(r){
+        var t = r[COL.규정제목] || '(제목 없음)';
+        if (!byReg[t]) { byReg[t] = []; rOrder.push(t); }
+        byReg[t].push(r);
+      });
+      var card = document.createElement('div');
       card.className = 'jg-card';
-      card.innerHTML = `
-        <div class="jg-card-header">
-          <span class="jg-num">${String(idx+1).padStart(2,'0')}</span>
-          <span class="jg-name">${esc(group)}</span>
-          <span class="jg-count">${rows.length} 항목</span>
-          <span class="toggle-arrow">
-            <svg viewBox="0 0 24 24" style="width:12px;height:12px;fill:none;stroke:var(--text-muted);stroke-width:2;stroke-linecap:round;stroke-linejoin:round">
-              <polyline points="6 9 12 15 18 9"/>
-            </svg>
-          </span>
-        </div>
-        <div class="jg-card-body">
-          <div class="jg-card-body-inner">
-            ${Object.entries(byReg).map(([regTitle, regRows]) => `
-              <div class="jg-reg-group">
-                <div class="jg-reg-title">${esc(regTitle)}</div>
-                <div class="item-list">
-                  ${regRows.map((r, i) => itemCardHtml(r, i)).join('')}
-                </div>
-              </div>
-            `).join('')}
-          </div>
-        </div>
-      `;
-      card.querySelector('.jg-card-header').addEventListener('click', () => toggleCard(card, 'jg'));
+      card.innerHTML =
+        '<div class="jg-card-header">' +
+          '<span class="jg-num">' + pad(idx+1) + '</span>' +
+          '<span class="jg-name">' + esc(group) + '</span>' +
+          '<span class="jg-count">' + rows.length + ' 항목</span>' +
+          '<span class="toggle-arrow">' +
+            '<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+              '<polyline points="6 9 12 15 18 9"/>' +
+            '</svg>' +
+          '</span>' +
+        '</div>' +
+        '<div class="jg-card-body">' +
+          '<div class="jg-card-body-inner">' +
+            rOrder.map(function(regTitle){
+              return '<div class="jg-reg-group">' +
+                '<div class="jg-reg-title">' + esc(regTitle) + '</div>' +
+                '<div class="item-list">' + byReg[regTitle].map(itemCardHtml).join('') + '</div>' +
+              '</div>';
+            }).join('') +
+          '</div>' +
+        '</div>';
+      card.querySelector('.jg-card-header').addEventListener('click', function(){ toggleCard(card); });
       container.appendChild(card);
     });
   }
 
-  /* ---- 질문 뷰 렌더링 (아코디언, 규정 제목별) ---- */
-  function renderQuestion() {
-    const container = document.getElementById('questionList');
-    container.innerHTML = '';
-    const filtered = applyFilters(questionRows);
-
-    if (!filtered.length) {
-      container.innerHTML = '<div class="empty-state"><span>/ /</span>표시할 데이터가 없습니다.</div>';
-      return;
-    }
-    const grouped = groupBy(filtered, COL.규정제목);
-    Object.entries(grouped).forEach(([title, rows], idx) => {
-      const card = document.createElement('div');
-      card.className = 'q-card';
-      card.innerHTML = `
-        <div class="q-card-header">
-          <span class="q-num">${String(idx+1).padStart(2,'0')}</span>
-          <span class="q-title">${esc(title)}</span>
-          <span class="q-count-badge">${rows.length} 항목</span>
-          <span class="toggle-arrow">
-            <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
-          </span>
-        </div>
-        <div class="q-card-body">
-          <div class="q-card-body-inner">
-            <div class="item-list">
-              ${rows.map((r,i) => itemCardHtml(r,i)).join('')}
-            </div>
-          </div>
-        </div>
-      `;
-      card.querySelector('.q-card-header').addEventListener('click', () => toggleCard(card, 'q'));
-      container.appendChild(card);
-    });
-  }
-
-  /* ---- 규정 검토 뷰 렌더링 (아코디언, 규정 제목별) ---- */
-  function renderReview() {
-    const container = document.getElementById('reviewList');
-    container.innerHTML = '';
-    const filtered = applyFilters(reviewRows);
-
-    if (!filtered.length) {
-      container.innerHTML = '<div class="empty-state"><span>/ /</span>표시할 데이터가 없습니다.</div>';
-      return;
-    }
-    const grouped = groupBy(filtered, COL.규정제목);
-    updateResultInfo(Object.keys(grouped).length, '규정');
-    Object.entries(grouped).forEach(([title, rows], idx) => {
-      container.appendChild(buildRegCard(title, rows, idx, true));
-    });
-  }
-
-  /* ---- 아코디언 reg-card 생성 (전체 / 규정검토 공용) ---- */
-  function buildRegCard(title, rows, idx, isTeal) {
-    const card = document.createElement('div');
-    card.className = 'reg-card' + (isTeal ? ' teal-card' : '');
-    card.innerHTML = `
-      <div class="reg-card-header">
-        <span class="reg-num">${String(idx+1).padStart(2,'0')}</span>
-        <span class="reg-title">${esc(title)}</span>
-        <span class="reg-count-badge">${rows.length} 항목</span>
-        ${isTeal ? '<span class="teal-label-badge">규정검토</span>' : ''}
-        <span class="toggle-arrow">
-          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
-        </span>
-      </div>
-      <div class="reg-card-body">
-        <div class="reg-card-body-inner">
-          <div class="item-list">
-            ${rows.map((r,i) => itemCardHtml(r,i)).join('')}
-          </div>
-        </div>
-      </div>
-    `;
-    card.querySelector('.reg-card-header').addEventListener('click', () => toggleCard(card, 'reg'));
-    return card;
-  }
-
-  /* ---- 항목 카드 HTML ---- */
+  /* ── 항목 카드 HTML ── */
   function itemCardHtml(r, i) {
-    const grade = r[COL.조사항목등급] || '';
-    const gradeClass = ['A','B','C'].includes(grade.toUpperCase())
-      ? 'grade-' + grade.toUpperCase() : 'grade-default';
-
-    const fields = [
+    var grade = norm(r[COL.조사항목등급]).toUpperCase();
+    var gradeClass = ['A','B','C'].indexOf(grade) !== -1 ? 'grade-' + grade : 'grade-default';
+    var fields = [
       { label: '직군',      val: r[COL.직군] },
       { label: '구분',      val: r[COL.조사항목구분] },
       { label: 'Chapter',   val: r[COL.조사항목장] },
@@ -975,85 +606,95 @@
       { label: '기준 이해', val: r[COL.기준이해] },
       { label: '조사 내용', val: r[COL.조사내용] },
       { label: '조사 목적', val: r[COL.조사목적] },
-      { label: '참고 자료', val: r[COL.참고자료] },
+      { label: '참고 자료', val: r[COL.참고자료] }
     ];
-
-    return `
-      <div class="item-card">
-        <div class="item-card-header">
-          <span class="item-idx">#${String(i+1).padStart(2,'0')}</span>
-          <span class="grade-badge ${gradeClass}">${esc(grade) || '-'}</span>
-          <span class="item-division">${esc(r[COL.조사항목구분])}</span>
-        </div>
-        <div class="field-rows">
-          ${fields.map(f => `
-            <div class="field-row">
-              <div class="field-label">${f.label}</div>
-              <div class="field-value ${f.val ? '' : 'empty'}">${esc(f.val)}</div>
-            </div>
-          `).join('')}
-        </div>
-      </div>
-    `;
+    return '<div class="item-card">' +
+      '<div class="item-card-header">' +
+        '<span class="item-idx">#' + pad((i||0)+1) + '</span>' +
+        '<span class="grade-badge ' + gradeClass + '">' + (grade || '-') + '</span>' +
+        '<span class="item-division">' + esc(r[COL.조사항목구분]) + '</span>' +
+      '</div>' +
+      '<div class="field-rows">' +
+        fields.map(function(f){
+          return '<div class="field-row">' +
+            '<div class="field-label">' + f.label + '</div>' +
+            '<div class="field-value' + (f.val ? '' : ' empty') + '">' + esc(f.val) + '</div>' +
+          '</div>';
+        }).join('') +
+      '</div>' +
+    '</div>';
   }
 
-  /* ---- 아코디언 토글 ---- */
-  function toggleCard(card, type) {
-    const bodyClass  = type === 'jg' ? '.jg-card-body'  : type === 'q' ? '.q-card-body'  : '.reg-card-body';
-    const innerClass = type === 'jg' ? '.jg-card-body-inner' : type === 'q' ? '.q-card-body-inner' : '.reg-card-body-inner';
-    const body  = card.querySelector(bodyClass);
-    const inner = card.querySelector(innerClass);
+  /* ── 아코디언 토글 ── */
+  function toggleCard(card) {
+    var body  = card.querySelector('.reg-card-body, .jg-card-body');
+    var inner = card.querySelector('.reg-card-body-inner, .jg-card-body-inner');
     if (card.classList.contains('expanded')) {
-      body.style.maxHeight = '0';
-      card.classList.remove('expanded');
+      body.style.maxHeight = '0'; card.classList.remove('expanded');
     } else {
       card.classList.add('expanded');
-      body.style.maxHeight = inner.scrollHeight + 200000 + 'px';
+      body.style.maxHeight = (inner.scrollHeight + 9999) + 'px';
     }
   }
 
-  /* ---- 그룹핑 유틸 ---- */
-  function groupBy(rows, colIdx) {
-    const result = {};
-    rows.forEach(r => {
-      const key = r[colIdx] || '(없음)';
-      if (!result[key]) result[key] = [];
-      result[key].push(r);
-    });
-    return result;
+  /* ── 탭 전환 ── */
+  function switchTab(tab) {
+    currentView = tab;
+    var tabIds  = { all:'tabAll', jobgroup:'tabJobgroup', question:'tabQuestion', review:'tabReview' };
+    var viewIds = { all:'view-all', jobgroup:'view-jobgroup', question:'view-question', review:'view-review' };
+    Object.keys(tabIds).forEach(function(k){ el(tabIds[k]).classList.toggle('active', k === tab); });
+    Object.keys(viewIds).forEach(function(k){ el(viewIds[k]).style.display = k === tab ? 'block' : 'none'; });
+    allExpanded = false;
+    setText('expandAllBtn', '모두 펼치기');
   }
 
-  /* ---- 전체 재렌더링 ---- */
+  /* ── 모두 펼치기/접기 ── */
+  function toggleExpandAll() {
+    allExpanded = !allExpanded;
+    setText('expandAllBtn', allExpanded ? '모두 접기' : '모두 펼치기');
+    var viewMap = { all:'regList', jobgroup:'jobgroupList', question:'questionList', review:'reviewList' };
+    el(viewMap[currentView]).querySelectorAll('.reg-card, .jg-card').forEach(function(card){
+      var body  = card.querySelector('.reg-card-body, .jg-card-body');
+      var inner = card.querySelector('.reg-card-body-inner, .jg-card-body-inner');
+      if (allExpanded) { card.classList.add('expanded'); body.style.maxHeight = (inner.scrollHeight+9999)+'px'; }
+      else { card.classList.remove('expanded'); body.style.maxHeight = '0'; }
+    });
+  }
+
+  /* ── 전체 재렌더 ── */
   function rerender() {
     allExpanded = false;
-    document.getElementById('expandAllBtn').textContent = '모두 펼치기';
-    renderAll();
-    renderJobGroup();
-    renderQuestion();
-    renderReview();
+    setText('expandAllBtn', '모두 펼치기');
+    renderAll(); renderJobGroup(); renderQuestion(); renderReview();
   }
 
-  /* ---- HTML 이스케이프 ---- */
-  function esc(str) {
-    if (!str) return '-';
-    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  function updateResultInfo(count) {
+    var infoEl = el('resultInfo');
+    if (searchQuery || gradeFilter) {
+      infoEl.innerHTML = '<strong>' + count + '</strong> 규정 검색됨';
+    } else { infoEl.textContent = ''; }
   }
 
-  /* ---- 검색 ---- */
-  document.getElementById('searchInput').addEventListener('input', e => {
-    searchQuery = e.target.value;
+  /* ── 등급 필터 ── */
+  function setGradeFilter(g) {
+    gradeFilter = g;
+    ['gradeAll','gradeA','gradeB','gradeC'].forEach(function(id){ el(id).className = 'grade-btn'; });
+    el(g === '' ? 'gradeAll' : 'grade' + g).classList.add('active-' + (g === '' ? 'ALL' : g));
     rerender();
+  }
+
+  /* ── 이벤트 바인딩 ── */
+  el('searchInput').addEventListener('input', function(e){ searchQuery = e.target.value; rerender(); });
+  el('expandAllBtn').addEventListener('click', toggleExpandAll);
+  document.querySelectorAll('.main-tab-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){ switchTab(btn.dataset.tab); });
+  });
+  document.querySelectorAll('.grade-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){ setGradeFilter(btn.dataset.grade); });
   });
 
-  /* ---- ALL 버튼 초기 스타일 ---- */
-  (function() {
-    const btn = document.getElementById('gradeAll');
-    btn.style.background   = 'var(--gold-dim)';
-    btn.style.color        = 'var(--gold)';
-    btn.style.borderColor  = 'rgba(201,168,76,0.5)';
-  })();
-
   loadData();
+})();
 </script>
 </body>
 </html>
