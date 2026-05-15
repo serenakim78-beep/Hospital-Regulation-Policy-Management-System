@@ -1,28 +1,29 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>규정 조사 항목 뷰어</title>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Noto+Serif+KR:wght@600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <title>한서재활요양병원 규정 뷰어</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700&family=Noto+Sans+KR:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #0d0d0d;
-      --surface: #161616;
-      --surface2: #1f1f1f;
-      --surface3: #2a2a2a;
+      --bg: #0c0b09;
+      --surface: #141210;
+      --surface2: #1c1916;
+      --surface3: #242018;
       --gold: #c9a84c;
       --gold2: #e8c97a;
+      --gold-dim: rgba(201,168,76,0.15);
       --text: #ede8df;
-      --text-muted: #7a7468;
-      --text-sub: #a09890;
-      --border: #2a2a2a;
-      --border2: #333;
-      --success: #5cba8a;
-      --warning: #d4a043;
-      --danger: #c45c5c;
+      --text-muted: #7a7060;
+      --text-mid: #a89880;
+      --border: #2a2520;
+      --border2: #3a342c;
+      --success: #6db98a;
+      --warning: #c9a84c;
+      --danger: #c97a6d;
     }
 
     body {
@@ -32,30 +33,27 @@
       min-height: 100vh;
     }
 
-    /* noise overlay */
     body::before {
       content: '';
       position: fixed;
       inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
       pointer-events: none;
-      z-index: 0;
-      opacity: 0.4;
+      z-index: 999;
+      opacity: 0.35;
     }
 
     /* ---- HEADER ---- */
     header {
-      position: sticky;
-      top: 0;
-      z-index: 200;
-      background: rgba(13,13,13,0.95);
-      backdrop-filter: blur(20px);
+      background: var(--surface);
       border-bottom: 1px solid var(--border);
-      padding: 0 40px;
-      height: 64px;
+      padding: 20px 32px;
       display: flex;
       align-items: center;
-      gap: 20px;
+      gap: 14px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
 
     .logo-grid {
@@ -66,77 +64,43 @@
       height: 32px;
       flex-shrink: 0;
     }
-
-    .logo-grid span {
-      border-radius: 2px;
-    }
-    .logo-grid span:nth-child(1) { background: var(--gold); }
+    .logo-grid span { border-radius: 2px; background: var(--gold); }
     .logo-grid span:nth-child(2) { background: var(--gold2); opacity: 0.6; }
-    .logo-grid span:nth-child(3) { background: var(--gold2); opacity: 0.6; }
-    .logo-grid span:nth-child(4) { background: var(--gold); opacity: 0.3; }
+    .logo-grid span:nth-child(3) { background: var(--gold2); opacity: 0.4; }
+    .logo-grid span:nth-child(4) { background: var(--gold); opacity: 0.8; }
 
-    .logo-text {
-      display: flex;
-      flex-direction: column;
-      gap: 1px;
-    }
+    .header-titles { display: flex; flex-direction: column; gap: 1px; }
+    .header-sub { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2.5px; color: var(--text-muted); text-transform: uppercase; }
+    .header-main { font-family: 'Noto Serif KR', serif; font-size: 18px; font-weight: 700; color: var(--text); letter-spacing: -0.5px; }
 
-    .logo-text .eyebrow {
-      font-family: 'DM Mono', monospace;
-      font-size: 9px;
-      letter-spacing: 2.5px;
-      color: var(--gold);
-      text-transform: uppercase;
-    }
-
-    .logo-text h1 {
-      font-family: 'Noto Serif KR', serif;
-      font-size: 17px;
-      font-weight: 700;
-      color: var(--text);
-      letter-spacing: -0.3px;
-    }
-
-    .header-right {
+    .header-status {
       margin-left: auto;
-      display: flex;
-      align-items: center;
-      gap: 8px;
       font-family: 'DM Mono', monospace;
       font-size: 11px;
       color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
-
     .status-dot {
-      width: 7px;
-      height: 7px;
+      width: 7px; height: 7px;
       border-radius: 50%;
-      background: var(--success);
-      animation: pulse 2.5s ease-in-out infinite;
+      background: var(--warning);
+      animation: pulse 2.5s infinite;
+      flex-shrink: 0;
     }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(92,186,138,0.4); }
-      50% { opacity: 0.7; box-shadow: 0 0 0 4px rgba(92,186,138,0); }
-    }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
     /* ---- CONTAINER ---- */
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 40px 24px 80px;
-      position: relative;
-      z-index: 1;
-    }
+    .container { max-width: 1100px; margin: 0 auto; padding: 32px; }
 
     /* ---- STATS ---- */
     .stats-bar {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 12px;
-      margin-bottom: 36px;
+      margin-bottom: 28px;
     }
-
     .stat-card {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -145,24 +109,21 @@
       position: relative;
       overflow: hidden;
     }
-
     .stat-card::after {
       content: '';
       position: absolute;
-      bottom: 0; left: 0;
-      width: 100%; height: 2px;
+      bottom: 0; left: 0; right: 0;
+      height: 2px;
       background: linear-gradient(90deg, var(--gold), transparent);
     }
-
     .stat-label {
-      font-size: 10px;
       font-family: 'DM Mono', monospace;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
+      font-size: 9px;
+      letter-spacing: 2px;
       color: var(--text-muted);
+      text-transform: uppercase;
       margin-bottom: 8px;
     }
-
     .stat-value {
       font-family: 'Noto Serif KR', serif;
       font-size: 32px;
@@ -171,204 +132,201 @@
       line-height: 1;
     }
 
-    /* ---- SEARCH ---- */
-    .search-wrap {
-      margin-bottom: 28px;
-      position: relative;
+    /* ---- TOOLBAR ---- */
+    .toolbar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
     }
-
-    .search-wrap svg {
+    .search-wrap {
+      position: relative;
+      flex: 1;
+      min-width: 200px;
+    }
+    .search-icon {
       position: absolute;
       left: 14px;
       top: 50%;
       transform: translateY(-50%);
       color: var(--text-muted);
+      font-size: 13px;
       pointer-events: none;
     }
-
     .search-wrap input {
       width: 100%;
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 12px 16px 12px 42px;
+      padding: 11px 16px 11px 38px;
       font-size: 13px;
       font-family: 'Noto Sans KR', sans-serif;
       color: var(--text);
       outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
+      transition: border-color 0.2s;
     }
-
     .search-wrap input::placeholder { color: var(--text-muted); }
-    .search-wrap input:focus {
-      border-color: var(--gold);
-      box-shadow: 0 0 0 3px rgba(201,168,76,0.1);
-    }
+    .search-wrap input:focus { border-color: var(--gold); }
 
-    /* ---- TABS ---- */
-    .tabs-scroll {
-      overflow-x: auto;
-      scrollbar-width: none;
-      margin-bottom: 28px;
-    }
-    .tabs-scroll::-webkit-scrollbar { display: none; }
-
-    .tabs {
+    /* ---- GRADE FILTER ---- */
+    .grade-filter {
       display: flex;
-      gap: 0;
-      border-bottom: 1px solid var(--border);
-      min-width: max-content;
+      gap: 6px;
+      align-items: center;
     }
+    .grade-filter-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 1.5px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+    .grade-btn {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      font-weight: 500;
+      padding: 5px 12px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .grade-btn:hover { border-color: var(--border2); color: var(--text); }
+    .grade-btn.active-A { background: rgba(109,185,138,0.15); color: var(--success); border-color: rgba(109,185,138,0.5); }
+    .grade-btn.active-B { background: rgba(201,168,76,0.15); color: var(--warning); border-color: rgba(201,168,76,0.5); }
+    .grade-btn.active-C { background: rgba(201,122,109,0.15); color: var(--danger); border-color: rgba(201,122,109,0.5); }
 
-    .tab-btn {
-      background: none;
-      border: none;
-      border-bottom: 2px solid transparent;
-      margin-bottom: -1px;
-      padding: 10px 18px;
-      font-size: 12px;
+    /* ---- TABS & CONTROLS ROW ---- */
+    .tabs-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .main-tabs { display: flex; gap: 6px; }
+    .main-tab-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 13px;
       font-family: 'Noto Sans KR', sans-serif;
       font-weight: 500;
       color: var(--text-muted);
       cursor: pointer;
       transition: all 0.2s;
-      white-space: nowrap;
-      display: flex;
-      align-items: center;
-      gap: 6px;
     }
+    .main-tab-btn:hover { border-color: var(--border2); color: var(--text); }
+    .main-tab-btn.active { background: var(--gold-dim); border-color: var(--gold); color: var(--gold); }
 
-    .tab-btn:hover { color: var(--text); }
-
-    .tab-btn.active {
-      color: var(--gold);
-      border-bottom-color: var(--gold);
-    }
-
-    .tab-count {
+    .tab-count-badge {
       font-family: 'DM Mono', monospace;
       font-size: 10px;
-      background: rgba(201,168,76,0.15);
+      background: rgba(201,168,76,0.2);
       color: var(--gold);
-      border: 1px solid rgba(201,168,76,0.25);
       border-radius: 20px;
       padding: 1px 7px;
     }
+    .main-tab-btn.active .tab-count-badge { background: rgba(201,168,76,0.3); }
 
-    /* ---- REG CARDS ---- */
-    .reg-list {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
+    .spacer { flex: 1; }
+
+    /* Result counter */
+    .result-info {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--text-muted);
     }
+    .result-info strong { color: var(--gold); }
+
+    /* Expand/Collapse All */
+    .expand-all-btn {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 6px 12px;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .expand-all-btn:hover { border-color: var(--border2); color: var(--text); }
+
+    /* ---- REG LIST ---- */
+    .reg-list { display: flex; flex-direction: column; gap: 10px; }
 
     .reg-card {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 12px;
       overflow: hidden;
-      transition: border-color 0.25s;
+      transition: border-color 0.2s;
     }
-
-    .reg-card:hover { border-color: rgba(201,168,76,0.35); }
-    .reg-card.expanded { border-color: rgba(201,168,76,0.5); }
+    .reg-card:hover { border-color: var(--border2); }
+    .reg-card.expanded { border-color: var(--gold); }
 
     .reg-card-header {
       display: flex;
       align-items: center;
-      padding: 18px 20px;
+      gap: 16px;
+      padding: 16px 20px;
       cursor: pointer;
       user-select: none;
-      gap: 14px;
     }
-
     .reg-num {
       font-family: 'DM Mono', monospace;
       font-size: 11px;
       color: var(--text-muted);
-      min-width: 24px;
+      width: 24px;
       flex-shrink: 0;
     }
-
-    .reg-info {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .reg-info h3 {
+    .reg-title {
       font-family: 'Noto Serif KR', serif;
       font-size: 15px;
-      font-weight: 600;
+      font-weight: 700;
       color: var(--text);
-      margin-bottom: 6px;
-      line-height: 1.4;
+      flex: 1;
     }
-
-    .reg-chips {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-    }
-
-    .chip {
-      font-size: 11px;
+    .reg-count-badge {
       font-family: 'DM Mono', monospace;
-      padding: 2px 9px;
-      border-radius: 4px;
-      border: 1px solid;
-    }
-
-    .chip-count {
-      background: rgba(201,168,76,0.08);
-      color: var(--gold2);
-      border-color: rgba(201,168,76,0.2);
-    }
-
-    .chip-grade-A {
-      background: rgba(92,186,138,0.1);
-      color: var(--success);
-      border-color: rgba(92,186,138,0.25);
-    }
-
-    .chip-grade-B {
-      background: rgba(212,160,67,0.1);
-      color: var(--warning);
-      border-color: rgba(212,160,67,0.25);
-    }
-
-    .chip-grade-C {
-      background: rgba(196,92,92,0.1);
-      color: var(--danger);
-      border-color: rgba(196,92,92,0.25);
-    }
-
-    .toggle-btn {
-      width: 32px;
-      height: 32px;
-      border-radius: 8px;
+      font-size: 11px;
       background: var(--surface2);
-      border: 1px solid var(--border2);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      border-radius: 6px;
+      padding: 3px 10px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .reg-card.expanded .reg-count-badge {
+      border-color: var(--gold);
+      color: var(--gold);
+      background: var(--gold-dim);
+    }
+
+    .toggle-arrow {
+      width: 20px; height: 20px;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
-      transition: background 0.2s, transform 0.3s;
+      transition: transform 0.25s;
     }
-
-    .reg-card.expanded .toggle-btn {
-      background: rgba(201,168,76,0.15);
-      border-color: rgba(201,168,76,0.3);
-      transform: none;
-    }
-
-    .toggle-btn svg {
-      color: var(--text-muted);
-      transition: transform 0.3s ease;
-    }
-
-    .reg-card.expanded .toggle-btn svg {
-      transform: rotate(180deg);
-      color: var(--gold);
+    .reg-card.expanded .toggle-arrow { transform: rotate(180deg); }
+    .toggle-arrow svg {
+      width: 12px; height: 12px;
+      fill: none; stroke: var(--text-muted);
+      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
     }
 
     /* ---- ACCORDION BODY ---- */
@@ -377,163 +335,169 @@
       overflow: hidden;
       transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
-
-    .reg-card.expanded .reg-card-body {
-      max-height: 99999px;
-    }
-
-    .body-inner {
+    .reg-card-body-inner {
       padding: 0 20px 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
+      border-top: 1px solid var(--border);
     }
 
-    /* ---- ITEM CARD (세로) ---- */
+    /* ---- ITEM CARDS ---- */
+    .item-list { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
+
     .item-card {
       background: var(--surface2);
-      border: 1px solid var(--border2);
+      border: 1px solid var(--border);
       border-radius: 10px;
       overflow: hidden;
     }
-
-    .item-card-top {
+    .item-card-header {
       display: flex;
       align-items: center;
       gap: 10px;
-      padding: 12px 16px;
+      padding: 10px 14px;
       background: var(--surface3);
       border-bottom: 1px solid var(--border);
     }
-
-    .item-seq {
+    .item-idx {
       font-family: 'DM Mono', monospace;
       font-size: 10px;
       color: var(--text-muted);
     }
-
-    .item-grade {
-      font-size: 11px;
+    .grade-badge {
       font-family: 'DM Mono', monospace;
-      padding: 2px 9px;
+      font-size: 10px;
+      font-weight: 500;
+      padding: 2px 8px;
       border-radius: 4px;
-      font-weight: 500;
-      border: 1px solid;
     }
+    .grade-A { background: rgba(109,185,138,0.15); color: var(--success); border: 1px solid rgba(109,185,138,0.3); }
+    .grade-B { background: rgba(201,168,76,0.15);  color: var(--warning); border: 1px solid rgba(201,168,76,0.3); }
+    .grade-C { background: rgba(201,122,109,0.15); color: var(--danger);  border: 1px solid rgba(201,122,109,0.3); }
+    .grade-default { background: var(--surface2); color: var(--text-muted); border: 1px solid var(--border); }
 
-    .item-category {
-      font-size: 11px;
-      color: var(--text-sub);
-      font-weight: 500;
-    }
+    .item-division { font-size: 11px; color: var(--text-muted); font-weight: 400; }
 
-    .item-chapter {
-      font-family: 'DM Mono', monospace;
-      font-size: 10px;
-      color: var(--text-muted);
-      margin-left: auto;
-    }
-
-    /* ---- FIELD ROWS (세로 배치) ---- */
-    .field-list {
-      display: flex;
-      flex-direction: column;
-    }
-
+    .field-rows { padding: 14px; display: flex; flex-direction: column; gap: 0; }
     .field-row {
       display: grid;
-      grid-template-columns: 110px 1fr;
-      border-bottom: 1px solid rgba(42,42,42,0.6);
+      grid-template-columns: 100px 1fr;
+      gap: 0;
+      border-bottom: 1px solid var(--border);
+      min-height: 36px;
     }
-
     .field-row:last-child { border-bottom: none; }
-
     .field-label {
       font-family: 'DM Mono', monospace;
       font-size: 10px;
-      letter-spacing: 0.8px;
-      text-transform: uppercase;
       color: var(--text-muted);
-      padding: 11px 14px;
-      background: rgba(0,0,0,0.2);
+      letter-spacing: 0.5px;
+      padding: 10px 12px 10px 0;
       border-right: 1px solid var(--border);
       display: flex;
       align-items: flex-start;
-      padding-top: 13px;
-      flex-shrink: 0;
+      text-transform: uppercase;
     }
-
     .field-value {
-      padding: 11px 14px;
       font-size: 13px;
       color: var(--text);
-      line-height: 1.65;
-      word-break: break-all;
+      padding: 10px 0 10px 14px;
+      line-height: 1.6;
+      word-break: break-word;
     }
+    .field-value.empty { color: var(--text-muted); font-style: italic; }
 
-    .field-value.empty {
-      color: var(--text-muted);
-      font-style: italic;
-      font-size: 12px;
+    /* ---- JOB GROUP VIEW ---- */
+    .jobgroup-list { display: flex; flex-direction: column; gap: 10px; }
+
+    .jg-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: border-color 0.2s;
     }
+    .jg-card:hover { border-color: var(--border2); }
+    .jg-card.expanded { border-color: var(--gold); }
 
-    /* ---- LOADING / ERROR / EMPTY ---- */
-    .loading-screen {
+    .jg-card-header {
       display: flex;
-      flex-direction: column;
       align-items: center;
-      justify-content: center;
-      min-height: 60vh;
-      gap: 20px;
+      gap: 14px;
+      padding: 16px 20px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .jg-num { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-muted); width: 24px; flex-shrink: 0; }
+    .jg-name { font-family: 'Noto Serif KR', serif; font-size: 15px; font-weight: 700; color: var(--text); flex: 1; }
+    .jg-count {
+      font-family: 'DM Mono', monospace; font-size: 11px;
+      background: var(--surface2); border: 1px solid var(--border);
+      color: var(--text-muted); border-radius: 6px;
+      padding: 3px 10px; white-space: nowrap; flex-shrink: 0;
+    }
+    .jg-card.expanded .jg-count { border-color: var(--gold); color: var(--gold); background: var(--gold-dim); }
+
+    .jg-card-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .jg-card-body-inner {
+      padding: 0 20px 20px;
+      border-top: 1px solid var(--border);
     }
 
+    .jg-reg-group { margin-top: 14px; }
+    .jg-reg-title {
+      font-size: 12px; font-weight: 700; color: var(--gold);
+      margin-bottom: 8px; padding-bottom: 6px;
+      border-bottom: 1px solid var(--border);
+      font-family: 'Noto Serif KR', serif;
+    }
+
+    /* ---- LOADING / ERROR ---- */
+    .loading-screen, .error-screen {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      min-height: 60vh; gap: 16px; text-align: center;
+    }
     .spinner {
-      width: 44px;
-      height: 44px;
+      width: 40px; height: 40px;
       border: 2px solid var(--border);
       border-top-color: var(--gold);
       border-radius: 50%;
       animation: spin 0.9s linear infinite;
     }
-
     @keyframes spin { to { transform: rotate(360deg); } }
-
-    .loading-text {
-      font-family: 'DM Mono', monospace;
-      font-size: 12px;
-      color: var(--text-muted);
-      letter-spacing: 1px;
-    }
+    .loading-text { color: var(--text-muted); font-size: 13px; font-family: 'DM Mono', monospace; letter-spacing: 1px; }
 
     .error-box {
-      background: rgba(196,92,92,0.08);
-      border: 1px solid rgba(196,92,92,0.25);
-      border-radius: 10px;
-      padding: 24px 28px;
+      background: rgba(201,122,109,0.08);
+      border: 1px solid rgba(201,122,109,0.3);
+      border-radius: 12px;
+      padding: 24px 32px;
       color: var(--danger);
       font-size: 13px;
+      max-width: 480px;
       line-height: 1.7;
-      max-width: 520px;
-      margin: 60px auto;
     }
 
     .empty-state {
       text-align: center;
-      padding: 60px 24px;
+      padding: 48px;
       color: var(--text-muted);
+      font-size: 13px;
       font-family: 'DM Mono', monospace;
-      font-size: 12px;
-      letter-spacing: 1px;
     }
+    .empty-state span { display: block; font-size: 22px; margin-bottom: 10px; color: var(--border2); }
 
-    @media (max-width: 640px) {
-      header { padding: 0 16px; }
-      .container { padding: 24px 14px 60px; }
-      .stats-bar { grid-template-columns: repeat(3, 1fr); gap: 8px; }
-      .stat-value { font-size: 24px; }
-      .field-row { grid-template-columns: 80px 1fr; }
-      .field-label { font-size: 9px; padding: 10px 10px; }
-      .field-value { font-size: 12px; padding: 10px 12px; }
+    @media (max-width: 768px) {
+      .container { padding: 16px; }
+      header { padding: 14px 16px; }
+      .header-status .status-text { display: none; }
+      .stats-bar { grid-template-columns: 1fr 1fr; }
+      .field-row { grid-template-columns: 72px 1fr; }
+      .grade-filter-label { display: none; }
+      .result-info { display: none; }
     }
   </style>
 </head>
@@ -544,30 +508,30 @@
     <span></span><span></span>
     <span></span><span></span>
   </div>
-  <div class="logo-text">
-    <div class="eyebrow">Regulation Viewer</div>
-    <h1>규정 조사 항목</h1>
+  <div class="header-titles">
+    <div class="header-sub">Regulation Viewer</div>
+    <div class="header-main">규정 조사 항목</div>
   </div>
-  <div class="header-right">
+  <div class="header-status">
     <div class="status-dot" id="statusDot"></div>
-    <span id="statusText">로딩 중...</span>
+    <span id="statusText" class="status-text">데이터 로딩 중...</span>
   </div>
 </header>
 
 <div class="container">
 
-  <!-- LOADING -->
   <div class="loading-screen" id="loadingScreen">
     <div class="spinner"></div>
-    <div class="loading-text">LOADING DATA...</div>
+    <div class="loading-text">loading data...</div>
   </div>
 
-  <!-- ERROR -->
-  <div id="errorScreen" style="display:none;"></div>
+  <div class="error-screen" id="errorScreen" style="display:none;">
+    <div class="error-box" id="errorMsg"></div>
+  </div>
 
-  <!-- MAIN -->
   <div id="mainContent" style="display:none;">
 
+    <!-- STATS -->
     <div class="stats-bar">
       <div class="stat-card">
         <div class="stat-label">Total Items</div>
@@ -583,18 +547,53 @@
       </div>
     </div>
 
-    <div class="search-wrap">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-      </svg>
-      <input type="text" id="searchInput" placeholder="규정 제목, 조사 항목, 기준 제목으로 검색..." />
+    <!-- TOOLBAR: SEARCH + GRADE FILTER -->
+    <div class="toolbar">
+      <div class="search-wrap">
+        <span class="search-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+        </span>
+        <input type="text" id="searchInput" placeholder="규정 제목, 조사 항목, 기준 제목으로 검색..."/>
+      </div>
+      <div class="grade-filter">
+        <span class="grade-filter-label">Grade</span>
+        <button class="grade-btn" id="gradeAll" onclick="setGradeFilter('')">ALL</button>
+        <button class="grade-btn" id="gradeA" onclick="setGradeFilter('A')">A</button>
+        <button class="grade-btn" id="gradeB" onclick="setGradeFilter('B')">B</button>
+        <button class="grade-btn" id="gradeC" onclick="setGradeFilter('C')">C</button>
+      </div>
     </div>
 
-    <div class="tabs-scroll">
-      <div class="tabs" id="tabsContainer"></div>
+    <!-- TABS ROW -->
+    <div class="tabs-row">
+      <div class="main-tabs">
+        <button class="main-tab-btn active" id="tabAll" onclick="switchTab('all')">
+          전체
+          <span class="tab-count-badge" id="badgeAll">0</span>
+        </button>
+        <button class="main-tab-btn" id="tabJobGroup" onclick="switchTab('jobgroup')">
+          직군
+          <span class="tab-count-badge" id="badgeJobGroup">0</span>
+        </button>
+      </div>
+      <div class="spacer"></div>
+      <span class="result-info" id="resultInfo"></span>
+      <button class="expand-all-btn" id="expandAllBtn" onclick="toggleExpandAll()">
+        모두 펼치기
+      </button>
     </div>
 
-    <div class="reg-list" id="regList"></div>
+    <!-- VIEW: 전체 -->
+    <div id="view-all">
+      <div class="reg-list" id="regList"></div>
+    </div>
+
+    <!-- VIEW: 직군 -->
+    <div id="view-jobgroup" style="display:none;">
+      <div class="jobgroup-list" id="jobgroupList"></div>
+    </div>
 
   </div>
 </div>
@@ -604,39 +603,18 @@
   const CSV_URL = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/export?format=csv&gid=0`;
 
   const COL = {
-    규정제목: 0,
-    직군: 1,
-    조사항목등급: 2,
-    조사항목구분: 3,
-    조사항목장: 4,
-    기준제목: 5,
-    기준: 6,
-    조사항목: 7,
-    기준이해: 8,
-    조사내용: 9,
-    조사목적: 10,
-    참고자료: 11,
+    규정제목: 0, 직군: 1, 조사항목등급: 2, 조사항목구분: 3,
+    조사항목장: 4, 기준제목: 5, 기준: 6, 조사항목: 7,
+    기준이해: 8, 조사내용: 9, 조사목적: 10, 참고자료: 11,
   };
 
-  const FIELDS = [
-    { label: '직군',       key: COL.직군 },
-    { label: '등급',       key: COL.조사항목등급 },
-    { label: '구분',       key: COL.조사항목구분 },
-    { label: 'Chapter',   key: COL.조사항목장 },
-    { label: '기준 제목', key: COL.기준제목 },
-    { label: '기준',       key: COL.기준 },
-    { label: '조사 항목', key: COL.조사항목 },
-    { label: '기준 이해', key: COL.기준이해 },
-    { label: '조사 내용', key: COL.조사내용 },
-    { label: '조사 목적', key: COL.조사목적 },
-    { label: '참고 자료', key: COL.참고자료 },
-  ];
-
   let allRows = [];
-  let currentTab = '전체';
+  let currentView = 'all';
   let searchQuery = '';
+  let gradeFilter = '';
+  let allExpanded = false;
 
-  /* ── CSV 파싱 ── */
+  /* ---- CSV 파싱 ---- */
   function parseCSV(text) {
     const lines = [];
     let cur = '', inQ = false, row = [];
@@ -651,15 +629,13 @@
         if (ch === '\r' && text[i+1] === '\n') i++;
         row.push(cur.trim()); cur = '';
         lines.push(row); row = [];
-      } else {
-        cur += ch;
-      }
+      } else { cur += ch; }
     }
     if (cur || row.length) { row.push(cur.trim()); lines.push(row); }
     return lines;
   }
 
-  /* ── 데이터 로드 ── */
+  /* ---- 데이터 로드 ---- */
   async function loadData() {
     try {
       const res = await fetch(CSV_URL);
@@ -673,227 +649,290 @@
       const regSet   = new Set(allRows.map(r => r[COL.규정제목]).filter(Boolean));
       const groupSet = new Set(allRows.map(r => r[COL.직군]).filter(Boolean));
 
-      animateCount('statTotal',  allRows.length);
-      animateCount('statRegs',   regSet.size);
-      animateCount('statGroups', groupSet.size);
+      document.getElementById('statTotal').textContent  = allRows.length.toLocaleString();
+      document.getElementById('statRegs').textContent   = regSet.size.toLocaleString();
+      document.getElementById('statGroups').textContent = groupSet.size.toLocaleString();
+      document.getElementById('badgeAll').textContent      = regSet.size;
+      document.getElementById('badgeJobGroup').textContent = groupSet.size;
 
-      buildTabs(groupSet);
-
-      document.getElementById('statusDot').style.background = '#5cba8a';
-      document.getElementById('statusText').textContent = allRows.length + '개 항목 로드 완료';
+      document.getElementById('statusDot').style.background = '#6db98a';
+      document.getElementById('statusText').textContent = `${allRows.length}개 항목 로드 완료`;
       document.getElementById('loadingScreen').style.display = 'none';
-      document.getElementById('mainContent').style.display  = 'block';
+      document.getElementById('mainContent').style.display = 'block';
 
-      render();
+      rerender();
     } catch (err) {
       document.getElementById('loadingScreen').style.display = 'none';
-      document.getElementById('statusDot').style.background = '#c45c5c';
+      document.getElementById('errorScreen').style.display = 'flex';
+      document.getElementById('errorMsg').innerHTML =
+        `<strong>데이터를 불러오지 못했습니다.</strong><br/><br/>${err.message}<br/><br/>
+        <small>구글 시트가 "링크가 있는 모든 사용자" 공개 설정인지 확인해주세요.</small>`;
+      document.getElementById('statusDot').style.background = '#c97a6d';
       document.getElementById('statusText').textContent = '로드 실패';
-      const el = document.getElementById('errorScreen');
-      el.style.display = 'block';
-      el.innerHTML = `<div class="error-box">
-        <strong>데이터를 불러오지 못했습니다.</strong><br/><br/>
-        ${escHtml(err.message)}<br/><br/>
-        <small>구글 시트 공개 설정을 확인해주세요.</small>
-      </div>`;
     }
   }
 
-  /* ── 카운트업 애니메이션 ── */
-  function animateCount(id, target) {
-    const el = document.getElementById(id);
-    let start = 0;
-    const step = Math.ceil(target / 30);
-    const timer = setInterval(() => {
-      start = Math.min(start + step, target);
-      el.textContent = start.toLocaleString();
-      if (start >= target) clearInterval(timer);
-    }, 30);
+  /* ---- 탭 전환 ---- */
+  function switchTab(tab) {
+    currentView = tab;
+    document.getElementById('tabAll').classList.toggle('active', tab === 'all');
+    document.getElementById('tabJobGroup').classList.toggle('active', tab === 'jobgroup');
+    document.getElementById('view-all').style.display      = tab === 'all'      ? 'block' : 'none';
+    document.getElementById('view-jobgroup').style.display = tab === 'jobgroup' ? 'block' : 'none';
+    allExpanded = false;
+    document.getElementById('expandAllBtn').textContent = '모두 펼치기';
   }
 
-  /* ── 탭 생성 ── */
-  function buildTabs(groupSet) {
-    const container = document.getElementById('tabsContainer');
-    container.innerHTML = '';
-    const groups = ['전체', ...Array.from(groupSet).sort()];
+  /* ---- 등급 필터 ---- */
+  function setGradeFilter(g) {
+    gradeFilter = g;
+    ['gradeAll','gradeA','gradeB','gradeC'].forEach(id => {
+      const btn = document.getElementById(id);
+      btn.className = 'grade-btn';
+    });
+    if (!g) {
+      document.getElementById('gradeAll').classList.add('active-A');
+      document.getElementById('gradeAll').style.background = 'var(--gold-dim)';
+      document.getElementById('gradeAll').style.color = 'var(--gold)';
+      document.getElementById('gradeAll').style.borderColor = 'rgba(201,168,76,0.5)';
+    } else {
+      const btn = document.getElementById('grade' + g);
+      btn.classList.add('active-' + g);
+    }
+    rerender();
+  }
 
-    groups.forEach(g => {
-      const count = g === '전체'
-        ? allRows.length
-        : allRows.filter(r => r[COL.직군] === g).length;
-
-      const btn = document.createElement('button');
-      btn.className = 'tab-btn' + (g === currentTab ? ' active' : '');
-      btn.innerHTML = `${escHtml(g)} <span class="tab-count">${count}</span>`;
-      btn.addEventListener('click', () => {
-        currentTab = g;
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        render();
-      });
-      container.appendChild(btn);
+  /* ---- 전체 펼치기/접기 ---- */
+  function toggleExpandAll() {
+    allExpanded = !allExpanded;
+    document.getElementById('expandAllBtn').textContent = allExpanded ? '모두 접기' : '모두 펼치기';
+    const container = currentView === 'all'
+      ? document.getElementById('regList')
+      : document.getElementById('jobgroupList');
+    const cards = container.querySelectorAll('.reg-card, .jg-card');
+    cards.forEach(card => {
+      const body  = card.querySelector('.reg-card-body, .jg-card-body');
+      const inner = card.querySelector('.reg-card-body-inner, .jg-card-body-inner');
+      if (allExpanded) {
+        card.classList.add('expanded');
+        body.style.maxHeight = inner.scrollHeight + 200000 + 'px';
+      } else {
+        card.classList.remove('expanded');
+        body.style.maxHeight = '0';
+      }
     });
   }
 
-  /* ── 필터 ── */
+  /* ---- 필터링 ---- */
   function getFiltered() {
-    return allRows.filter(r => {
-      if (currentTab !== '전체' && r[COL.직군] !== currentTab) return false;
-      if (!searchQuery) return true;
-      const q = searchQuery.toLowerCase();
-      return (
-        (r[COL.규정제목]  || '').toLowerCase().includes(q) ||
-        (r[COL.기준제목]  || '').toLowerCase().includes(q) ||
-        (r[COL.조사항목]  || '').toLowerCase().includes(q) ||
-        (r[COL.직군]      || '').toLowerCase().includes(q)
-      );
-    });
+    let rows = allRows;
+    if (gradeFilter) {
+      rows = rows.filter(r => (r[COL.조사항목등급]||'').toUpperCase() === gradeFilter);
+    }
+    if (!searchQuery) return rows;
+    const q = searchQuery.toLowerCase();
+    return rows.filter(r =>
+      (r[COL.규정제목]||'').toLowerCase().includes(q) ||
+      (r[COL.기준제목]||'').toLowerCase().includes(q) ||
+      (r[COL.조사항목]||'').toLowerCase().includes(q) ||
+      (r[COL.직군]||'').toLowerCase().includes(q)
+    );
   }
 
-  /* ── 등급 스타일 ── */
-  function gradeClass(g) {
-    if (!g) return '';
-    const up = g.toUpperCase();
-    if (up === 'A' || up === '필수') return 'chip-grade-A';
-    if (up === 'B') return 'chip-grade-B';
-    if (up === 'C') return 'chip-grade-C';
-    return '';
+  /* ---- 결과 정보 업데이트 ---- */
+  function updateResultInfo(count, label) {
+    const el = document.getElementById('resultInfo');
+    if (searchQuery || gradeFilter) {
+      el.innerHTML = `<strong>${count}</strong> ${label} 검색됨`;
+    } else {
+      el.textContent = '';
+    }
   }
 
-  /* ── 개별 항목 카드 HTML (세로 필드 목록) ── */
-  function buildItemCard(row, idx) {
-    const grade = row[COL.조사항목등급] || '';
-    const gClass = gradeClass(grade);
-
-    const topHtml = `
-      <div class="item-card-top">
-        <span class="item-seq">#${String(idx + 1).padStart(2, '0')}</span>
-        ${grade ? `<span class="item-grade ${gClass}">${escHtml(grade)}</span>` : ''}
-        ${row[COL.조사항목구분] ? `<span class="item-category">${escHtml(row[COL.조사항목구분])}</span>` : ''}
-        ${row[COL.조사항목장] ? `<span class="item-chapter">${escHtml(row[COL.조사항목장])}</span>` : ''}
-      </div>`;
-
-    const fieldHtml = FIELDS.map(f => {
-      const val = row[f.key] || '';
-      return `
-        <div class="field-row">
-          <div class="field-label">${f.label}</div>
-          <div class="field-value${val ? '' : ' empty'}">${val ? escHtml(val) : '없음'}</div>
-        </div>`;
-    }).join('');
-
-    return `
-      <div class="item-card">
-        ${topHtml}
-        <div class="field-list">
-          ${fieldHtml}
-        </div>
-      </div>`;
-  }
-
-  /* ── 메인 렌더 ── */
-  function render() {
-    const filtered = getFiltered();
+  /* ---- 전체 뷰 렌더링 ---- */
+  function renderAll() {
     const container = document.getElementById('regList');
     container.innerHTML = '';
+    const filtered = getFiltered();
 
-    if (filtered.length === 0) {
-      container.innerHTML = '<div class="empty-state">표시할 데이터가 없습니다.</div>';
+    if (!filtered.length) {
+      container.innerHTML = '<div class="empty-state"><span>/ /</span>표시할 데이터가 없습니다.</div>';
+      updateResultInfo(0, '규정');
       return;
     }
 
-    /* 규정제목별 그룹화 */
     const grouped = {};
-    const groupOrder = [];
     filtered.forEach(r => {
-      const title = r[COL.규정제목] || '(제목 없음)';
-      if (!grouped[title]) { grouped[title] = []; groupOrder.push(title); }
-      grouped[title].push(r);
+      const t = r[COL.규정제목] || '(제목 없음)';
+      if (!grouped[t]) grouped[t] = [];
+      grouped[t].push(r);
     });
 
-    groupOrder.forEach((title, i) => {
-      const rows = grouped[title];
+    updateResultInfo(Object.keys(grouped).length, '규정');
 
-      /* 등급별 칩 집계 */
-      const gradeCounts = {};
-      rows.forEach(r => {
-        const g = (r[COL.조사항목등급] || '').trim();
-        if (g) gradeCounts[g] = (gradeCounts[g] || 0) + 1;
-      });
-
-      const gradeChips = Object.entries(gradeCounts)
-        .map(([g, cnt]) => `<span class="chip ${gradeClass(g)}">${escHtml(g)} ${cnt}</span>`)
-        .join('');
-
+    Object.entries(grouped).forEach(([title, rows], idx) => {
       const card = document.createElement('div');
       card.className = 'reg-card';
       card.innerHTML = `
         <div class="reg-card-header">
-          <span class="reg-num">${String(i + 1).padStart(2, '0')}</span>
-          <div class="reg-info">
-            <h3>${escHtml(title)}</h3>
-            <div class="reg-chips">
-              <span class="chip chip-count">${rows.length}개 항목</span>
-              ${gradeChips}
-            </div>
-          </div>
-          <div class="toggle-btn">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-              <polyline points="6 9 12 15 18 9"/>
-            </svg>
-          </div>
+          <span class="reg-num">${String(idx+1).padStart(2,'0')}</span>
+          <span class="reg-title">${esc(title)}</span>
+          <span class="reg-count-badge">${rows.length} 항목</span>
+          <span class="toggle-arrow">
+            <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+          </span>
         </div>
         <div class="reg-card-body">
-          <div class="body-inner"></div>
-        </div>`;
-
-      const header  = card.querySelector('.reg-card-header');
-      const body    = card.querySelector('.reg-card-body');
-      const inner   = card.querySelector('.body-inner');
-      let rendered  = false;
-
-      header.addEventListener('click', () => {
-        const isOpen = card.classList.toggle('expanded');
-
-        /* 최초 클릭 시 내용 렌더링 */
-        if (isOpen && !rendered) {
-          rendered = true;
-          inner.innerHTML = rows.map((r, idx) => buildItemCard(r, idx)).join('');
-        }
-
-        /* max-height 수동 설정 (transition용) */
-        if (isOpen) {
-          body.style.maxHeight = body.scrollHeight + inner.scrollHeight + 'px';
-          /* 렌더 후 실제 높이 재적용 */
-          requestAnimationFrame(() => {
-            body.style.maxHeight = body.scrollHeight + 'px';
-          });
-        } else {
-          body.style.maxHeight = '0';
-        }
-      });
-
+          <div class="reg-card-body-inner">
+            <div class="item-list">
+              ${rows.map((r, i) => itemCardHtml(r, i)).join('')}
+            </div>
+          </div>
+        </div>
+      `;
+      card.querySelector('.reg-card-header').addEventListener('click', () => toggleCard(card));
       container.appendChild(card);
     });
   }
 
-  /* ── HTML 이스케이프 ── */
-  function escHtml(str) {
-    if (str === undefined || str === null) return '';
-    return String(str)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;');
+  /* ---- 직군 뷰 렌더링 ---- */
+  function renderJobGroup() {
+    const container = document.getElementById('jobgroupList');
+    container.innerHTML = '';
+    const filtered = getFiltered();
+
+    if (!filtered.length) {
+      container.innerHTML = '<div class="empty-state"><span>/ /</span>표시할 데이터가 없습니다.</div>';
+      return;
+    }
+
+    const byGroup = {};
+    filtered.forEach(r => {
+      const g = r[COL.직군] || '(직군 없음)';
+      if (!byGroup[g]) byGroup[g] = [];
+      byGroup[g].push(r);
+    });
+
+    Object.entries(byGroup).sort((a,b) => a[0].localeCompare(b[0])).forEach(([group, rows], idx) => {
+      const byReg = {};
+      rows.forEach(r => {
+        const t = r[COL.규정제목] || '(제목 없음)';
+        if (!byReg[t]) byReg[t] = [];
+        byReg[t].push(r);
+      });
+
+      const card = document.createElement('div');
+      card.className = 'jg-card';
+      card.innerHTML = `
+        <div class="jg-card-header">
+          <span class="jg-num">${String(idx+1).padStart(2,'0')}</span>
+          <span class="jg-name">${esc(group)}</span>
+          <span class="jg-count">${rows.length} 항목</span>
+          <span class="toggle-arrow">
+            <svg viewBox="0 0 24 24" style="width:12px;height:12px;fill:none;stroke:var(--text-muted);stroke-width:2;stroke-linecap:round;stroke-linejoin:round">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </span>
+        </div>
+        <div class="jg-card-body">
+          <div class="jg-card-body-inner">
+            ${Object.entries(byReg).map(([regTitle, regRows]) => `
+              <div class="jg-reg-group">
+                <div class="jg-reg-title">${esc(regTitle)}</div>
+                <div class="item-list">
+                  ${regRows.map((r, i) => itemCardHtml(r, i)).join('')}
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+      card.querySelector('.jg-card-header').addEventListener('click', () => toggleCard(card));
+      container.appendChild(card);
+    });
   }
 
-  /* ── 검색 ── */
+  /* ---- 항목 카드 HTML ---- */
+  function itemCardHtml(r, i) {
+    const grade = r[COL.조사항목등급] || '';
+    const gradeClass = ['A','B','C'].includes(grade.toUpperCase())
+      ? 'grade-' + grade.toUpperCase() : 'grade-default';
+
+    const fields = [
+      { label: '직군',      val: r[COL.직군],          raw: false },
+      { label: '구분',      val: r[COL.조사항목구분],  raw: false },
+      { label: 'Chapter',   val: r[COL.조사항목장],    raw: false },
+      { label: '기준 제목', val: r[COL.기준제목],      raw: false },
+      { label: '기준',      val: r[COL.기준],          raw: false },
+      { label: '조사 항목', val: r[COL.조사항목],      raw: false },
+      { label: '기준 이해', val: r[COL.기준이해],      raw: false },
+      { label: '조사 내용', val: r[COL.조사내용],      raw: false },
+      { label: '조사 목적', val: r[COL.조사목적],      raw: false },
+      { label: '참고 자료', val: r[COL.참고자료],      raw: false },
+    ];
+
+    return `
+      <div class="item-card">
+        <div class="item-card-header">
+          <span class="item-idx">#${String(i+1).padStart(2,'0')}</span>
+          <span class="grade-badge ${gradeClass}">${esc(grade) || '-'}</span>
+          <span class="item-division">${esc(r[COL.조사항목구분])}</span>
+        </div>
+        <div class="field-rows">
+          ${fields.map(f => `
+            <div class="field-row">
+              <div class="field-label">${f.label}</div>
+              <div class="field-value ${f.val ? '' : 'empty'}">${esc(f.val)}</div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  }
+
+  /* ---- 아코디언 토글 ---- */
+  function toggleCard(card) {
+    const body  = card.querySelector('.reg-card-body, .jg-card-body');
+    const inner = card.querySelector('.reg-card-body-inner, .jg-card-body-inner');
+    if (card.classList.contains('expanded')) {
+      body.style.maxHeight = '0';
+      card.classList.remove('expanded');
+    } else {
+      card.classList.add('expanded');
+      // 큰 값을 사용해 중첩 콘텐츠가 잘리지 않도록 처리
+      body.style.maxHeight = inner.scrollHeight + 200000 + 'px';
+    }
+  }
+
+  /* ---- 전체 재렌더링 ---- */
+  function rerender() {
+    allExpanded = false;
+    document.getElementById('expandAllBtn').textContent = '모두 펼치기';
+    renderAll();
+    renderJobGroup();
+  }
+
+  /* ---- 유틸 ---- */
+  function esc(str) {
+    if (!str) return '-';
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  /* ---- 검색 ---- */
   document.getElementById('searchInput').addEventListener('input', e => {
-    searchQuery = e.target.value.trim();
-    render();
+    searchQuery = e.target.value;
+    rerender();
   });
 
-  /* ── 시작 ── */
+  /* ---- 초기화 시 ALL 버튼 스타일 세팅 ---- */
+  (function() {
+    const btn = document.getElementById('gradeAll');
+    btn.style.background = 'var(--gold-dim)';
+    btn.style.color = 'var(--gold)';
+    btn.style.borderColor = 'rgba(201,168,76,0.5)';
+  })();
+
+  /* ---- 시작 ---- */
   loadData();
 </script>
 </body>
