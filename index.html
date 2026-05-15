@@ -7,184 +7,509 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700&family=Noto+Sans+KR:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     :root {
-      --bg: #0c0b09; --surface: #141210; --surface2: #1c1916; --surface3: #242018;
-      --gold: #c9a84c; --gold2: #e8c97a; --gold-dim: rgba(201,168,76,0.15);
-      --text: #ede8df; --text-muted: #7a7060; --text-mid: #a89880;
-      --border: #2a2520; --border2: #3a342c;
-      --success: #6db98a; --warning: #c9a84c; --danger: #c97a6d;
-      --blue: #7a9fc9; --blue-dim: rgba(122,159,201,0.15);
-      --teal: #6db9b0; --teal-dim: rgba(109,185,176,0.15);
+      --bg: #0c0b09;
+      --surface: #141210;
+      --surface2: #1c1916;
+      --surface3: #242018;
+      --gold: #c9a84c;
+      --gold2: #e8c97a;
+      --gold-dim: rgba(201,168,76,0.15);
+      --text: #ede8df;
+      --text-muted: #7a7060;
+      --text-mid: #a89880;
+      --border: #2a2520;
+      --border2: #3a342c;
+      --success: #6db98a;
+      --warning: #c9a84c;
+      --danger: #c97a6d;
+      --blue: #7a9fc9;
+      --blue-dim: rgba(122,159,201,0.15);
+      --teal: #6db9b0;
+      --teal-dim: rgba(109,185,176,0.15);
+      --purple: #a07ac9;
+      --purple-dim: rgba(160,122,201,0.15);
+      --rose: #c97a9f;
+      --rose-dim: rgba(201,122,159,0.15);
+      --sidebar-width: 220px;
     }
-    body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
     body::before {
-      content: ''; position: fixed; inset: 0;
+      content: '';
+      position: fixed;
+      inset: 0;
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-      pointer-events: none; z-index: 999; opacity: 0.35;
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0.35;
     }
+
     header {
-      background: var(--surface); border-bottom: 1px solid var(--border);
-      padding: 20px 32px; display: flex; align-items: center; gap: 14px;
-      position: sticky; top: 0; z-index: 100;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 28px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      position: sticky;
+      top: 0;
+      z-index: 200;
     }
-    .logo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; width: 32px; height: 32px; flex-shrink: 0; }
+
+    .logo-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3px;
+      width: 28px;
+      height: 28px;
+      flex-shrink: 0;
+    }
     .logo-grid span { border-radius: 2px; background: var(--gold); }
     .logo-grid span:nth-child(2) { background: var(--gold2); opacity: 0.6; }
     .logo-grid span:nth-child(3) { background: var(--gold2); opacity: 0.4; }
     .logo-grid span:nth-child(4) { background: var(--gold); opacity: 0.8; }
+
     .header-titles { display: flex; flex-direction: column; gap: 1px; }
     .header-sub { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2.5px; color: var(--text-muted); text-transform: uppercase; }
-    .header-main { font-family: 'Noto Serif KR', serif; font-size: 18px; font-weight: 700; color: var(--text); letter-spacing: -0.5px; }
-    .header-status { margin-left: auto; font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-muted); display: flex; align-items: center; gap: 6px; }
-    .status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--warning); animation: pulse 2.5s infinite; flex-shrink: 0; }
-    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
-    .container { max-width: 1100px; margin: 0 auto; padding: 32px; }
+    .header-main { font-family: 'Noto Serif KR', serif; font-size: 17px; font-weight: 700; color: var(--text); letter-spacing: -0.5px; }
 
-    /* ── 디버그 배너 ── */
-    .debug-banner {
-      background: rgba(201,168,76,0.07); border: 1px solid rgba(201,168,76,0.25);
-      border-radius: 8px; padding: 10px 16px; margin-bottom: 20px;
-      font-family: 'DM Mono', monospace; font-size: 11px; color: var(--gold);
-      cursor: pointer; user-select: none;
+    .header-status {
+      margin-left: auto;
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
-    .debug-banner summary { list-style: none; display: flex; align-items: center; gap: 8px; }
-    .debug-banner summary::-webkit-details-marker { display: none; }
-    .debug-content { margin-top: 10px; display: flex; flex-direction: column; gap: 6px; }
-    .debug-row { display: flex; gap: 8px; align-items: flex-start; }
-    .debug-label { color: var(--text-muted); min-width: 180px; flex-shrink: 0; }
-    .debug-vals { color: var(--text); line-height: 1.7; }
+    .status-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--warning);
+      animation: pulse 2.5s infinite;
+      flex-shrink: 0;
+    }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
-    .stats-bar { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 28px; }
-    @media (max-width: 900px) { .stats-bar { grid-template-columns: repeat(3, 1fr); } }
-    @media (max-width: 600px) { .stats-bar { grid-template-columns: repeat(2, 1fr); } }
-    .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 18px 22px; position: relative; overflow: hidden; }
-    .stat-card::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--gold), transparent); }
-    .stat-card.blue-accent::after { background: linear-gradient(90deg, var(--blue), transparent); }
-    .stat-card.teal-accent::after { background: linear-gradient(90deg, var(--teal), transparent); }
+    /* ── Layout: sidebar + content ── */
+    .app-layout {
+      display: flex;
+      min-height: calc(100vh - 61px);
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      width: var(--sidebar-width);
+      flex-shrink: 0;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      position: sticky;
+      top: 61px;
+      height: calc(100vh - 61px);
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      padding: 20px 0;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border2) transparent;
+    }
+    .sidebar::-webkit-scrollbar { width: 4px; }
+    .sidebar::-webkit-scrollbar-track { background: transparent; }
+    .sidebar::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+    .sidebar-section-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 8px;
+      letter-spacing: 2.5px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      padding: 0 18px 8px;
+      margin-top: 8px;
+    }
+    .sidebar-section-label:first-child { margin-top: 0; }
+
+    .sidebar-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 12px 18px;
+    }
+
+    .tab-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 18px;
+      width: 100%;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 13px;
+      font-family: 'Noto Sans KR', sans-serif;
+      font-weight: 500;
+      color: var(--text-muted);
+      transition: all 0.18s;
+      text-align: left;
+      border-left: 2px solid transparent;
+      position: relative;
+    }
+    .tab-btn:hover { color: var(--text); background: var(--surface2); }
+
+    .tab-btn.active {
+      color: var(--gold);
+      background: var(--gold-dim);
+      border-left-color: var(--gold);
+    }
+    .tab-btn.active.blue-tab   { color: var(--blue);   background: var(--blue-dim);   border-left-color: var(--blue); }
+    .tab-btn.active.teal-tab   { color: var(--teal);   background: var(--teal-dim);   border-left-color: var(--teal); }
+    .tab-btn.active.purple-tab { color: var(--purple); background: var(--purple-dim); border-left-color: var(--purple); }
+    .tab-btn.active.rose-tab   { color: var(--rose);   background: var(--rose-dim);   border-left-color: var(--rose); }
+    .tab-btn.active.green-tab  { color: var(--success);background: rgba(109,185,138,0.12); border-left-color: var(--success); }
+    .tab-btn.active.orange-tab { color: #c9906d;       background: rgba(201,144,109,0.12); border-left-color: #c9906d; }
+    .tab-btn.active.gray-tab   { color: var(--text-mid);background: rgba(168,152,128,0.12); border-left-color: var(--text-mid); }
+
+    .tab-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      background: var(--text-muted);
+    }
+    .tab-btn.active      .tab-dot { background: var(--gold); }
+    .tab-btn.active.blue-tab   .tab-dot { background: var(--blue); }
+    .tab-btn.active.teal-tab   .tab-dot { background: var(--teal); }
+    .tab-btn.active.purple-tab .tab-dot { background: var(--purple); }
+    .tab-btn.active.rose-tab   .tab-dot { background: var(--rose); }
+    .tab-btn.active.green-tab  .tab-dot { background: var(--success); }
+    .tab-btn.active.orange-tab .tab-dot { background: #c9906d; }
+    .tab-btn.active.gray-tab   .tab-dot { background: var(--text-mid); }
+
+    .tab-label { flex: 1; }
+
+    .tab-badge {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      padding: 1px 7px;
+      border-radius: 20px;
+      background: var(--surface3);
+      color: var(--text-muted);
+      min-width: 24px;
+      text-align: center;
+    }
+    .tab-btn.active      .tab-badge { background: var(--gold-dim);                        color: var(--gold); }
+    .tab-btn.active.blue-tab   .tab-badge { background: var(--blue-dim);                  color: var(--blue); }
+    .tab-btn.active.teal-tab   .tab-badge { background: var(--teal-dim);                  color: var(--teal); }
+    .tab-btn.active.purple-tab .tab-badge { background: var(--purple-dim);                color: var(--purple); }
+    .tab-btn.active.rose-tab   .tab-badge { background: var(--rose-dim);                  color: var(--rose); }
+    .tab-btn.active.green-tab  .tab-badge { background: rgba(109,185,138,0.15);           color: var(--success); }
+    .tab-btn.active.orange-tab .tab-badge { background: rgba(201,144,109,0.15);           color: #c9906d; }
+    .tab-btn.active.gray-tab   .tab-badge { background: rgba(168,152,128,0.15);           color: var(--text-mid); }
+
+    /* ── Main content area ── */
+    .main-content {
+      flex: 1;
+      min-width: 0;
+      padding: 28px 32px;
+      overflow-x: hidden;
+    }
+
+    /* ── Stats bar ── */
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 18px;
+      position: relative;
+      overflow: hidden;
+    }
+    .stat-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--gold), transparent);
+    }
+    .stat-card.blue-accent::after  { background: linear-gradient(90deg, var(--blue), transparent); }
+    .stat-card.teal-accent::after  { background: linear-gradient(90deg, var(--teal), transparent); }
+    .stat-card.green-accent::after { background: linear-gradient(90deg, var(--success), transparent); }
+
     .stat-label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; }
-    .stat-value { font-family: 'Noto Serif KR', serif; font-size: 28px; font-weight: 700; color: var(--gold); line-height: 1; }
-    .stat-value.blue { color: var(--blue); }
-    .stat-value.teal { color: var(--teal); }
+    .stat-value { font-family: 'Noto Serif KR', serif; font-size: 26px; font-weight: 700; color: var(--gold); line-height: 1; }
+    .stat-value.blue  { color: var(--blue); }
+    .stat-value.teal  { color: var(--teal); }
+    .stat-value.green { color: var(--success); }
 
-    .toolbar { display: flex; align-items: center; gap: 10px; margin-bottom: 24px; flex-wrap: wrap; }
+    /* ── Toolbar ── */
+    .toolbar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
     .search-wrap { position: relative; flex: 1; min-width: 200px; }
-    .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none; }
+    .search-icon {
+      position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+      color: var(--text-muted); font-size: 13px; pointer-events: none;
+    }
     .search-wrap input {
-      width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
-      padding: 11px 16px 11px 38px; font-size: 13px; font-family: 'Noto Sans KR', sans-serif;
-      color: var(--text); outline: none; transition: border-color 0.2s;
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 16px 10px 38px;
+      font-size: 13px;
+      font-family: 'Noto Sans KR', sans-serif;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s;
     }
     .search-wrap input::placeholder { color: var(--text-muted); }
     .search-wrap input:focus { border-color: var(--gold); }
+
     .grade-filter { display: flex; gap: 6px; align-items: center; }
     .grade-filter-label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 1.5px; color: var(--text-muted); text-transform: uppercase; }
-    .grade-btn { font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500; padding: 5px 12px; border-radius: 6px; border: 1px solid var(--border); background: var(--surface); color: var(--text-muted); cursor: pointer; transition: all 0.15s; }
+    .grade-btn {
+      font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500;
+      padding: 5px 12px; border-radius: 6px; border: 1px solid var(--border);
+      background: var(--surface); color: var(--text-muted); cursor: pointer; transition: all 0.15s;
+    }
     .grade-btn:hover { border-color: var(--border2); color: var(--text); }
     .grade-btn.active-ALL { background: var(--gold-dim); color: var(--gold); border-color: rgba(201,168,76,0.5); }
-    .grade-btn.active-A { background: rgba(109,185,138,0.15); color: var(--success); border-color: rgba(109,185,138,0.5); }
-    .grade-btn.active-B { background: rgba(201,168,76,0.15); color: var(--warning); border-color: rgba(201,168,76,0.5); }
-    .grade-btn.active-C { background: rgba(201,122,109,0.15); color: var(--danger); border-color: rgba(201,122,109,0.5); }
+    .grade-btn.active-A   { background: rgba(109,185,138,0.15); color: var(--success); border-color: rgba(109,185,138,0.5); }
+    .grade-btn.active-B   { background: rgba(201,168,76,0.15);  color: var(--warning); border-color: rgba(201,168,76,0.5); }
+    .grade-btn.active-C   { background: rgba(201,122,109,0.15); color: var(--danger);  border-color: rgba(201,122,109,0.5); }
 
-    .tabs-row { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
-    .main-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
-    .main-tab-btn {
-      display: flex; align-items: center; gap: 8px;
-      background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
-      padding: 8px 16px; font-size: 13px; font-family: 'Noto Sans KR', sans-serif;
-      font-weight: 500; color: var(--text-muted); cursor: pointer; transition: all 0.2s;
+    /* ── Top bar (result + expand) ── */
+    .topbar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
     }
-    .main-tab-btn:hover { border-color: var(--border2); color: var(--text); }
-    .main-tab-btn.active { background: var(--gold-dim); border-color: var(--gold); color: var(--gold); }
-    .main-tab-btn.active.blue-tab { background: var(--blue-dim); border-color: var(--blue); color: var(--blue); }
-    .main-tab-btn.active.teal-tab { background: var(--teal-dim); border-color: var(--teal); color: var(--teal); }
-    .tab-count-badge { font-family: 'DM Mono', monospace; font-size: 10px; background: rgba(201,168,76,0.2); color: var(--gold); border-radius: 20px; padding: 1px 7px; }
-    .tab-count-badge.blue { background: rgba(122,159,201,0.2); color: var(--blue); }
-    .tab-count-badge.teal { background: rgba(109,185,176,0.2); color: var(--teal); }
-    .spacer { flex: 1; }
-    .result-info { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-muted); }
+    .result-info { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-muted); flex: 1; }
     .result-info strong { color: var(--gold); }
-    .expand-all-btn { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 6px 12px; color: var(--text-muted); cursor: pointer; transition: all 0.15s; }
+    .expand-all-btn {
+      font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 1px; text-transform: uppercase;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 6px; padding: 6px 12px; color: var(--text-muted); cursor: pointer; transition: all 0.15s;
+    }
     .expand-all-btn:hover { border-color: var(--border2); color: var(--text); }
 
-    .tab-info-banner { display: flex; align-items: center; gap: 10px; padding: 10px 16px; border-radius: 8px; margin-bottom: 16px; font-size: 12px; font-family: 'DM Mono', monospace; }
-    .tab-info-banner.blue { background: rgba(122,159,201,0.08); border: 1px solid rgba(122,159,201,0.25); color: var(--blue); }
-    .tab-info-banner.teal { background: rgba(109,185,176,0.08); border: 1px solid rgba(109,185,176,0.25); color: var(--teal); }
-    .tab-info-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
-    .tab-info-dot.blue { background: var(--blue); }
-    .tab-info-dot.teal { background: var(--teal); }
+    /* ── Info banner ── */
+    .tab-info-banner {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 16px; border-radius: 8px;
+      margin-bottom: 16px; font-size: 12px; font-family: 'DM Mono', monospace;
+    }
+    .tab-info-banner.blue   { background: rgba(122,159,201,0.08); border: 1px solid rgba(122,159,201,0.25); color: var(--blue); }
+    .tab-info-banner.teal   { background: rgba(109,185,176,0.08); border: 1px solid rgba(109,185,176,0.25); color: var(--teal); }
+    .tab-info-banner.purple { background: rgba(160,122,201,0.08); border: 1px solid rgba(160,122,201,0.25); color: var(--purple); }
+    .tab-info-banner.rose   { background: rgba(201,122,159,0.08); border: 1px solid rgba(201,122,159,0.25); color: var(--rose); }
+    .tab-info-banner.green  { background: rgba(109,185,138,0.08); border: 1px solid rgba(109,185,138,0.25); color: var(--success); }
+    .tab-info-banner.orange { background: rgba(201,144,109,0.08); border: 1px solid rgba(201,144,109,0.25); color: #c9906d; }
+    .tab-info-banner.gray   { background: rgba(168,152,128,0.08); border: 1px solid rgba(168,152,128,0.25); color: var(--text-mid); }
 
+    .tab-info-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+    .tab-info-dot.blue   { background: var(--blue); }
+    .tab-info-dot.teal   { background: var(--teal); }
+    .tab-info-dot.purple { background: var(--purple); }
+    .tab-info-dot.rose   { background: var(--rose); }
+    .tab-info-dot.green  { background: var(--success); }
+    .tab-info-dot.orange { background: #c9906d; }
+    .tab-info-dot.gray   { background: var(--text-mid); }
+
+    /* ── Cards ── */
     .reg-list { display: flex; flex-direction: column; gap: 10px; }
-    .reg-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; transition: border-color 0.2s; }
+
+    .reg-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; overflow: hidden; transition: border-color 0.2s;
+    }
     .reg-card:hover { border-color: var(--border2); }
-    .reg-card.expanded { border-color: var(--gold); }
-    .reg-card.blue-card.expanded { border-color: var(--blue); }
-    .reg-card.teal-card.expanded { border-color: var(--teal); }
-    .reg-card-header { display: flex; align-items: center; gap: 16px; padding: 16px 20px; cursor: pointer; user-select: none; }
+    .reg-card.expanded           { border-color: var(--gold); }
+    .reg-card.blue-card.expanded   { border-color: var(--blue); }
+    .reg-card.teal-card.expanded   { border-color: var(--teal); }
+    .reg-card.purple-card.expanded { border-color: var(--purple); }
+    .reg-card.rose-card.expanded   { border-color: var(--rose); }
+    .reg-card.green-card.expanded  { border-color: var(--success); }
+    .reg-card.orange-card.expanded { border-color: #c9906d; }
+    .reg-card.gray-card.expanded   { border-color: var(--text-mid); }
+
+    .reg-card-header {
+      display: flex; align-items: center; gap: 16px;
+      padding: 16px 20px; cursor: pointer; user-select: none;
+    }
     .reg-num { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-muted); width: 24px; flex-shrink: 0; }
     .reg-title { font-family: 'Noto Serif KR', serif; font-size: 15px; font-weight: 700; color: var(--text); flex: 1; }
-    .reg-count-badge { font-family: 'DM Mono', monospace; font-size: 11px; background: var(--surface2); border: 1px solid var(--border); color: var(--text-muted); border-radius: 6px; padding: 3px 10px; white-space: nowrap; flex-shrink: 0; }
-    .reg-card.expanded .reg-count-badge { border-color: var(--gold); color: var(--gold); background: var(--gold-dim); }
-    .reg-card.blue-card.expanded .reg-count-badge { border-color: var(--blue); color: var(--blue); background: var(--blue-dim); }
-    .reg-card.teal-card.expanded .reg-count-badge { border-color: var(--teal); color: var(--teal); background: var(--teal-dim); }
-    .review-badge { font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500; padding: 3px 10px; border-radius: 6px; background: var(--teal-dim); border: 1px solid rgba(109,185,176,0.4); color: var(--teal); white-space: nowrap; flex-shrink: 0; }
-    .toggle-arrow { width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: transform 0.25s; }
+    .reg-count-badge {
+      font-family: 'DM Mono', monospace; font-size: 11px;
+      background: var(--surface2); border: 1px solid var(--border);
+      color: var(--text-muted); border-radius: 6px; padding: 3px 10px;
+      white-space: nowrap; flex-shrink: 0;
+    }
+    .reg-card.expanded .reg-count-badge           { border-color: var(--gold);       color: var(--gold);       background: var(--gold-dim); }
+    .reg-card.blue-card.expanded .reg-count-badge   { border-color: var(--blue);       color: var(--blue);       background: var(--blue-dim); }
+    .reg-card.teal-card.expanded .reg-count-badge   { border-color: var(--teal);       color: var(--teal);       background: var(--teal-dim); }
+    .reg-card.purple-card.expanded .reg-count-badge { border-color: var(--purple);     color: var(--purple);     background: var(--purple-dim); }
+    .reg-card.rose-card.expanded .reg-count-badge   { border-color: var(--rose);       color: var(--rose);       background: var(--rose-dim); }
+    .reg-card.green-card.expanded .reg-count-badge  { border-color: var(--success);    color: var(--success);    background: rgba(109,185,138,0.12); }
+    .reg-card.orange-card.expanded .reg-count-badge { border-color: #c9906d;           color: #c9906d;           background: rgba(201,144,109,0.12); }
+    .reg-card.gray-card.expanded .reg-count-badge   { border-color: var(--text-mid);   color: var(--text-mid);   background: rgba(168,152,128,0.12); }
+
+    .toggle-arrow {
+      width: 20px; height: 20px; display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; transition: transform 0.25s;
+    }
     .reg-card.expanded .toggle-arrow { transform: rotate(180deg); }
-    .jg-card.expanded .toggle-arrow { transform: rotate(180deg); }
+
     .reg-card-body { max-height: 0; overflow: hidden; transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1); }
     .reg-card-body-inner { padding: 0 20px 20px; border-top: 1px solid var(--border); }
 
+    /* ── Item cards ── */
     .item-list { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
     .item-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
-    .item-card-header { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: var(--surface3); border-bottom: 1px solid var(--border); }
+    .item-card-header {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 14px; background: var(--surface3); border-bottom: 1px solid var(--border);
+    }
     .item-idx { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-muted); }
     .grade-badge { font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500; padding: 2px 8px; border-radius: 4px; }
-    .grade-A { background: rgba(109,185,138,0.15); color: var(--success); border: 1px solid rgba(109,185,138,0.3); }
-    .grade-B { background: rgba(201,168,76,0.15); color: var(--warning); border: 1px solid rgba(201,168,76,0.3); }
-    .grade-C { background: rgba(201,122,109,0.15); color: var(--danger); border: 1px solid rgba(201,122,109,0.3); }
+    .grade-A       { background: rgba(109,185,138,0.15); color: var(--success); border: 1px solid rgba(109,185,138,0.3); }
+    .grade-B       { background: rgba(201,168,76,0.15);  color: var(--warning); border: 1px solid rgba(201,168,76,0.3); }
+    .grade-C       { background: rgba(201,122,109,0.15); color: var(--danger);  border: 1px solid rgba(201,122,109,0.3); }
     .grade-default { background: var(--surface2); color: var(--text-muted); border: 1px solid var(--border); }
     .item-division { font-size: 11px; color: var(--text-muted); font-weight: 400; }
-    .field-rows { padding: 14px; display: flex; flex-direction: column; }
-    .field-row { display: grid; grid-template-columns: 100px 1fr; border-bottom: 1px solid var(--border); min-height: 36px; }
+
+    .field-rows { padding: 14px; display: flex; flex-direction: column; gap: 0; }
+    .field-row {
+      display: grid; grid-template-columns: 100px 1fr; gap: 0;
+      border-bottom: 1px solid var(--border); min-height: 36px;
+    }
     .field-row:last-child { border-bottom: none; }
-    .field-label { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-muted); letter-spacing: 0.5px; padding: 10px 12px 10px 0; border-right: 1px solid var(--border); display: flex; align-items: flex-start; text-transform: uppercase; }
+    .field-label {
+      font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-muted);
+      letter-spacing: 0.5px; padding: 10px 12px 10px 0;
+      border-right: 1px solid var(--border);
+      display: flex; align-items: flex-start; text-transform: uppercase;
+    }
     .field-value { font-size: 13px; color: var(--text); padding: 10px 0 10px 14px; line-height: 1.6; word-break: break-word; }
     .field-value.empty { color: var(--text-muted); font-style: italic; }
 
+    /* ── Jobgroup view ── */
     .jobgroup-list { display: flex; flex-direction: column; gap: 10px; }
-    .jg-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; transition: border-color 0.2s; }
+    .jg-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; overflow: hidden; transition: border-color 0.2s;
+    }
     .jg-card:hover { border-color: var(--border2); }
     .jg-card.expanded { border-color: var(--gold); }
-    .jg-card-header { display: flex; align-items: center; gap: 14px; padding: 16px 20px; cursor: pointer; user-select: none; }
-    .jg-num { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-muted); width: 24px; flex-shrink: 0; }
+    .jg-card-header {
+      display: flex; align-items: center; gap: 14px;
+      padding: 16px 20px; cursor: pointer; user-select: none;
+    }
+    .jg-num  { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-muted); width: 24px; flex-shrink: 0; }
     .jg-name { font-family: 'Noto Serif KR', serif; font-size: 15px; font-weight: 700; color: var(--text); flex: 1; }
-    .jg-count { font-family: 'DM Mono', monospace; font-size: 11px; background: var(--surface2); border: 1px solid var(--border); color: var(--text-muted); border-radius: 6px; padding: 3px 10px; white-space: nowrap; flex-shrink: 0; }
+    .jg-count {
+      font-family: 'DM Mono', monospace; font-size: 11px;
+      background: var(--surface2); border: 1px solid var(--border);
+      color: var(--text-muted); border-radius: 6px; padding: 3px 10px; white-space: nowrap; flex-shrink: 0;
+    }
     .jg-card.expanded .jg-count { border-color: var(--gold); color: var(--gold); background: var(--gold-dim); }
     .jg-card-body { max-height: 0; overflow: hidden; transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1); }
     .jg-card-body-inner { padding: 0 20px 20px; border-top: 1px solid var(--border); }
     .jg-reg-group { margin-top: 14px; }
-    .jg-reg-title { font-size: 12px; font-weight: 700; color: var(--gold); margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid var(--border); font-family: 'Noto Serif KR', serif; }
+    .jg-reg-title {
+      font-size: 12px; font-weight: 700; color: var(--gold);
+      margin-bottom: 8px; padding-bottom: 6px;
+      border-bottom: 1px solid var(--border);
+      font-family: 'Noto Serif KR', serif;
+    }
 
-    .loading-screen, .error-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 60vh; gap: 16px; text-align: center; }
-    .spinner { width: 40px; height: 40px; border: 2px solid var(--border); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.9s linear infinite; }
+    /* ── Loading / Error ── */
+    .loading-screen, .error-screen {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      min-height: 60vh; gap: 16px; text-align: center;
+      width: 100%;
+    }
+    .spinner {
+      width: 40px; height: 40px;
+      border: 2px solid var(--border);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin 0.9s linear infinite;
+    }
     @keyframes spin { to { transform: rotate(360deg); } }
     .loading-text { color: var(--text-muted); font-size: 13px; font-family: 'DM Mono', monospace; letter-spacing: 1px; }
-    .error-box { background: rgba(201,122,109,0.08); border: 1px solid rgba(201,122,109,0.3); border-radius: 12px; padding: 24px 32px; color: var(--danger); font-size: 13px; max-width: 480px; line-height: 1.7; }
-    .empty-state { text-align: center; padding: 48px; color: var(--text-muted); font-size: 13px; font-family: 'DM Mono', monospace; }
+    .error-box {
+      background: rgba(201,122,109,0.08);
+      border: 1px solid rgba(201,122,109,0.3);
+      border-radius: 12px; padding: 24px 32px;
+      color: var(--danger); font-size: 13px; max-width: 480px; line-height: 1.7;
+    }
+    .empty-state {
+      text-align: center; padding: 48px;
+      color: var(--text-muted); font-size: 13px; font-family: 'DM Mono', monospace;
+    }
 
-    @media (max-width: 768px) {
-      .container { padding: 16px; }
-      header { padding: 14px 16px; }
+    /* ── Mobile ── */
+    @media (max-width: 860px) {
+      .app-layout { flex-direction: column; }
+      .sidebar {
+        width: 100%; position: static; height: auto;
+        flex-direction: row; overflow-x: auto; overflow-y: hidden;
+        padding: 0; border-right: none; border-bottom: 1px solid var(--border);
+        scrollbar-width: none;
+      }
+      .sidebar::-webkit-scrollbar { display: none; }
+      .sidebar-section-label { display: none; }
+      .sidebar-divider { display: none; }
+      .tab-btn {
+        flex-shrink: 0; white-space: nowrap;
+        border-left: none; border-bottom: 2px solid transparent;
+        padding: 12px 16px;
+      }
+      .tab-btn.active            { border-bottom-color: var(--gold); }
+      .tab-btn.active.blue-tab   { border-bottom-color: var(--blue); }
+      .tab-btn.active.teal-tab   { border-bottom-color: var(--teal); }
+      .tab-btn.active.purple-tab { border-bottom-color: var(--purple); }
+      .tab-btn.active.rose-tab   { border-bottom-color: var(--rose); }
+      .tab-btn.active.green-tab  { border-bottom-color: var(--success); }
+      .tab-btn.active.orange-tab { border-bottom-color: #c9906d; }
+      .tab-btn.active.gray-tab   { border-bottom-color: var(--text-mid); }
+      .tab-dot { display: none; }
+      .stats-bar { grid-template-columns: repeat(2, 1fr); }
+      .main-content { padding: 16px; }
+    }
+    @media (max-width: 480px) {
+      header { padding: 12px 16px; }
       .header-status .status-text { display: none; }
       .field-row { grid-template-columns: 72px 1fr; }
       .grade-filter-label { display: none; }
-      .result-info { display: none; }
     }
   </style>
 </head>
 <body>
 
 <header>
-  <div class="logo-grid"><span></span><span></span><span></span><span></span></div>
+  <div class="logo-grid">
+    <span></span><span></span>
+    <span></span><span></span>
+  </div>
   <div class="header-titles">
     <div class="header-sub">Regulation Viewer</div>
     <div class="header-main">한서재활요양병원 규정</div>
@@ -195,25 +520,39 @@
   </div>
 </header>
 
-<div class="container">
-  <div class="loading-screen" id="loadingScreen">
-    <div class="spinner"></div>
-    <div class="loading-text">loading data...</div>
-  </div>
-  <div class="error-screen" id="errorScreen" style="display:none;">
-    <div class="error-box" id="errorMsg"></div>
-  </div>
+<div id="loadingScreen" class="loading-screen" style="min-height:calc(100vh - 61px);">
+  <div class="spinner"></div>
+  <div class="loading-text">loading data...</div>
+</div>
 
-  <div id="mainContent" style="display:none;">
+<div id="errorScreen" class="error-screen" style="display:none; min-height:calc(100vh - 61px);">
+  <div class="error-box" id="errorMsg"></div>
+</div>
 
-    <!-- 디버그 배너 -->
-    <details class="debug-banner" id="debugBanner">
-      <summary>
-        <span style="font-size:10px;margin-right:4px;">&#9654;</span>
-        데이터 분류 현황 (클릭하여 펼치기)
-      </summary>
-      <div class="debug-content" id="debugContent"></div>
-    </details>
+<div id="mainContent" class="app-layout" style="display:none;">
+
+  <!-- ── Sidebar ── -->
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-section-label">전체 보기</div>
+    <button class="tab-btn active"       data-tab="all"       id="tabAll">      <span class="tab-dot"></span><span class="tab-label">전체</span>      <span class="tab-badge" id="badgeAll">0</span></button>
+    <button class="tab-btn"              data-tab="jobgroup"  id="tabJobgroup"> <span class="tab-dot"></span><span class="tab-label">직군별</span>    <span class="tab-badge" id="badgeJobgroup">0</span></button>
+
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-section-label">직군 필터</div>
+    <button class="tab-btn purple-tab"   data-tab="doc"       id="tabDoc">      <span class="tab-dot"></span><span class="tab-label">의사</span>      <span class="tab-badge" id="badgeDoc">0</span></button>
+    <button class="tab-btn rose-tab"     data-tab="nurse"     id="tabNurse">    <span class="tab-dot"></span><span class="tab-label">간호사</span>    <span class="tab-badge" id="badgeNurse">0</span></button>
+    <button class="tab-btn green-tab"    data-tab="pharm"     id="tabPharm">    <span class="tab-dot"></span><span class="tab-label">약사</span>      <span class="tab-badge" id="badgePharm">0</span></button>
+    <button class="tab-btn orange-tab"   data-tab="guardian"  id="tabGuardian"> <span class="tab-dot"></span><span class="tab-label">보호자</span>    <span class="tab-badge" id="badgeGuardian">0</span></button>
+    <button class="tab-btn gray-tab"     data-tab="other"     id="tabOther">    <span class="tab-dot"></span><span class="tab-label">기타 직군</span><span class="tab-badge" id="badgeOther">0</span></button>
+
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-section-label">특수 분류</div>
+    <button class="tab-btn blue-tab"     data-tab="question"  id="tabQuestion"> <span class="tab-dot"></span><span class="tab-label">질문</span>      <span class="tab-badge" id="badgeQuestion">0</span></button>
+    <button class="tab-btn teal-tab"     data-tab="review"    id="tabReview">   <span class="tab-dot"></span><span class="tab-label">규정 검토</span><span class="tab-badge" id="badgeReview">0</span></button>
+  </nav>
+
+  <!-- ── Main ── -->
+  <div class="main-content">
 
     <div class="stats-bar">
       <div class="stat-card">
@@ -223,10 +562,6 @@
       <div class="stat-card">
         <div class="stat-label">Regulations</div>
         <div class="stat-value" id="statRegs">0</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Job Groups</div>
-        <div class="stat-value" id="statGroups">0</div>
       </div>
       <div class="stat-card blue-accent">
         <div class="stat-label">Questions</div>
@@ -249,33 +584,19 @@
       </div>
       <div class="grade-filter">
         <span class="grade-filter-label">Grade</span>
-        <button class="grade-btn active-ALL" id="gradeAll" data-grade="">ALL</button>
-        <button class="grade-btn" id="gradeA" data-grade="A">A</button>
-        <button class="grade-btn" id="gradeB" data-grade="B">B</button>
-        <button class="grade-btn" id="gradeC" data-grade="C">C</button>
+        <button class="grade-btn active-ALL" data-grade="">ALL</button>
+        <button class="grade-btn" data-grade="A">A</button>
+        <button class="grade-btn" data-grade="B">B</button>
+        <button class="grade-btn" data-grade="C">C</button>
       </div>
     </div>
 
-    <div class="tabs-row">
-      <div class="main-tabs">
-        <button class="main-tab-btn active" id="tabAll" data-tab="all">
-          전체 <span class="tab-count-badge" id="badgeAll">0</span>
-        </button>
-        <button class="main-tab-btn" id="tabJobgroup" data-tab="jobgroup">
-          직군 <span class="tab-count-badge" id="badgeJobgroup">0</span>
-        </button>
-        <button class="main-tab-btn blue-tab" id="tabQuestion" data-tab="question">
-          질문 <span class="tab-count-badge blue" id="badgeQuestion">0</span>
-        </button>
-        <button class="main-tab-btn teal-tab" id="tabReview" data-tab="review">
-          규정 검토 <span class="tab-count-badge teal" id="badgeReview">0</span>
-        </button>
-      </div>
-      <div class="spacer"></div>
+    <div class="topbar">
       <span class="result-info" id="resultInfo"></span>
       <button class="expand-all-btn" id="expandAllBtn">모두 펼치기</button>
     </div>
 
+    <!-- Views -->
     <div id="view-all">
       <div class="reg-list" id="regList"></div>
     </div>
@@ -285,20 +606,55 @@
     <div id="view-question" style="display:none;">
       <div class="tab-info-banner blue">
         <div class="tab-info-dot blue"></div>
-        <span id="questionBannerText">A열(규정제목)에 "질문"이 포함된 항목들만 표시됩니다.</span>
+        <span>A열(규정제목)에 "질문"이 포함된 항목들만 표시됩니다.</span>
       </div>
       <div class="reg-list" id="questionList"></div>
     </div>
     <div id="view-review" style="display:none;">
       <div class="tab-info-banner teal">
         <div class="tab-info-dot teal"></div>
-        <span id="reviewBannerText">B열(직군)에 "규정 검토"가 포함된 항목들만 표시됩니다.</span>
+        <span>B열(직군)에 "규정 검토"가 포함된 항목들만 표시됩니다.</span>
       </div>
       <div class="reg-list" id="reviewList"></div>
     </div>
+    <div id="view-doc" style="display:none;">
+      <div class="tab-info-banner purple">
+        <div class="tab-info-dot purple"></div>
+        <span>B열(직군)에 "의사"가 포함된 항목들만 표시됩니다.</span>
+      </div>
+      <div class="reg-list" id="docList"></div>
+    </div>
+    <div id="view-nurse" style="display:none;">
+      <div class="tab-info-banner rose">
+        <div class="tab-info-dot rose"></div>
+        <span>B열(직군)에 "간호사"가 포함된 항목들만 표시됩니다.</span>
+      </div>
+      <div class="reg-list" id="nurseList"></div>
+    </div>
+    <div id="view-pharm" style="display:none;">
+      <div class="tab-info-banner green">
+        <div class="tab-info-dot green"></div>
+        <span>B열(직군)에 "약사"가 포함된 항목들만 표시됩니다.</span>
+      </div>
+      <div class="reg-list" id="pharmList"></div>
+    </div>
+    <div id="view-guardian" style="display:none;">
+      <div class="tab-info-banner orange">
+        <div class="tab-info-dot orange"></div>
+        <span>B열(직군)에 "보호자"가 포함된 항목들만 표시됩니다.</span>
+      </div>
+      <div class="reg-list" id="guardianList"></div>
+    </div>
+    <div id="view-other" style="display:none;">
+      <div class="tab-info-banner gray">
+        <div class="tab-info-dot gray"></div>
+        <span>의사 / 간호사 / 약사 / 보호자 / 질문 / 규정검토 외 기타 직군 항목들입니다.</span>
+      </div>
+      <div class="reg-list" id="otherList"></div>
+    </div>
 
-  </div>
-</div>
+  </div><!-- /main-content -->
+</div><!-- /mainContent -->
 
 <script>
 (function () {
@@ -308,55 +664,59 @@
   const DIRECT_URL = 'https://docs.google.com/spreadsheets/d/' + SPREADSHEET_ID + '/export?format=csv&gid=0';
   const PROXY_URL  = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(DIRECT_URL);
 
-  /* ── 열 인덱스 (0-based) ──
-     A=0 규정제목  B=1 직군  C=2 등급  D=3 구분  E=4 장
-     F=5 기준제목  G=6 기준  H=7 조사항목  I=8 기준이해
-     J=9 조사내용  K=10 조사목적  L=11 참고자료
-  ── */
-  var COL = {
+  const COL = {
     규정제목: 0, 직군: 1, 조사항목등급: 2, 조사항목구분: 3,
     조사항목장: 4, 기준제목: 5, 기준: 6, 조사항목: 7,
-    기준이해: 8, 조사내용: 9, 조사목적: 10, 참고자료: 11
+    기준이해: 8, 조사내용: 9, 조사목적: 10, 참고자료: 11,
   };
 
-  var allRows     = [];
-  var currentView = 'all';
-  var searchQuery = '';
-  var gradeFilter = '';
-  var allExpanded = false;
+  let allRows     = [];
+  let currentView = 'all';
+  let searchQuery = '';
+  let gradeFilter = '';
+  let allExpanded = false;
 
-  /* ── 정규화: BOM / NBSP / 전각공백 / 줄바꿈 제거 후 trim ── */
-  function norm(s) {
-    if (!s) return '';
-    return s
-      .replace(/^\uFEFF/, '')
+  /* ── 정규화 ── */
+  function norm(str) {
+    return (str || '')
+      .replace(/\uFEFF/g, '')
       .replace(/\u00A0/g, ' ')
       .replace(/\u3000/g, ' ')
-      .replace(/[\r\n]+/g, ' ')
       .trim()
       .toLowerCase();
   }
 
-  /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-     핵심 분류 함수
-     질문  : A열(규정제목, index 0)에 "질문" 포함
-     규정검토 : B열(직군,   index 1)에 "규정 검토" 또는 "규정검토" 포함
-     전체/직군 : 위 두 조건 모두 해당하지 않는 행
-  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-  function isQuestion(r) {
-    var a = norm(r[COL.규정제목]);   /* A열 */
-    return a.indexOf('질문') !== -1;
+  /* ── 행 분류 ── */
+  function isQuestion(r)  { return norm(r[COL.규정제목]).indexOf('질문') !== -1; }
+  function isReview(r)    { return norm(r[COL.직군]).indexOf('규정 검토') !== -1 || norm(r[COL.직군]).indexOf('규정검토') !== -1; }
+  function isDoc(r)       { return norm(r[COL.직군]).indexOf('의사') !== -1; }
+  function isNurse(r)     { return norm(r[COL.직군]).indexOf('간호사') !== -1; }
+  function isPharm(r)     { return norm(r[COL.직군]).indexOf('약사') !== -1; }
+  function isGuardian(r)  { return norm(r[COL.직군]).indexOf('보호자') !== -1; }
+  function isOther(r) {
+    return !isQuestion(r) && !isReview(r) && !isDoc(r) && !isNurse(r) && !isPharm(r) && !isGuardian(r);
   }
 
-  function isReview(r) {
-    var b = norm(r[COL.직군]);       /* B열 */
-    /* "규정 검토" (공백 있는 것) 와 "규정검토" (공백 없는 것) 모두 허용 */
-    return b.indexOf('규정검토') !== -1 || b.indexOf('규정 검토') !== -1;
-  }
+  /* 탭별 필터 함수 맵 */
+  const TAB_FILTER = {
+    all:      function() { return true; },
+    jobgroup: function() { return true; },
+    question: isQuestion,
+    review:   isReview,
+    doc:      isDoc,
+    nurse:    isNurse,
+    pharm:    isPharm,
+    guardian: isGuardian,
+    other:    isOther,
+  };
 
-  function isGeneral(r) {
-    return !isQuestion(r) && !isReview(r);
-  }
+  /* 탭별 카드 색상 맵 */
+  const TAB_CARD_CLASS = {
+    all: '', jobgroup: '',
+    question: 'blue-card', review: 'teal-card',
+    doc: 'purple-card', nurse: 'rose-card',
+    pharm: 'green-card', guardian: 'orange-card', other: 'gray-card',
+  };
 
   /* ── CSV 파서 ── */
   function parseCSV(text) {
@@ -364,17 +724,15 @@
     for (var i = 0; i < text.length; i++) {
       var ch = text[i];
       if (ch === '"') {
-        if (inQ && text[i + 1] === '"') { cur += '"'; i++; }
+        if (inQ && text[i+1] === '"') { cur += '"'; i++; }
         else { inQ = !inQ; }
       } else if (ch === ',' && !inQ) {
         row.push(cur.trim()); cur = '';
       } else if ((ch === '\n' || ch === '\r') && !inQ) {
-        if (ch === '\r' && text[i + 1] === '\n') i++;
+        if (ch === '\r' && text[i+1] === '\n') i++;
         row.push(cur.trim()); cur = '';
         lines.push(row); row = [];
-      } else {
-        cur += ch;
-      }
+      } else { cur += ch; }
     }
     if (cur !== '' || row.length) { row.push(cur.trim()); lines.push(row); }
     return lines;
@@ -385,23 +743,19 @@
     if (!str) return '-';
     return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   }
-  function pad(n) { return String(n).padStart(2,'0'); }
-  function el(id) { return document.getElementById(id); }
-  function setText(id, v) { el(id).textContent = v; }
 
   /* ── 데이터 로드 ── */
   async function loadData() {
     var text = null;
-
     try {
-      var r1 = await fetch(DIRECT_URL);
-      if (r1.ok) text = await r1.text();
+      var res = await fetch(DIRECT_URL);
+      if (res.ok) text = await res.text();
     } catch(_) {}
 
     if (!text) {
       try {
-        var r2 = await fetch(PROXY_URL);
-        if (r2.ok) text = await r2.text();
+        var res2 = await fetch(PROXY_URL);
+        if (res2.ok) text = await res2.text();
       } catch(e) { showError('네트워크 오류: ' + e.message); return; }
     }
 
@@ -413,75 +767,51 @@
     allRows = rows.slice(1).filter(function(r){ return r.some(function(c){ return c !== ''; }); });
     if (!allRows.length) { showError('유효한 데이터 행이 없습니다.'); return; }
 
-    var generalRows  = allRows.filter(isGeneral);
-    var questionRows = allRows.filter(isQuestion);
-    var reviewRows   = allRows.filter(isReview);
-
-    /* 고유 규정제목 집합 */
-    var regSet   = {};
-    var groupSet = {};
-    generalRows.forEach(function(r){ if(r[COL.규정제목]) regSet[r[COL.규정제목]]=1; if(r[COL.직군]) groupSet[r[COL.직군]]=1; });
-    var qRegSet = {};
-    questionRows.forEach(function(r){ if(r[COL.규정제목]) qRegSet[r[COL.규정제목]]=1; });
-    var rvRegSet = {};
-    reviewRows.forEach(function(r){ if(r[COL.규정제목]) rvRegSet[r[COL.규정제목]]=1; });
+    /* 통계 계산 */
+    var qRows  = allRows.filter(isQuestion);
+    var rvRows = allRows.filter(isReview);
+    var regSet = new Set(allRows.map(function(r){ return r[COL.규정제목]; }).filter(Boolean));
 
     setText('statTotal',     allRows.length.toLocaleString());
-    setText('statRegs',      Object.keys(regSet).length.toLocaleString());
-    setText('statGroups',    Object.keys(groupSet).length.toLocaleString());
-    setText('statQuestions', questionRows.length.toLocaleString());
-    setText('statReviews',   reviewRows.length.toLocaleString());
+    setText('statRegs',      regSet.size.toLocaleString());
+    setText('statQuestions', qRows.length.toLocaleString());
+    setText('statReviews',   rvRows.length.toLocaleString());
 
-    setText('badgeAll',      Object.keys(regSet).length);
-    setText('badgeJobgroup', Object.keys(groupSet).length);
-    setText('badgeQuestion', Object.keys(qRegSet).length);
-    setText('badgeReview',   Object.keys(rvRegSet).length);
+    /* 배지 업데이트 */
+    function badgeCount(filterFn) {
+      var set = new Set(allRows.filter(filterFn).map(function(r){ return r[COL.규정제목]; }).filter(Boolean));
+      return set.size;
+    }
 
-    /* 디버그 정보 출력 */
-    buildDebug(generalRows, questionRows, reviewRows);
+    setText('badgeAll',      regSet.size);
+    setText('badgeJobgroup', new Set(allRows.map(function(r){ return r[COL.직군]; }).filter(Boolean)).size);
+    setText('badgeQuestion', badgeCount(isQuestion));
+    setText('badgeReview',   badgeCount(isReview));
+    setText('badgeDoc',      badgeCount(isDoc));
+    setText('badgeNurse',    badgeCount(isNurse));
+    setText('badgePharm',    badgeCount(isPharm));
+    setText('badgeGuardian', badgeCount(isGuardian));
+    setText('badgeOther',    badgeCount(isOther));
 
     el('statusDot').style.background = '#6db98a';
     el('statusDot').style.animation  = 'none';
     setText('statusText', allRows.length + '개 항목 로드 완료');
     el('loadingScreen').style.display = 'none';
-    el('mainContent').style.display   = 'block';
+    el('mainContent').style.display   = 'flex';
 
     rerender();
-  }
-
-  /* ── 디버그 배너 내용 구성 ── */
-  function buildDebug(generalRows, questionRows, reviewRows) {
-    /* A열 고유값 샘플 (처음 10개) */
-    var aVals = {};
-    allRows.forEach(function(r){ if(r[COL.규정제목]) aVals[r[COL.규정제목]] = 1; });
-    var aSample = Object.keys(aVals).slice(0, 10).map(function(v){ return '"' + v + '"'; }).join(', ');
-
-    /* B열 고유값 전체 */
-    var bVals = {};
-    allRows.forEach(function(r){ if(r[COL.직군]) bVals[r[COL.직군]] = 1; });
-    var bAll = Object.keys(bVals).map(function(v){ return '"' + v + '"'; }).join(', ');
-
-    var dc = el('debugContent');
-    dc.innerHTML =
-      '<div class="debug-row"><span class="debug-label">전체 행 수:</span><span class="debug-vals">' + allRows.length + '행</span></div>' +
-      '<div class="debug-row"><span class="debug-label">일반 탭 (전체/직군):</span><span class="debug-vals">' + generalRows.length + '행</span></div>' +
-      '<div class="debug-row"><span class="debug-label">질문 탭 (A열 "질문" 포함):</span><span class="debug-vals">' + questionRows.length + '행</span></div>' +
-      '<div class="debug-row"><span class="debug-label">규정검토 탭 (B열 "규정검토" 포함):</span><span class="debug-vals">' + reviewRows.length + '행</span></div>' +
-      '<div class="debug-row"><span class="debug-label">A열 고유값 샘플:</span><span class="debug-vals">' + aSample + '</span></div>' +
-      '<div class="debug-row"><span class="debug-label">B열 고유값 전체:</span><span class="debug-vals">' + bAll + '</span></div>';
   }
 
   function showError(msg) {
     el('loadingScreen').style.display = 'none';
     el('errorScreen').style.display   = 'flex';
-    el('errorMsg').innerHTML = '<strong>데이터를 불러오지 못했습니다.</strong><br/><br/>' + msg +
-      '<br/><br/><small>구글 시트가 "링크가 있는 모든 사용자" 공개 설정인지 확인해주세요.</small>';
+    el('errorMsg').innerHTML = '<strong>데이터를 불러오지 못했습니다.</strong><br/><br/>' + msg;
     el('statusDot').style.background = '#c97a6d';
     setText('statusText', '로드 실패');
   }
 
-  /* ── 필터 ── */
-  function getFilteredBy(filterFn) {
+  /* ── 필터 헬퍼 ── */
+  function getFiltered(filterFn) {
     var rows = allRows.filter(filterFn);
     if (gradeFilter) {
       rows = rows.filter(function(r){ return norm(r[COL.조사항목등급]) === gradeFilter.toLowerCase(); });
@@ -489,16 +819,16 @@
     if (searchQuery) {
       var q = searchQuery.toLowerCase();
       rows = rows.filter(function(r){
-        return (r[COL.규정제목] || '').toLowerCase().indexOf(q) !== -1 ||
-               (r[COL.기준제목] || '').toLowerCase().indexOf(q) !== -1 ||
-               (r[COL.조사항목] || '').toLowerCase().indexOf(q) !== -1 ||
-               (r[COL.직군]     || '').toLowerCase().indexOf(q) !== -1;
+        return (r[COL.규정제목]  || '').toLowerCase().indexOf(q) !== -1 ||
+               (r[COL.기준제목]  || '').toLowerCase().indexOf(q) !== -1 ||
+               (r[COL.조사항목]  || '').toLowerCase().indexOf(q) !== -1 ||
+               (r[COL.직군]      || '').toLowerCase().indexOf(q) !== -1;
       });
     }
     return rows;
   }
 
-  /* ── 공통 아코디언 렌더 ── */
+  /* ── 아코디언 렌더 ── */
   function renderAccordion(containerId, rows, cardClass) {
     var container = el(containerId);
     container.innerHTML = '';
@@ -517,37 +847,26 @@
       var rowSet = groups[title];
       var card = document.createElement('div');
       card.className = 'reg-card' + (cardClass ? ' ' + cardClass : '');
-      var reviewBadge = cardClass === 'teal-card' ? '<span class="review-badge">규정검토</span>' : '';
       card.innerHTML =
         '<div class="reg-card-header">' +
           '<span class="reg-num">' + pad(idx+1) + '</span>' +
           '<span class="reg-title">' + esc(title) + '</span>' +
           '<span class="reg-count-badge">' + rowSet.length + ' 항목</span>' +
-          reviewBadge +
-          '<span class="toggle-arrow">' +
-            '<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
-              '<polyline points="6 9 12 15 18 9"/>' +
-            '</svg>' +
-          '</span>' +
+          '<span class="toggle-arrow"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>' +
         '</div>' +
-        '<div class="reg-card-body">' +
-          '<div class="reg-card-body-inner">' +
-            '<div class="item-list">' + rowSet.map(itemCardHtml).join('') + '</div>' +
-          '</div>' +
-        '</div>';
+        '<div class="reg-card-body"><div class="reg-card-body-inner"><div class="item-list">' +
+          rowSet.map(function(r,i){ return itemCardHtml(r,i); }).join('') +
+        '</div></div></div>';
       card.querySelector('.reg-card-header').addEventListener('click', function(){ toggleCard(card); });
       container.appendChild(card);
     });
   }
 
-  function renderAll()      { renderAccordion('regList',      getFilteredBy(isGeneral),  ''); }
-  function renderQuestion() { renderAccordion('questionList', getFilteredBy(isQuestion), 'blue-card'); }
-  function renderReview()   { renderAccordion('reviewList',   getFilteredBy(isReview),   'teal-card'); }
-
+  /* ── 직군별 렌더 ── */
   function renderJobGroup() {
     var container = el('jobgroupList');
     container.innerHTML = '';
-    var filtered = getFilteredBy(isGeneral);
+    var filtered = getFiltered(function(){ return true; });
     if (!filtered.length) { container.innerHTML = '<div class="empty-state">표시할 데이터가 없습니다.</div>'; return; }
     var order = [], byGroup = {};
     filtered.forEach(function(r){
@@ -558,10 +877,10 @@
     order.sort(function(a,b){ return a.localeCompare(b); });
     order.forEach(function(group, idx){
       var rows = byGroup[group];
-      var rOrder = [], byReg = {};
+      var regOrder = [], byReg = {};
       rows.forEach(function(r){
         var t = r[COL.규정제목] || '(제목 없음)';
-        if (!byReg[t]) { byReg[t] = []; rOrder.push(t); }
+        if (!byReg[t]) { byReg[t] = []; regOrder.push(t); }
         byReg[t].push(r);
       });
       var card = document.createElement('div');
@@ -571,22 +890,14 @@
           '<span class="jg-num">' + pad(idx+1) + '</span>' +
           '<span class="jg-name">' + esc(group) + '</span>' +
           '<span class="jg-count">' + rows.length + ' 항목</span>' +
-          '<span class="toggle-arrow">' +
-            '<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
-              '<polyline points="6 9 12 15 18 9"/>' +
-            '</svg>' +
-          '</span>' +
+          '<span class="toggle-arrow"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>' +
         '</div>' +
-        '<div class="jg-card-body">' +
-          '<div class="jg-card-body-inner">' +
-            rOrder.map(function(regTitle){
-              return '<div class="jg-reg-group">' +
-                '<div class="jg-reg-title">' + esc(regTitle) + '</div>' +
-                '<div class="item-list">' + byReg[regTitle].map(itemCardHtml).join('') + '</div>' +
-              '</div>';
-            }).join('') +
-          '</div>' +
-        '</div>';
+        '<div class="jg-card-body"><div class="jg-card-body-inner">' +
+          regOrder.map(function(regTitle){
+            return '<div class="jg-reg-group"><div class="jg-reg-title">' + esc(regTitle) + '</div>' +
+              '<div class="item-list">' + byReg[regTitle].map(function(r,i){ return itemCardHtml(r,i); }).join('') + '</div></div>';
+          }).join('') +
+        '</div></div>';
       card.querySelector('.jg-card-header').addEventListener('click', function(){ toggleCard(card); });
       container.appendChild(card);
     });
@@ -594,7 +905,7 @@
 
   /* ── 항목 카드 HTML ── */
   function itemCardHtml(r, i) {
-    var grade = norm(r[COL.조사항목등급]).toUpperCase();
+    var grade = (r[COL.조사항목등급] || '').toUpperCase();
     var gradeClass = ['A','B','C'].indexOf(grade) !== -1 ? 'grade-' + grade : 'grade-default';
     var fields = [
       { label: '직군',      val: r[COL.직군] },
@@ -606,12 +917,12 @@
       { label: '기준 이해', val: r[COL.기준이해] },
       { label: '조사 내용', val: r[COL.조사내용] },
       { label: '조사 목적', val: r[COL.조사목적] },
-      { label: '참고 자료', val: r[COL.참고자료] }
+      { label: '참고 자료', val: r[COL.참고자료] },
     ];
     return '<div class="item-card">' +
       '<div class="item-card-header">' +
-        '<span class="item-idx">#' + pad((i||0)+1) + '</span>' +
-        '<span class="grade-badge ' + gradeClass + '">' + (grade || '-') + '</span>' +
+        '<span class="item-idx">#' + pad(i+1) + '</span>' +
+        '<span class="grade-badge ' + gradeClass + '">' + (esc(grade) || '-') + '</span>' +
         '<span class="item-division">' + esc(r[COL.조사항목구분]) + '</span>' +
       '</div>' +
       '<div class="field-rows">' +
@@ -621,16 +932,16 @@
             '<div class="field-value' + (f.val ? '' : ' empty') + '">' + esc(f.val) + '</div>' +
           '</div>';
         }).join('') +
-      '</div>' +
-    '</div>';
+      '</div></div>';
   }
 
-  /* ── 아코디언 토글 ── */
+  /* ── 토글 ── */
   function toggleCard(card) {
     var body  = card.querySelector('.reg-card-body, .jg-card-body');
     var inner = card.querySelector('.reg-card-body-inner, .jg-card-body-inner');
     if (card.classList.contains('expanded')) {
-      body.style.maxHeight = '0'; card.classList.remove('expanded');
+      body.style.maxHeight = '0';
+      card.classList.remove('expanded');
     } else {
       card.classList.add('expanded');
       body.style.maxHeight = (inner.scrollHeight + 9999) + 'px';
@@ -640,59 +951,100 @@
   /* ── 탭 전환 ── */
   function switchTab(tab) {
     currentView = tab;
-    var tabIds  = { all:'tabAll', jobgroup:'tabJobgroup', question:'tabQuestion', review:'tabReview' };
-    var viewIds = { all:'view-all', jobgroup:'view-jobgroup', question:'view-question', review:'view-review' };
-    Object.keys(tabIds).forEach(function(k){ el(tabIds[k]).classList.toggle('active', k === tab); });
-    Object.keys(viewIds).forEach(function(k){ el(viewIds[k]).style.display = k === tab ? 'block' : 'none'; });
+    var views = ['all','jobgroup','question','review','doc','nurse','pharm','guardian','other'];
+    views.forEach(function(v){
+      el('view-' + v).style.display = v === tab ? 'block' : 'none';
+    });
+    document.querySelectorAll('.tab-btn').forEach(function(btn){
+      btn.classList.toggle('active', btn.dataset.tab === tab);
+    });
     allExpanded = false;
     setText('expandAllBtn', '모두 펼치기');
-  }
-
-  /* ── 모두 펼치기/접기 ── */
-  function toggleExpandAll() {
-    allExpanded = !allExpanded;
-    setText('expandAllBtn', allExpanded ? '모두 접기' : '모두 펼치기');
-    var viewMap = { all:'regList', jobgroup:'jobgroupList', question:'questionList', review:'reviewList' };
-    el(viewMap[currentView]).querySelectorAll('.reg-card, .jg-card').forEach(function(card){
-      var body  = card.querySelector('.reg-card-body, .jg-card-body');
-      var inner = card.querySelector('.reg-card-body-inner, .jg-card-body-inner');
-      if (allExpanded) { card.classList.add('expanded'); body.style.maxHeight = (inner.scrollHeight+9999)+'px'; }
-      else { card.classList.remove('expanded'); body.style.maxHeight = '0'; }
-    });
   }
 
   /* ── 전체 재렌더 ── */
   function rerender() {
     allExpanded = false;
     setText('expandAllBtn', '모두 펼치기');
-    renderAll(); renderJobGroup(); renderQuestion(); renderReview();
+    renderAccordion('regList',      getFiltered(TAB_FILTER.all),      TAB_CARD_CLASS.all);
+    renderJobGroup();
+    renderAccordion('questionList', getFiltered(TAB_FILTER.question), TAB_CARD_CLASS.question);
+    renderAccordion('reviewList',   getFiltered(TAB_FILTER.review),   TAB_CARD_CLASS.review);
+    renderAccordion('docList',      getFiltered(TAB_FILTER.doc),      TAB_CARD_CLASS.doc);
+    renderAccordion('nurseList',    getFiltered(TAB_FILTER.nurse),    TAB_CARD_CLASS.nurse);
+    renderAccordion('pharmList',    getFiltered(TAB_FILTER.pharm),    TAB_CARD_CLASS.pharm);
+    renderAccordion('guardianList', getFiltered(TAB_FILTER.guardian), TAB_CARD_CLASS.guardian);
+    renderAccordion('otherList',    getFiltered(TAB_FILTER.other),    TAB_CARD_CLASS.other);
   }
 
+  /* ── 결과 카운트 ── */
   function updateResultInfo(count) {
     var infoEl = el('resultInfo');
     if (searchQuery || gradeFilter) {
       infoEl.innerHTML = '<strong>' + count + '</strong> 규정 검색됨';
-    } else { infoEl.textContent = ''; }
+    } else {
+      infoEl.innerHTML = '<strong>' + count + '</strong> 규정';
+    }
+  }
+
+  /* ── 모두 펼치기/접기 ── */
+  function toggleExpandAll() {
+    allExpanded = !allExpanded;
+    setText('expandAllBtn', allExpanded ? '모두 접기' : '모두 펼치기');
+    var listMap = {
+      all:'regList', jobgroup:'jobgroupList', question:'questionList',
+      review:'reviewList', doc:'docList', nurse:'nurseList',
+      pharm:'pharmList', guardian:'guardianList', other:'otherList'
+    };
+    var container = el(listMap[currentView]);
+    container.querySelectorAll('.reg-card, .jg-card').forEach(function(card){
+      var body  = card.querySelector('.reg-card-body, .jg-card-body');
+      var inner = card.querySelector('.reg-card-body-inner, .jg-card-body-inner');
+      if (allExpanded) {
+        card.classList.add('expanded');
+        body.style.maxHeight = (inner.scrollHeight + 9999) + 'px';
+      } else {
+        card.classList.remove('expanded');
+        body.style.maxHeight = '0';
+      }
+    });
   }
 
   /* ── 등급 필터 ── */
   function setGradeFilter(g) {
     gradeFilter = g;
-    ['gradeAll','gradeA','gradeB','gradeC'].forEach(function(id){ el(id).className = 'grade-btn'; });
-    el(g === '' ? 'gradeAll' : 'grade' + g).classList.add('active-' + (g === '' ? 'ALL' : g));
+    document.querySelectorAll('.grade-btn').forEach(function(btn){ btn.className = 'grade-btn'; });
+    var key = g === '' ? 'ALL' : g;
+    var activeBtn = document.querySelector('.grade-btn[data-grade="' + g + '"]');
+    if (activeBtn) activeBtn.classList.add('active-' + key);
     rerender();
   }
 
-  /* ── 이벤트 바인딩 ── */
-  el('searchInput').addEventListener('input', function(e){ searchQuery = e.target.value; rerender(); });
-  el('expandAllBtn').addEventListener('click', toggleExpandAll);
-  document.querySelectorAll('.main-tab-btn').forEach(function(btn){
-    btn.addEventListener('click', function(){ switchTab(btn.dataset.tab); });
+  /* ── 유틸 ── */
+  function el(id)         { return document.getElementById(id); }
+  function setText(id, v) { var e = el(id); if(e) e.textContent = v; }
+  function pad(n)         { return String(n).padStart(2, '0'); }
+
+  /* ── 이벤트 ── */
+  el('searchInput').addEventListener('input', function(e){
+    searchQuery = e.target.value;
+    rerender();
   });
+
+  el('expandAllBtn').addEventListener('click', toggleExpandAll);
+
+  document.querySelectorAll('.tab-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      switchTab(btn.dataset.tab);
+      rerender();
+    });
+  });
+
   document.querySelectorAll('.grade-btn').forEach(function(btn){
     btn.addEventListener('click', function(){ setGradeFilter(btn.dataset.grade); });
   });
 
+  /* ── 시작 ── */
   loadData();
 })();
 </script>
