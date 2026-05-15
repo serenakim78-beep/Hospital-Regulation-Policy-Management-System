@@ -24,6 +24,8 @@
       --success: #6db98a;
       --warning: #c9a84c;
       --danger: #c97a6d;
+      --question: #7a9fc9;
+      --question-dim: rgba(122,159,201,0.15);
     }
 
     body {
@@ -94,7 +96,7 @@
 
     .stats-bar {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 12px;
       margin-bottom: 28px;
     }
@@ -113,6 +115,9 @@
       height: 2px;
       background: linear-gradient(90deg, var(--gold), transparent);
     }
+    .stat-card.question-card::after {
+      background: linear-gradient(90deg, var(--question), transparent);
+    }
     .stat-label {
       font-family: 'DM Mono', monospace;
       font-size: 9px;
@@ -128,6 +133,7 @@
       color: var(--gold);
       line-height: 1;
     }
+    .stat-value.question-val { color: var(--question); }
 
     .toolbar {
       display: flex;
@@ -190,6 +196,7 @@
     .grade-btn.active-B { background: rgba(201,168,76,0.15); color: var(--warning); border-color: rgba(201,168,76,0.5); }
     .grade-btn.active-C { background: rgba(201,122,109,0.15); color: var(--danger); border-color: rgba(201,122,109,0.5); }
 
+    /* ---- TABS ROW ---- */
     .tabs-row {
       display: flex;
       align-items: center;
@@ -216,6 +223,13 @@
     .main-tab-btn:hover { border-color: var(--border2); color: var(--text); }
     .main-tab-btn.active { background: var(--gold-dim); border-color: var(--gold); color: var(--gold); }
 
+    /* 질문 탭 전용 활성 스타일 */
+    .main-tab-btn.tab-question.active {
+      background: var(--question-dim);
+      border-color: var(--question);
+      color: var(--question);
+    }
+
     .tab-count-badge {
       font-family: 'DM Mono', monospace;
       font-size: 10px;
@@ -225,6 +239,24 @@
       padding: 1px 7px;
     }
     .main-tab-btn.active .tab-count-badge { background: rgba(201,168,76,0.3); }
+
+    .tab-count-badge.question-badge {
+      background: rgba(122,159,201,0.2);
+      color: var(--question);
+    }
+    .main-tab-btn.tab-question.active .tab-count-badge {
+      background: rgba(122,159,201,0.3);
+      color: var(--question);
+    }
+
+    /* 질문 탭 아이콘 */
+    .tab-icon {
+      width: 14px; height: 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .tab-icon svg { width: 13px; height: 13px; }
 
     .spacer { flex: 1; }
 
@@ -250,6 +282,44 @@
     }
     .expand-all-btn:hover { border-color: var(--border2); color: var(--text); }
 
+    /* ---- QUESTION VIEW 상단 안내 배너 ---- */
+    .question-banner {
+      background: var(--question-dim);
+      border: 1px solid rgba(122,159,201,0.3);
+      border-radius: 10px;
+      padding: 14px 20px;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .question-banner-icon {
+      width: 32px; height: 32px;
+      border-radius: 8px;
+      background: rgba(122,159,201,0.2);
+      border: 1px solid rgba(122,159,201,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .question-banner-icon svg { width: 16px; height: 16px; }
+    .question-banner-text { flex: 1; }
+    .question-banner-title {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--question);
+      margin-bottom: 2px;
+    }
+    .question-banner-desc {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+    }
+
+    /* ---- REG CARDS ---- */
     .reg-list { display: flex; flex-direction: column; gap: 10px; }
 
     .reg-card {
@@ -261,6 +331,7 @@
     }
     .reg-card:hover { border-color: var(--border2); }
     .reg-card.expanded { border-color: var(--gold); }
+    .reg-card.question-type.expanded { border-color: var(--question); }
 
     .reg-card-header {
       display: flex;
@@ -299,6 +370,25 @@
       border-color: var(--gold);
       color: var(--gold);
       background: var(--gold-dim);
+    }
+    .reg-card.question-type.expanded .reg-count-badge {
+      border-color: var(--question);
+      color: var(--question);
+      background: var(--question-dim);
+    }
+
+    /* 질문 타입 카드 레이블 */
+    .question-type-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      background: rgba(122,159,201,0.15);
+      color: var(--question);
+      border: 1px solid rgba(122,159,201,0.3);
+      border-radius: 4px;
+      padding: 2px 7px;
+      flex-shrink: 0;
     }
 
     .toggle-arrow {
@@ -390,6 +480,7 @@
     }
     .field-value.empty { color: var(--text-muted); font-style: italic; }
 
+    /* ---- JOB GROUP VIEW ---- */
     .jobgroup-list { display: flex; flex-direction: column; gap: 10px; }
 
     .jg-card {
@@ -438,6 +529,7 @@
       font-family: 'Noto Serif KR', serif;
     }
 
+    /* ---- LOADING / ERROR ---- */
     .loading-screen, .error-screen {
       display: flex; flex-direction: column;
       align-items: center; justify-content: center;
@@ -514,6 +606,7 @@
 
   <div id="mainContent" style="display:none;">
 
+    <!-- STATS: 4칸 -->
     <div class="stats-bar">
       <div class="stat-card">
         <div class="stat-label">Total Items</div>
@@ -527,8 +620,13 @@
         <div class="stat-label">Job Groups</div>
         <div class="stat-value" id="statGroups">0</div>
       </div>
+      <div class="stat-card question-card">
+        <div class="stat-label">Questions</div>
+        <div class="stat-value question-val" id="statQuestions">0</div>
+      </div>
     </div>
 
+    <!-- TOOLBAR -->
     <div class="toolbar">
       <div class="search-wrap">
         <span class="search-icon">
@@ -547,6 +645,7 @@
       </div>
     </div>
 
+    <!-- TABS ROW: 전체 / 직군 / 질문 -->
     <div class="tabs-row">
       <div class="main-tabs">
         <button class="main-tab-btn active" id="tabAll" onclick="switchTab('all')">
@@ -557,6 +656,17 @@
           직군
           <span class="tab-count-badge" id="badgeJobGroup">0</span>
         </button>
+        <button class="main-tab-btn tab-question" id="tabQuestion" onclick="switchTab('question')">
+          <span class="tab-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+              <line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+          </span>
+          질문
+          <span class="tab-count-badge question-badge" id="badgeQuestion">0</span>
+        </button>
       </div>
       <div class="spacer"></div>
       <span class="result-info" id="resultInfo"></span>
@@ -565,12 +675,32 @@
       </button>
     </div>
 
+    <!-- VIEW: 전체 (질문 제외) -->
     <div id="view-all">
       <div class="reg-list" id="regList"></div>
     </div>
 
+    <!-- VIEW: 직군 -->
     <div id="view-jobgroup" style="display:none;">
       <div class="jobgroup-list" id="jobgroupList"></div>
+    </div>
+
+    <!-- VIEW: 질문 -->
+    <div id="view-question" style="display:none;">
+      <div class="question-banner">
+        <div class="question-banner-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--question)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+        </div>
+        <div class="question-banner-text">
+          <div class="question-banner-title">질문 항목 모음</div>
+          <div class="question-banner-desc">규정 제목에 "질문"이 포함된 항목들만 별도 분리하여 표시합니다.</div>
+        </div>
+      </div>
+      <div class="reg-list" id="questionList"></div>
     </div>
 
   </div>
@@ -592,6 +722,12 @@
   let gradeFilter = '';
   let allExpanded = false;
 
+  /* "질문" 포함 여부 판별 */
+  function isQuestion(title) {
+    return (title || '').includes('질문');
+  }
+
+  /* ---- CSV 파싱 ---- */
   function parseCSV(text) {
     const lines = [];
     let cur = '', inQ = false, row = [];
@@ -612,6 +748,7 @@
     return lines;
   }
 
+  /* ---- 데이터 로드 ---- */
   async function loadData() {
     try {
       const res = await fetch(CSV_URL);
@@ -622,14 +759,18 @@
 
       allRows = rows.slice(1).filter(r => r.some(c => c !== ''));
 
-      const regSet   = new Set(allRows.map(r => r[COL.규정제목]).filter(Boolean));
-      const groupSet = new Set(allRows.map(r => r[COL.직군]).filter(Boolean));
+      const regSet      = new Set(allRows.filter(r => !isQuestion(r[COL.규정제목])).map(r => r[COL.규정제목]).filter(Boolean));
+      const questionSet = new Set(allRows.filter(r =>  isQuestion(r[COL.규정제목])).map(r => r[COL.규정제목]).filter(Boolean));
+      const groupSet    = new Set(allRows.map(r => r[COL.직군]).filter(Boolean));
 
-      document.getElementById('statTotal').textContent  = allRows.length.toLocaleString();
-      document.getElementById('statRegs').textContent   = regSet.size.toLocaleString();
-      document.getElementById('statGroups').textContent = groupSet.size.toLocaleString();
+      document.getElementById('statTotal').textContent     = allRows.length.toLocaleString();
+      document.getElementById('statRegs').textContent      = regSet.size.toLocaleString();
+      document.getElementById('statGroups').textContent    = groupSet.size.toLocaleString();
+      document.getElementById('statQuestions').textContent = questionSet.size.toLocaleString();
+
       document.getElementById('badgeAll').textContent      = regSet.size;
       document.getElementById('badgeJobGroup').textContent = groupSet.size;
+      document.getElementById('badgeQuestion').textContent = questionSet.size;
 
       document.getElementById('statusDot').style.background = '#6db98a';
       document.getElementById('statusText').textContent = `${allRows.length}개 항목 로드 완료`;
@@ -648,16 +789,20 @@
     }
   }
 
+  /* ---- 탭 전환 ---- */
   function switchTab(tab) {
     currentView = tab;
     document.getElementById('tabAll').classList.toggle('active', tab === 'all');
     document.getElementById('tabJobGroup').classList.toggle('active', tab === 'jobgroup');
+    document.getElementById('tabQuestion').classList.toggle('active', tab === 'question');
     document.getElementById('view-all').style.display      = tab === 'all'      ? 'block' : 'none';
     document.getElementById('view-jobgroup').style.display = tab === 'jobgroup' ? 'block' : 'none';
+    document.getElementById('view-question').style.display = tab === 'question' ? 'block' : 'none';
     allExpanded = false;
     document.getElementById('expandAllBtn').textContent = '모두 펼치기';
   }
 
+  /* ---- 등급 필터 ---- */
   function setGradeFilter(g) {
     gradeFilter = g;
     ['gradeAll','gradeA','gradeB','gradeC'].forEach(id => {
@@ -678,12 +823,14 @@
     rerender();
   }
 
+  /* ---- 전체 펼치기/접기 ---- */
   function toggleExpandAll() {
     allExpanded = !allExpanded;
     document.getElementById('expandAllBtn').textContent = allExpanded ? '모두 접기' : '모두 펼치기';
-    const container = currentView === 'all'
-      ? document.getElementById('regList')
-      : document.getElementById('jobgroupList');
+    const containerId = currentView === 'all' ? 'regList'
+                      : currentView === 'jobgroup' ? 'jobgroupList'
+                      : 'questionList';
+    const container = document.getElementById(containerId);
     container.querySelectorAll('.reg-card, .jg-card').forEach(card => {
       const body  = card.querySelector('.reg-card-body, .jg-card-body');
       const inner = card.querySelector('.reg-card-body-inner, .jg-card-body-inner');
@@ -697,8 +844,17 @@
     });
   }
 
-  function getFiltered() {
+  /* ---- 필터링 ---- */
+  function getFiltered(includeQuestion) {
     let rows = allRows;
+
+    /* 탭에 따라 질문 포함/제외 분리 */
+    if (includeQuestion === true) {
+      rows = rows.filter(r => isQuestion(r[COL.규정제목]));
+    } else if (includeQuestion === false) {
+      rows = rows.filter(r => !isQuestion(r[COL.규정제목]));
+    }
+
     if (gradeFilter) {
       rows = rows.filter(r => (r[COL.조사항목등급]||'').toUpperCase() === gradeFilter);
     }
@@ -712,6 +868,7 @@
     );
   }
 
+  /* ---- 결과 정보 업데이트 ---- */
   function updateResultInfo(count, label) {
     const el = document.getElementById('resultInfo');
     if (searchQuery || gradeFilter) {
@@ -721,10 +878,11 @@
     }
   }
 
+  /* ---- 전체 뷰 렌더링 (질문 제외) ---- */
   function renderAll() {
     const container = document.getElementById('regList');
     container.innerHTML = '';
-    const filtered = getFiltered();
+    const filtered = getFiltered(false);
 
     if (!filtered.length) {
       container.innerHTML = '<div class="empty-state"><span>/ /</span>표시할 데이터가 없습니다.</div>';
@@ -740,36 +898,70 @@
     });
 
     updateResultInfo(Object.keys(grouped).length, '규정');
-
     Object.entries(grouped).forEach(([title, rows], idx) => {
-      const card = document.createElement('div');
-      card.className = 'reg-card';
-      card.innerHTML = `
-        <div class="reg-card-header">
-          <span class="reg-num">${String(idx+1).padStart(2,'0')}</span>
-          <span class="reg-title">${esc(title)}</span>
-          <span class="reg-count-badge">${rows.length} 항목</span>
-          <span class="toggle-arrow">
-            <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
-          </span>
-        </div>
-        <div class="reg-card-body">
-          <div class="reg-card-body-inner">
-            <div class="item-list">
-              ${rows.map((r, i) => itemCardHtml(r, i)).join('')}
-            </div>
-          </div>
-        </div>
-      `;
-      card.querySelector('.reg-card-header').addEventListener('click', () => toggleCard(card));
-      container.appendChild(card);
+      container.appendChild(buildRegCard(title, rows, idx, false));
     });
   }
 
+  /* ---- 질문 뷰 렌더링 ---- */
+  function renderQuestion() {
+    const container = document.getElementById('questionList');
+    container.innerHTML = '';
+    const filtered = getFiltered(true);
+
+    if (!filtered.length) {
+      container.innerHTML = '<div class="empty-state"><span>/ /</span>표시할 질문 데이터가 없습니다.</div>';
+      return;
+    }
+
+    const grouped = {};
+    filtered.forEach(r => {
+      const t = r[COL.규정제목] || '(제목 없음)';
+      if (!grouped[t]) grouped[t] = [];
+      grouped[t].push(r);
+    });
+
+    Object.entries(grouped).forEach(([title, rows], idx) => {
+      container.appendChild(buildRegCard(title, rows, idx, true));
+    });
+  }
+
+  /* ---- reg 카드 생성 (공통) ---- */
+  function buildRegCard(title, rows, idx, isQuestionType) {
+    const card = document.createElement('div');
+    card.className = 'reg-card' + (isQuestionType ? ' question-type' : '');
+
+    const questionLabel = isQuestionType
+      ? `<span class="question-type-label">질문</span>`
+      : '';
+
+    card.innerHTML = `
+      <div class="reg-card-header">
+        <span class="reg-num">${String(idx+1).padStart(2,'0')}</span>
+        <span class="reg-title">${esc(title)}</span>
+        ${questionLabel}
+        <span class="reg-count-badge">${rows.length} 항목</span>
+        <span class="toggle-arrow">
+          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </span>
+      </div>
+      <div class="reg-card-body">
+        <div class="reg-card-body-inner">
+          <div class="item-list">
+            ${rows.map((r, i) => itemCardHtml(r, i)).join('')}
+          </div>
+        </div>
+      </div>
+    `;
+    card.querySelector('.reg-card-header').addEventListener('click', () => toggleCard(card));
+    return card;
+  }
+
+  /* ---- 직군 뷰 렌더링 ---- */
   function renderJobGroup() {
     const container = document.getElementById('jobgroupList');
     container.innerHTML = '';
-    const filtered = getFiltered();
+    const filtered = getFiltered(null); /* 직군 탭은 전체 포함 */
 
     if (!filtered.length) {
       container.innerHTML = '<div class="empty-state"><span>/ /</span>표시할 데이터가 없습니다.</div>';
@@ -822,6 +1014,7 @@
     });
   }
 
+  /* ---- 항목 카드 HTML ---- */
   function itemCardHtml(r, i) {
     const grade = r[COL.조사항목등급] || '';
     const gradeClass = ['A','B','C'].includes(grade.toUpperCase())
@@ -859,6 +1052,7 @@
     `;
   }
 
+  /* ---- 아코디언 토글 ---- */
   function toggleCard(card) {
     const body  = card.querySelector('.reg-card-body, .jg-card-body');
     const inner = card.querySelector('.reg-card-body-inner, .jg-card-body-inner');
@@ -871,23 +1065,28 @@
     }
   }
 
+  /* ---- 전체 재렌더링 ---- */
   function rerender() {
     allExpanded = false;
     document.getElementById('expandAllBtn').textContent = '모두 펼치기';
     renderAll();
     renderJobGroup();
+    renderQuestion();
   }
 
+  /* ---- 유틸 ---- */
   function esc(str) {
     if (!str) return '-';
     return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   }
 
+  /* ---- 검색 ---- */
   document.getElementById('searchInput').addEventListener('input', e => {
     searchQuery = e.target.value;
     rerender();
   });
 
+  /* ---- 초기 ALL 버튼 스타일 ---- */
   (function() {
     const btn = document.getElementById('gradeAll');
     btn.style.background = 'var(--gold-dim)';
@@ -895,6 +1094,7 @@
     btn.style.borderColor = 'rgba(201,168,76,0.5)';
   })();
 
+  /* ---- 시작 ---- */
   loadData();
 </script>
 </body>
