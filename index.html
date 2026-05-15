@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>규정 조사 항목 뷰어</title>
+  <title>한서재활요양병원 규정 뷰어</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700&family=Noto+Sans+KR:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -43,7 +43,6 @@
       opacity: 0.35;
     }
 
-    /* ---- HEADER ---- */
     header {
       background: var(--surface);
       border-bottom: 1px solid var(--border);
@@ -91,10 +90,8 @@
     }
     @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
-    /* ---- CONTAINER ---- */
     .container { max-width: 1100px; margin: 0 auto; padding: 32px; }
 
-    /* ---- STATS ---- */
     .stats-bar {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -132,7 +129,6 @@
       line-height: 1;
     }
 
-    /* ---- TOOLBAR ---- */
     .toolbar {
       display: flex;
       align-items: center;
@@ -169,12 +165,7 @@
     .search-wrap input::placeholder { color: var(--text-muted); }
     .search-wrap input:focus { border-color: var(--gold); }
 
-    /* ---- GRADE FILTER ---- */
-    .grade-filter {
-      display: flex;
-      gap: 6px;
-      align-items: center;
-    }
+    .grade-filter { display: flex; gap: 6px; align-items: center; }
     .grade-filter-label {
       font-family: 'DM Mono', monospace;
       font-size: 9px;
@@ -199,7 +190,6 @@
     .grade-btn.active-B { background: rgba(201,168,76,0.15); color: var(--warning); border-color: rgba(201,168,76,0.5); }
     .grade-btn.active-C { background: rgba(201,122,109,0.15); color: var(--danger); border-color: rgba(201,122,109,0.5); }
 
-    /* ---- TABS & CONTROLS ROW ---- */
     .tabs-row {
       display: flex;
       align-items: center;
@@ -238,7 +228,6 @@
 
     .spacer { flex: 1; }
 
-    /* Result counter */
     .result-info {
       font-family: 'DM Mono', monospace;
       font-size: 11px;
@@ -246,7 +235,6 @@
     }
     .result-info strong { color: var(--gold); }
 
-    /* Expand/Collapse All */
     .expand-all-btn {
       font-family: 'DM Mono', monospace;
       font-size: 10px;
@@ -262,7 +250,6 @@
     }
     .expand-all-btn:hover { border-color: var(--border2); color: var(--text); }
 
-    /* ---- REG LIST ---- */
     .reg-list { display: flex; flex-direction: column; gap: 10px; }
 
     .reg-card {
@@ -329,7 +316,6 @@
       stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
     }
 
-    /* ---- ACCORDION BODY ---- */
     .reg-card-body {
       max-height: 0;
       overflow: hidden;
@@ -340,7 +326,6 @@
       border-top: 1px solid var(--border);
     }
 
-    /* ---- ITEM CARDS ---- */
     .item-list { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
 
     .item-card {
@@ -405,7 +390,6 @@
     }
     .field-value.empty { color: var(--text-muted); font-style: italic; }
 
-    /* ---- JOB GROUP VIEW ---- */
     .jobgroup-list { display: flex; flex-direction: column; gap: 10px; }
 
     .jg-card {
@@ -454,7 +438,6 @@
       font-family: 'Noto Serif KR', serif;
     }
 
-    /* ---- LOADING / ERROR ---- */
     .loading-screen, .error-screen {
       display: flex; flex-direction: column;
       align-items: center; justify-content: center;
@@ -510,7 +493,7 @@
   </div>
   <div class="header-titles">
     <div class="header-sub">Regulation Viewer</div>
-    <div class="header-main">규정 조사 항목</div>
+    <div class="header-main">한서재활요양병원 규정</div>
   </div>
   <div class="header-status">
     <div class="status-dot" id="statusDot"></div>
@@ -531,7 +514,6 @@
 
   <div id="mainContent" style="display:none;">
 
-    <!-- STATS -->
     <div class="stats-bar">
       <div class="stat-card">
         <div class="stat-label">Total Items</div>
@@ -547,7 +529,6 @@
       </div>
     </div>
 
-    <!-- TOOLBAR: SEARCH + GRADE FILTER -->
     <div class="toolbar">
       <div class="search-wrap">
         <span class="search-icon">
@@ -566,7 +547,6 @@
       </div>
     </div>
 
-    <!-- TABS ROW -->
     <div class="tabs-row">
       <div class="main-tabs">
         <button class="main-tab-btn active" id="tabAll" onclick="switchTab('all')">
@@ -585,12 +565,10 @@
       </button>
     </div>
 
-    <!-- VIEW: 전체 -->
     <div id="view-all">
       <div class="reg-list" id="regList"></div>
     </div>
 
-    <!-- VIEW: 직군 -->
     <div id="view-jobgroup" style="display:none;">
       <div class="jobgroup-list" id="jobgroupList"></div>
     </div>
@@ -614,7 +592,6 @@
   let gradeFilter = '';
   let allExpanded = false;
 
-  /* ---- CSV 파싱 ---- */
   function parseCSV(text) {
     const lines = [];
     let cur = '', inQ = false, row = [];
@@ -635,7 +612,6 @@
     return lines;
   }
 
-  /* ---- 데이터 로드 ---- */
   async function loadData() {
     try {
       const res = await fetch(CSV_URL);
@@ -672,7 +648,6 @@
     }
   }
 
-  /* ---- 탭 전환 ---- */
   function switchTab(tab) {
     currentView = tab;
     document.getElementById('tabAll').classList.toggle('active', tab === 'all');
@@ -683,34 +658,33 @@
     document.getElementById('expandAllBtn').textContent = '모두 펼치기';
   }
 
-  /* ---- 등급 필터 ---- */
   function setGradeFilter(g) {
     gradeFilter = g;
     ['gradeAll','gradeA','gradeB','gradeC'].forEach(id => {
       const btn = document.getElementById(id);
       btn.className = 'grade-btn';
+      btn.style.background = '';
+      btn.style.color = '';
+      btn.style.borderColor = '';
     });
     if (!g) {
-      document.getElementById('gradeAll').classList.add('active-A');
-      document.getElementById('gradeAll').style.background = 'var(--gold-dim)';
-      document.getElementById('gradeAll').style.color = 'var(--gold)';
-      document.getElementById('gradeAll').style.borderColor = 'rgba(201,168,76,0.5)';
+      const btn = document.getElementById('gradeAll');
+      btn.style.background = 'var(--gold-dim)';
+      btn.style.color = 'var(--gold)';
+      btn.style.borderColor = 'rgba(201,168,76,0.5)';
     } else {
-      const btn = document.getElementById('grade' + g);
-      btn.classList.add('active-' + g);
+      document.getElementById('grade' + g).classList.add('active-' + g);
     }
     rerender();
   }
 
-  /* ---- 전체 펼치기/접기 ---- */
   function toggleExpandAll() {
     allExpanded = !allExpanded;
     document.getElementById('expandAllBtn').textContent = allExpanded ? '모두 접기' : '모두 펼치기';
     const container = currentView === 'all'
       ? document.getElementById('regList')
       : document.getElementById('jobgroupList');
-    const cards = container.querySelectorAll('.reg-card, .jg-card');
-    cards.forEach(card => {
+    container.querySelectorAll('.reg-card, .jg-card').forEach(card => {
       const body  = card.querySelector('.reg-card-body, .jg-card-body');
       const inner = card.querySelector('.reg-card-body-inner, .jg-card-body-inner');
       if (allExpanded) {
@@ -723,7 +697,6 @@
     });
   }
 
-  /* ---- 필터링 ---- */
   function getFiltered() {
     let rows = allRows;
     if (gradeFilter) {
@@ -739,7 +712,6 @@
     );
   }
 
-  /* ---- 결과 정보 업데이트 ---- */
   function updateResultInfo(count, label) {
     const el = document.getElementById('resultInfo');
     if (searchQuery || gradeFilter) {
@@ -749,7 +721,6 @@
     }
   }
 
-  /* ---- 전체 뷰 렌더링 ---- */
   function renderAll() {
     const container = document.getElementById('regList');
     container.innerHTML = '';
@@ -795,7 +766,6 @@
     });
   }
 
-  /* ---- 직군 뷰 렌더링 ---- */
   function renderJobGroup() {
     const container = document.getElementById('jobgroupList');
     container.innerHTML = '';
@@ -852,23 +822,22 @@
     });
   }
 
-  /* ---- 항목 카드 HTML ---- */
   function itemCardHtml(r, i) {
     const grade = r[COL.조사항목등급] || '';
     const gradeClass = ['A','B','C'].includes(grade.toUpperCase())
       ? 'grade-' + grade.toUpperCase() : 'grade-default';
 
     const fields = [
-      { label: '직군',      val: r[COL.직군],          raw: false },
-      { label: '구분',      val: r[COL.조사항목구분],  raw: false },
-      { label: 'Chapter',   val: r[COL.조사항목장],    raw: false },
-      { label: '기준 제목', val: r[COL.기준제목],      raw: false },
-      { label: '기준',      val: r[COL.기준],          raw: false },
-      { label: '조사 항목', val: r[COL.조사항목],      raw: false },
-      { label: '기준 이해', val: r[COL.기준이해],      raw: false },
-      { label: '조사 내용', val: r[COL.조사내용],      raw: false },
-      { label: '조사 목적', val: r[COL.조사목적],      raw: false },
-      { label: '참고 자료', val: r[COL.참고자료],      raw: false },
+      { label: '직군',      val: r[COL.직군] },
+      { label: '구분',      val: r[COL.조사항목구분] },
+      { label: 'Chapter',   val: r[COL.조사항목장] },
+      { label: '기준 제목', val: r[COL.기준제목] },
+      { label: '기준',      val: r[COL.기준] },
+      { label: '조사 항목', val: r[COL.조사항목] },
+      { label: '기준 이해', val: r[COL.기준이해] },
+      { label: '조사 내용', val: r[COL.조사내용] },
+      { label: '조사 목적', val: r[COL.조사목적] },
+      { label: '참고 자료', val: r[COL.참고자료] },
     ];
 
     return `
@@ -890,7 +859,6 @@
     `;
   }
 
-  /* ---- 아코디언 토글 ---- */
   function toggleCard(card) {
     const body  = card.querySelector('.reg-card-body, .jg-card-body');
     const inner = card.querySelector('.reg-card-body-inner, .jg-card-body-inner');
@@ -899,12 +867,10 @@
       card.classList.remove('expanded');
     } else {
       card.classList.add('expanded');
-      // 큰 값을 사용해 중첩 콘텐츠가 잘리지 않도록 처리
       body.style.maxHeight = inner.scrollHeight + 200000 + 'px';
     }
   }
 
-  /* ---- 전체 재렌더링 ---- */
   function rerender() {
     allExpanded = false;
     document.getElementById('expandAllBtn').textContent = '모두 펼치기';
@@ -912,19 +878,16 @@
     renderJobGroup();
   }
 
-  /* ---- 유틸 ---- */
   function esc(str) {
     if (!str) return '-';
     return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   }
 
-  /* ---- 검색 ---- */
   document.getElementById('searchInput').addEventListener('input', e => {
     searchQuery = e.target.value;
     rerender();
   });
 
-  /* ---- 초기화 시 ALL 버튼 스타일 세팅 ---- */
   (function() {
     const btn = document.getElementById('gradeAll');
     btn.style.background = 'var(--gold-dim)';
@@ -932,7 +895,6 @@
     btn.style.borderColor = 'rgba(201,168,76,0.5)';
   })();
 
-  /* ---- 시작 ---- */
   loadData();
 </script>
 </body>
