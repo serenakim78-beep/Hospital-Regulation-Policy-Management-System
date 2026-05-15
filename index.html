@@ -1,1 +1,384 @@
-const csvUrl = 'https://docs.google.com/spreadsheets/d/18dDgxczklu9FRm053w2rqLDFDjqm7C18rijuyJdrkl/gviz/tq?tqx=out:csv';
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>한서 규정 조사항목 관리</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+
+    :root {
+      --bg: #f5f6fa;
+      --white: #ffffff;
+      --primary: #2563eb;
+      --primary-light: #eff6ff;
+      --accent: #dc2626;
+      --yellow: #fbbf24;
+      --yellow-light: #fffbeb;
+      --border: #e5e7eb;
+      --text: #111827;
+      --muted: #6b7280;
+      --radius: 10px;
+      --shadow: 0 2px 12px rgba(0,0,0,0.07);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    header {
+      background: var(--white);
+      border-bottom: 2px solid var(--primary);
+      padding: 18px 32px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    header h1 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    header span {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .toolbar {
+      padding: 18px 32px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .toolbar input,
+    .toolbar select {
+      padding: 8px 14px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 0.9rem;
+      font-family: inherit;
+      background: var(--bg);
+      color: var(--text);
+      outline: none;
+      transition: border 0.2s;
+    }
+
+    .toolbar input:focus,
+    .toolbar select:focus {
+      border-color: var(--primary);
+    }
+
+    .toolbar input { min-width: 220px; }
+
+    .stats {
+      margin-left: auto;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .stats b { color: var(--primary); }
+
+    .container {
+      padding: 24px 32px;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      font-size: 0.88rem;
+    }
+
+    thead tr {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    thead th {
+      padding: 12px 14px;
+      text-align: left;
+      font-weight: 600;
+      white-space: nowrap;
+      font-size: 0.85rem;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    thead th:hover { background: #1d4ed8; }
+
+    tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background 0.15s;
+    }
+
+    tbody tr:hover { background: var(--primary-light); }
+
+    tbody td {
+      padding: 11px 14px;
+      vertical-align: middle;
+      line-height: 1.5;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+
+    .badge-필수 {
+      background: var(--yellow-light);
+      color: #92400e;
+      border: 1px solid var(--yellow);
+    }
+
+    .badge-S {
+      background: #fef2f2;
+      color: var(--accent);
+      border: 1px solid #fca5a5;
+    }
+
+    .badge-P {
+      background: #f0fdf4;
+      color: #166534;
+      border: 1px solid #86efac;
+    }
+
+    .분류-red { color: var(--accent); font-weight: 600; }
+
+    .loading {
+      text-align: center;
+      padding: 60px;
+      color: var(--muted);
+      font-size: 1rem;
+    }
+
+    .loading .spinner {
+      width: 36px;
+      height: 36px;
+      border: 4px solid var(--border);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 16px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .error {
+      text-align: center;
+      padding: 60px;
+      color: var(--accent);
+    }
+
+    .no-data {
+      text-align: center;
+      padding: 40px;
+      color: var(--muted);
+    }
+
+    @media (max-width: 768px) {
+      header, .toolbar, .container { padding: 14px 12px; }
+      header h1 { font-size: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>한서 규정 조사항목 관리 시스템</h1>
+    <span>Hospital Regulation Policy Management</span>
+  </div>
+</header>
+
+<div class="toolbar">
+  <input type="text" id="searchInput" placeholder="검색어를 입력하세요..." oninput="applyFilters()" />
+  <select id="filterGrade" onchange="applyFilters()">
+    <option value="">전체 등급</option>
+    <option value="필수">필수</option>
+  </select>
+  <select id="filterType" onchange="applyFilters()">
+    <option value="">전체 구분</option>
+    <option value="S">S</option>
+    <option value="P">P</option>
+  </select>
+  <select id="filterChapter" id="filterChapter" onchange="applyFilters()">
+    <option value="">전체 장</option>
+  </select>
+  <div class="stats">총 <b id="countDisplay">0</b>개 항목</div>
+</div>
+
+<div class="container">
+  <div class="loading" id="loadingMsg">
+    <div class="spinner"></div>
+    데이터를 불러오는 중입니다...
+  </div>
+  <div class="error" id="errorMsg" style="display:none;">
+    데이터를 불러오지 못했습니다. 구글 시트 공유 설정을 확인해주세요.
+  </div>
+  <table id="dataTable" style="display:none;">
+    <thead>
+      <tr>
+        <th onclick="sortTable(0)">조사항목 등급</th>
+        <th onclick="sortTable(1)">조사항목 구분</th>
+        <th onclick="sortTable(2)">조사항목</th>
+        <th onclick="sortTable(3)">장(chapter)</th>
+        <th onclick="sortTable(4)">기준 제목</th>
+        <th onclick="sortTable(5)">분류</th>
+        <th onclick="sortTable(6)">기준(standard)</th>
+      </tr>
+    </thead>
+    <tbody id="tableBody"></tbody>
+  </table>
+  <div class="no-data" id="noDataMsg" style="display:none;">검색 결과가 없습니다.</div>
+</div>
+
+<script>
+  const CSV_URL = 'https://docs.google.com/spreadsheets/d/18dDgxczklu9FRm053w2rqLDFDjqm7C18rijuyJdrkl/gviz/tq?tqx=out:csv';
+
+  let allData = [];
+  let sortCol = -1;
+  let sortAsc = true;
+
+  function parseCSV(text) {
+    const lines = [];
+    let cur = '', inQ = false;
+    const chars = text.split('');
+    const rows = [];
+    let fields = [];
+    for (let i = 0; i < chars.length; i++) {
+      const c = chars[i];
+      if (c === '"') {
+        if (inQ && chars[i+1] === '"') { cur += '"'; i++; }
+        else inQ = !inQ;
+      } else if (c === ',' && !inQ) {
+        fields.push(cur.trim()); cur = '';
+      } else if ((c === '\n' || c === '\r') && !inQ) {
+        fields.push(cur.trim()); cur = '';
+        if (fields.some(f => f !== '')) rows.push(fields);
+        fields = [];
+        if (c === '\r' && chars[i+1] === '\n') i++;
+      } else {
+        cur += c;
+      }
+    }
+    if (cur || fields.length) { fields.push(cur.trim()); rows.push(fields); }
+    return rows;
+  }
+
+  async function loadData() {
+    try {
+      const res = await fetch(CSV_URL);
+      if (!res.ok) throw new Error('fetch failed');
+      const text = await res.text();
+      const rows = parseCSV(text);
+      if (rows.length < 2) throw new Error('no data');
+      allData = rows.slice(1).map(r => ({
+        grade: r[0] || '',
+        type: r[1] || '',
+        item: r[2] || '',
+        chapter: r[3] || '',
+        title: r[4] || '',
+        category: r[5] || '',
+        standard: r[6] || ''
+      }));
+      populateChapterFilter();
+      document.getElementById('loadingMsg').style.display = 'none';
+      document.getElementById('dataTable').style.display = 'table';
+      applyFilters();
+    } catch(e) {
+      document.getElementById('loadingMsg').style.display = 'none';
+      document.getElementById('errorMsg').style.display = 'block';
+    }
+  }
+
+  function populateChapterFilter() {
+    const sel = document.getElementById('filterChapter');
+    const chapters = [...new Set(allData.map(d => d.chapter).filter(Boolean))];
+    chapters.sort();
+    chapters.forEach(c => {
+      const opt = document.createElement('option');
+      opt.value = c; opt.textContent = c;
+      sel.appendChild(opt);
+    });
+  }
+
+  function applyFilters() {
+    const search = document.getElementById('searchInput').value.toLowerCase();
+    const grade = document.getElementById('filterGrade').value;
+    const type = document.getElementById('filterType').value;
+    const chapter = document.getElementById('filterChapter').value;
+
+    let filtered = allData.filter(d => {
+      const matchSearch = !search || Object.values(d).some(v => v.toLowerCase().includes(search));
+      const matchGrade = !grade || d.grade === grade;
+      const matchType = !type || d.type === type;
+      const matchChapter = !chapter || d.chapter === chapter;
+      return matchSearch && matchGrade && matchType && matchChapter;
+    });
+
+    if (sortCol >= 0) {
+      const keys = ['grade','type','item','chapter','title','category','standard'];
+      filtered.sort((a,b) => {
+        const av = a[keys[sortCol]] || '';
+        const bv = b[keys[sortCol]] || '';
+        return sortAsc ? av.localeCompare(bv,'ko') : bv.localeCompare(av,'ko');
+      });
+    }
+
+    renderTable(filtered);
+    document.getElementById('countDisplay').textContent = filtered.length;
+  }
+
+  function renderTable(data) {
+    const tbody = document.getElementById('tableBody');
+    const noData = document.getElementById('noDataMsg');
+    if (data.length === 0) {
+      tbody.innerHTML = '';
+      document.getElementById('dataTable').style.display = 'none';
+      noData.style.display = 'block';
+      return;
+    }
+    noData.style.display = 'none';
+    document.getElementById('dataTable').style.display = 'table';
+    tbody.innerHTML = data.map(d => `
+      <tr>
+        <td><span class="badge badge-필수">${d.grade}</span></td>
+        <td><span class="badge badge-${d.type}">${d.type}</span></td>
+        <td>${d.item}</td>
+        <td>${d.chapter}</td>
+        <td>${d.title}</td>
+        <td class="${d.category.includes('&') ? '분류-red' : ''}">${d.category}</td>
+        <td>${d.standard}</td>
+      </tr>
+    `).join('');
+  }
+
+  function sortTable(col) {
+    if (sortCol === col) sortAsc = !sortAsc;
+    else { sortCol = col; sortAsc = true; }
+    applyFilters();
+  }
+
+  loadData();
+</script>
+</body>
+</html>
