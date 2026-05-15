@@ -4,22 +4,25 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>규정 조사 항목 뷰어</title>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Noto+Serif+KR:wght@600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #0f1117;
-      --surface: #1a1d27;
-      --surface2: #22263a;
-      --accent: #4f8ef7;
-      --accent2: #a78bfa;
-      --text: #e8eaf0;
-      --text-muted: #8891a8;
-      --border: #2e3348;
-      --success: #34d399;
-      --warning: #fbbf24;
-      --danger: #f87171;
+      --bg: #0d0d0d;
+      --surface: #161616;
+      --surface2: #1f1f1f;
+      --surface3: #2a2a2a;
+      --gold: #c9a84c;
+      --gold2: #e8c97a;
+      --text: #ede8df;
+      --text-muted: #7a7468;
+      --text-sub: #a09890;
+      --border: #2a2a2a;
+      --border2: #333;
+      --success: #5cba8a;
+      --warning: #d4a043;
+      --danger: #c45c5c;
     }
 
     body {
@@ -29,353 +32,525 @@
       min-height: 100vh;
     }
 
-    /* ---- HEADER ---- */
-    header {
-      background: linear-gradient(135deg, #1a1d27 0%, #12162a 100%);
-      border-bottom: 1px solid var(--border);
-      padding: 24px 32px;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      backdrop-filter: blur(10px);
+    /* noise overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
     }
 
-    header .logo-icon {
-      width: 40px;
-      height: 40px;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      border-radius: 10px;
+    /* ---- HEADER ---- */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      background: rgba(13,13,13,0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 40px;
+      height: 64px;
       display: flex;
       align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      font-weight: 700;
-      color: white;
+      gap: 20px;
+    }
+
+    .logo-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3px;
+      width: 32px;
+      height: 32px;
       flex-shrink: 0;
     }
 
-    header h1 {
-      font-size: 20px;
+    .logo-grid span {
+      border-radius: 2px;
+    }
+    .logo-grid span:nth-child(1) { background: var(--gold); }
+    .logo-grid span:nth-child(2) { background: var(--gold2); opacity: 0.6; }
+    .logo-grid span:nth-child(3) { background: var(--gold2); opacity: 0.6; }
+    .logo-grid span:nth-child(4) { background: var(--gold); opacity: 0.3; }
+
+    .logo-text {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+
+    .logo-text .eyebrow {
+      font-family: 'DM Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 2.5px;
+      color: var(--gold);
+      text-transform: uppercase;
+    }
+
+    .logo-text h1 {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 17px;
       font-weight: 700;
-      letter-spacing: -0.5px;
+      color: var(--text);
+      letter-spacing: -0.3px;
     }
 
-    header h1 span {
-      color: var(--accent);
-    }
-
-    .header-status {
+    .header-right {
       margin-left: auto;
-      font-size: 12px;
-      color: var(--text-muted);
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--text-muted);
     }
 
     .status-dot {
-      width: 8px;
-      height: 8px;
+      width: 7px;
+      height: 7px;
       border-radius: 50%;
       background: var(--success);
-      animation: pulse 2s infinite;
+      animation: pulse 2.5s ease-in-out infinite;
     }
 
     @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.4; }
+      0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(92,186,138,0.4); }
+      50% { opacity: 0.7; box-shadow: 0 0 0 4px rgba(92,186,138,0); }
     }
 
-    /* ---- MAIN LAYOUT ---- */
+    /* ---- CONTAINER ---- */
     .container {
-      max-width: 1400px;
+      max-width: 900px;
       margin: 0 auto;
-      padding: 32px;
+      padding: 40px 24px 80px;
+      position: relative;
+      z-index: 1;
     }
 
     /* ---- STATS ---- */
     .stats-bar {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 16px;
-      margin-bottom: 32px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 36px;
     }
 
     .stat-card {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 16px 20px;
+      border-radius: 10px;
+      padding: 18px 22px;
+      position: relative;
+      overflow: hidden;
     }
 
-    .stat-card .stat-label {
-      font-size: 11px;
-      color: var(--text-muted);
+    .stat-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 100%; height: 2px;
+      background: linear-gradient(90deg, var(--gold), transparent);
+    }
+
+    .stat-label {
+      font-size: 10px;
+      font-family: 'DM Mono', monospace;
+      letter-spacing: 1.5px;
       text-transform: uppercase;
-      letter-spacing: 0.8px;
-      margin-bottom: 6px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
     }
 
-    .stat-card .stat-value {
-      font-size: 26px;
+    .stat-value {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 32px;
       font-weight: 700;
-      color: var(--accent);
+      color: var(--gold);
+      line-height: 1;
+    }
+
+    /* ---- SEARCH ---- */
+    .search-wrap {
+      margin-bottom: 28px;
+      position: relative;
+    }
+
+    .search-wrap svg {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    .search-wrap input {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 16px 12px 42px;
+      font-size: 13px;
+      font-family: 'Noto Sans KR', sans-serif;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .search-wrap input::placeholder { color: var(--text-muted); }
+    .search-wrap input:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(201,168,76,0.1);
     }
 
     /* ---- TABS ---- */
-    .tabs-wrapper {
-      margin-bottom: 24px;
+    .tabs-scroll {
       overflow-x: auto;
       scrollbar-width: none;
+      margin-bottom: 28px;
     }
-    .tabs-wrapper::-webkit-scrollbar { display: none; }
+    .tabs-scroll::-webkit-scrollbar { display: none; }
 
     .tabs {
       display: flex;
-      gap: 8px;
-      flex-wrap: nowrap;
+      gap: 0;
       border-bottom: 1px solid var(--border);
-      padding-bottom: 0;
+      min-width: max-content;
     }
 
     .tab-btn {
       background: none;
       border: none;
-      padding: 10px 20px;
-      font-size: 13px;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      padding: 10px 18px;
+      font-size: 12px;
       font-family: 'Noto Sans KR', sans-serif;
       font-weight: 500;
       color: var(--text-muted);
       cursor: pointer;
-      border-bottom: 2px solid transparent;
-      margin-bottom: -1px;
       transition: all 0.2s;
       white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
-    .tab-btn:hover {
-      color: var(--text);
-    }
+    .tab-btn:hover { color: var(--text); }
 
     .tab-btn.active {
-      color: var(--accent);
-      border-bottom-color: var(--accent);
+      color: var(--gold);
+      border-bottom-color: var(--gold);
     }
 
-    /* ---- SEARCH ---- */
-    .search-bar {
-      margin-bottom: 24px;
+    .tab-count {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      background: rgba(201,168,76,0.15);
+      color: var(--gold);
+      border: 1px solid rgba(201,168,76,0.25);
+      border-radius: 20px;
+      padding: 1px 7px;
     }
 
-    .search-bar input {
-      width: 100%;
-      max-width: 480px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 10px 16px;
-      font-size: 14px;
-      font-family: 'Noto Sans KR', sans-serif;
-      color: var(--text);
-      outline: none;
-      transition: border-color 0.2s;
-    }
-
-    .search-bar input::placeholder { color: var(--text-muted); }
-    .search-bar input:focus { border-color: var(--accent); }
-
-    /* ---- REGULATION TITLE LIST ---- */
+    /* ---- REG CARDS ---- */
     .reg-list {
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 10px;
     }
 
     .reg-card {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 14px;
+      border-radius: 12px;
       overflow: hidden;
-      transition: border-color 0.2s;
+      transition: border-color 0.25s;
     }
 
-    .reg-card:hover {
-      border-color: var(--accent);
-    }
+    .reg-card:hover { border-color: rgba(201,168,76,0.35); }
+    .reg-card.expanded { border-color: rgba(201,168,76,0.5); }
 
     .reg-card-header {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      padding: 16px 20px;
+      padding: 18px 20px;
       cursor: pointer;
       user-select: none;
-      gap: 12px;
+      gap: 14px;
     }
 
-    .reg-card-header h3 {
-      font-size: 15px;
-      font-weight: 700;
-      color: var(--text);
-      flex: 1;
-    }
-
-    .reg-meta {
-      display: flex;
-      gap: 8px;
-      align-items: center;
+    .reg-num {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--text-muted);
+      min-width: 24px;
       flex-shrink: 0;
     }
 
-    .badge {
+    .reg-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .reg-info h3 {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+      line-height: 1.4;
+    }
+
+    .reg-chips {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .chip {
       font-size: 11px;
-      padding: 3px 10px;
-      border-radius: 20px;
-      font-weight: 500;
+      font-family: 'DM Mono', monospace;
+      padding: 2px 9px;
+      border-radius: 4px;
+      border: 1px solid;
     }
 
-    .badge-count {
-      background: rgba(79, 142, 247, 0.15);
-      color: var(--accent);
-      border: 1px solid rgba(79, 142, 247, 0.3);
+    .chip-count {
+      background: rgba(201,168,76,0.08);
+      color: var(--gold2);
+      border-color: rgba(201,168,76,0.2);
     }
 
-    .toggle-icon {
+    .chip-grade-A {
+      background: rgba(92,186,138,0.1);
+      color: var(--success);
+      border-color: rgba(92,186,138,0.25);
+    }
+
+    .chip-grade-B {
+      background: rgba(212,160,67,0.1);
+      color: var(--warning);
+      border-color: rgba(212,160,67,0.25);
+    }
+
+    .chip-grade-C {
+      background: rgba(196,92,92,0.1);
+      color: var(--danger);
+      border-color: rgba(196,92,92,0.25);
+    }
+
+    .toggle-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: var(--surface2);
+      border: 1px solid var(--border2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: background 0.2s, transform 0.3s;
+    }
+
+    .reg-card.expanded .toggle-btn {
+      background: rgba(201,168,76,0.15);
+      border-color: rgba(201,168,76,0.3);
+      transform: none;
+    }
+
+    .toggle-btn svg {
       color: var(--text-muted);
-      font-size: 18px;
-      transition: transform 0.2s;
-      font-weight: 300;
+      transition: transform 0.3s ease;
     }
 
-    .reg-card.expanded .toggle-icon {
+    .reg-card.expanded .toggle-btn svg {
       transform: rotate(180deg);
+      color: var(--gold);
     }
 
+    /* ---- ACCORDION BODY ---- */
     .reg-card-body {
-      display: none;
-      padding: 0 20px 20px;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .reg-card.expanded .reg-card-body {
-      display: block;
+      max-height: 99999px;
     }
 
-    /* ---- TABLE ---- */
-    .table-wrapper {
-      overflow-x: auto;
-      border-radius: 10px;
-      border: 1px solid var(--border);
+    .body-inner {
+      padding: 0 20px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
     }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 13px;
-    }
-
-    thead th {
+    /* ---- ITEM CARD (세로) ---- */
+    .item-card {
       background: var(--surface2);
-      padding: 10px 14px;
-      text-align: left;
-      font-size: 11px;
-      font-weight: 600;
+      border: 1px solid var(--border2);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .item-card-top {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      background: var(--surface3);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .item-seq {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
       color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.6px;
-      white-space: nowrap;
-      border-bottom: 1px solid var(--border);
     }
 
-    tbody tr {
-      border-bottom: 1px solid var(--border);
-      transition: background 0.15s;
-    }
-
-    tbody tr:last-child { border-bottom: none; }
-    tbody tr:hover { background: rgba(79, 142, 247, 0.05); }
-
-    tbody td {
-      padding: 10px 14px;
-      color: var(--text);
-      vertical-align: top;
-      line-height: 1.5;
-    }
-
-    .grade-badge {
-      display: inline-block;
-      padding: 2px 8px;
-      border-radius: 4px;
+    .item-grade {
       font-size: 11px;
-      font-weight: 600;
-      white-space: nowrap;
+      font-family: 'DM Mono', monospace;
+      padding: 2px 9px;
+      border-radius: 4px;
+      font-weight: 500;
+      border: 1px solid;
     }
 
-    .grade-A { background: rgba(52, 211, 153, 0.15); color: var(--success); border: 1px solid rgba(52, 211, 153, 0.3); }
-    .grade-B { background: rgba(251, 191, 36, 0.15); color: var(--warning); border: 1px solid rgba(251, 191, 36, 0.3); }
-    .grade-C { background: rgba(248, 113, 113, 0.15); color: var(--danger); border: 1px solid rgba(248, 113, 113, 0.3); }
-    .grade-default { background: rgba(139, 145, 168, 0.15); color: var(--text-muted); border: 1px solid var(--border); }
+    .item-category {
+      font-size: 11px;
+      color: var(--text-sub);
+      font-weight: 500;
+    }
 
-    /* ---- LOADING / ERROR ---- */
-    .loading-screen, .error-screen {
+    .item-chapter {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      color: var(--text-muted);
+      margin-left: auto;
+    }
+
+    /* ---- FIELD ROWS (세로 배치) ---- */
+    .field-list {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .field-row {
+      display: grid;
+      grid-template-columns: 110px 1fr;
+      border-bottom: 1px solid rgba(42,42,42,0.6);
+    }
+
+    .field-row:last-child { border-bottom: none; }
+
+    .field-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      padding: 11px 14px;
+      background: rgba(0,0,0,0.2);
+      border-right: 1px solid var(--border);
+      display: flex;
+      align-items: flex-start;
+      padding-top: 13px;
+      flex-shrink: 0;
+    }
+
+    .field-value {
+      padding: 11px 14px;
+      font-size: 13px;
+      color: var(--text);
+      line-height: 1.65;
+      word-break: break-all;
+    }
+
+    .field-value.empty {
+      color: var(--text-muted);
+      font-style: italic;
+      font-size: 12px;
+    }
+
+    /* ---- LOADING / ERROR / EMPTY ---- */
+    .loading-screen {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       min-height: 60vh;
-      gap: 16px;
-      text-align: center;
+      gap: 20px;
     }
 
     .spinner {
-      width: 48px;
-      height: 48px;
-      border: 3px solid var(--border);
-      border-top-color: var(--accent);
+      width: 44px;
+      height: 44px;
+      border: 2px solid var(--border);
+      border-top-color: var(--gold);
       border-radius: 50%;
-      animation: spin 0.8s linear infinite;
+      animation: spin 0.9s linear infinite;
     }
 
     @keyframes spin { to { transform: rotate(360deg); } }
 
     .loading-text {
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
       color: var(--text-muted);
-      font-size: 14px;
+      letter-spacing: 1px;
     }
 
     .error-box {
-      background: rgba(248, 113, 113, 0.1);
-      border: 1px solid rgba(248, 113, 113, 0.3);
-      border-radius: 12px;
-      padding: 24px 32px;
+      background: rgba(196,92,92,0.08);
+      border: 1px solid rgba(196,92,92,0.25);
+      border-radius: 10px;
+      padding: 24px 28px;
       color: var(--danger);
-      font-size: 14px;
-      max-width: 500px;
+      font-size: 13px;
+      line-height: 1.7;
+      max-width: 520px;
+      margin: 60px auto;
     }
 
     .empty-state {
       text-align: center;
-      padding: 48px;
+      padding: 60px 24px;
       color: var(--text-muted);
-      font-size: 14px;
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 1px;
     }
 
-    @media (max-width: 768px) {
-      .container { padding: 16px; }
-      header { padding: 16px; }
+    @media (max-width: 640px) {
+      header { padding: 0 16px; }
+      .container { padding: 24px 14px 60px; }
+      .stats-bar { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+      .stat-value { font-size: 24px; }
+      .field-row { grid-template-columns: 80px 1fr; }
+      .field-label { font-size: 9px; padding: 10px 10px; }
+      .field-value { font-size: 12px; padding: 10px 12px; }
     }
   </style>
 </head>
 <body>
 
 <header>
-  <div class="logo-icon">R</div>
-  <h1>규정 조사 항목 <span>뷰어</span></h1>
-  <div class="header-status">
+  <div class="logo-grid">
+    <span></span><span></span>
+    <span></span><span></span>
+  </div>
+  <div class="logo-text">
+    <div class="eyebrow">Regulation Viewer</div>
+    <h1>규정 조사 항목</h1>
+  </div>
+  <div class="header-right">
     <div class="status-dot" id="statusDot"></div>
-    <span id="statusText">데이터 로딩 중...</span>
+    <span id="statusText">로딩 중...</span>
   </div>
 </header>
 
@@ -384,56 +559,50 @@
   <!-- LOADING -->
   <div class="loading-screen" id="loadingScreen">
     <div class="spinner"></div>
-    <div class="loading-text">구글 시트에서 데이터를 불러오는 중...</div>
+    <div class="loading-text">LOADING DATA...</div>
   </div>
 
   <!-- ERROR -->
-  <div class="error-screen" id="errorScreen" style="display:none;">
-    <div class="error-box" id="errorMsg"></div>
-  </div>
+  <div id="errorScreen" style="display:none;"></div>
 
-  <!-- MAIN CONTENT -->
+  <!-- MAIN -->
   <div id="mainContent" style="display:none;">
 
-    <!-- STATS -->
     <div class="stats-bar">
       <div class="stat-card">
-        <div class="stat-label">전체 항목</div>
+        <div class="stat-label">Total Items</div>
         <div class="stat-value" id="statTotal">0</div>
       </div>
       <div class="stat-card">
-        <div class="stat-label">규정 수</div>
+        <div class="stat-label">Regulations</div>
         <div class="stat-value" id="statRegs">0</div>
       </div>
       <div class="stat-card">
-        <div class="stat-label">직군 수</div>
+        <div class="stat-label">Job Groups</div>
         <div class="stat-value" id="statGroups">0</div>
       </div>
     </div>
 
-    <!-- SEARCH -->
-    <div class="search-bar">
+    <div class="search-wrap">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+      </svg>
       <input type="text" id="searchInput" placeholder="규정 제목, 조사 항목, 기준 제목으로 검색..." />
     </div>
 
-    <!-- TABS (직군) -->
-    <div class="tabs-wrapper">
+    <div class="tabs-scroll">
       <div class="tabs" id="tabsContainer"></div>
     </div>
 
-    <!-- REG LIST -->
     <div class="reg-list" id="regList"></div>
 
   </div>
 </div>
 
 <script>
-  // =============================================
-  // 스프레드시트 ID (이미 설정 완료)
-  // =============================================
   const SPREADSHEET_ID = '18dDgxsczklu9FRm053w2rqLDFDjqm7C18rijuyJdrkI';
+  const CSV_URL = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/export?format=csv&gid=0`;
 
-  // 컬럼 인덱스 (0부터 시작)
   const COL = {
     규정제목: 0,
     직군: 1,
@@ -449,21 +618,28 @@
     참고자료: 11,
   };
 
-  const CSV_URL = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/export?format=csv&gid=0`;
+  const FIELDS = [
+    { label: '직군',       key: COL.직군 },
+    { label: '등급',       key: COL.조사항목등급 },
+    { label: '구분',       key: COL.조사항목구분 },
+    { label: 'Chapter',   key: COL.조사항목장 },
+    { label: '기준 제목', key: COL.기준제목 },
+    { label: '기준',       key: COL.기준 },
+    { label: '조사 항목', key: COL.조사항목 },
+    { label: '기준 이해', key: COL.기준이해 },
+    { label: '조사 내용', key: COL.조사내용 },
+    { label: '조사 목적', key: COL.조사목적 },
+    { label: '참고 자료', key: COL.참고자료 },
+  ];
 
   let allRows = [];
   let currentTab = '전체';
   let searchQuery = '';
 
-  // =============================================
-  // CSV 파싱 (따옴표 포함 처리)
-  // =============================================
+  /* ── CSV 파싱 ── */
   function parseCSV(text) {
     const lines = [];
-    let cur = '';
-    let inQ = false;
-    let row = [];
-
+    let cur = '', inQ = false, row = [];
     for (let i = 0; i < text.length; i++) {
       const ch = text[i];
       if (ch === '"') {
@@ -483,65 +659,72 @@
     return lines;
   }
 
-  // =============================================
-  // 데이터 로드
-  // =============================================
+  /* ── 데이터 로드 ── */
   async function loadData() {
     try {
       const res = await fetch(CSV_URL);
-      if (!res.ok) throw new Error(`HTTP 오류: ${res.status}`);
+      if (!res.ok) throw new Error('HTTP ' + res.status);
       const text = await res.text();
       const rows = parseCSV(text);
+      if (rows.length < 2) throw new Error('데이터가 없습니다.');
 
-      if (rows.length < 2) throw new Error('데이터가 없습니다. 구글 시트를 확인해주세요.');
-
-      // 첫 번째 행은 헤더이므로 제거
       allRows = rows.slice(1).filter(r => r.some(c => c !== ''));
 
-      // 통계 업데이트
-      const regSet = new Set(allRows.map(r => r[COL.규정제목]).filter(Boolean));
+      const regSet   = new Set(allRows.map(r => r[COL.규정제목]).filter(Boolean));
       const groupSet = new Set(allRows.map(r => r[COL.직군]).filter(Boolean));
 
-      document.getElementById('statTotal').textContent = allRows.length.toLocaleString();
-      document.getElementById('statRegs').textContent = regSet.size.toLocaleString();
-      document.getElementById('statGroups').textContent = groupSet.size.toLocaleString();
+      animateCount('statTotal',  allRows.length);
+      animateCount('statRegs',   regSet.size);
+      animateCount('statGroups', groupSet.size);
 
-      // 탭 생성
       buildTabs(groupSet);
 
-      // 상태 업데이트
-      document.getElementById('statusDot').style.background = '#34d399';
-      document.getElementById('statusText').textContent = `${allRows.length}개 항목 로드 완료`;
-
-      // 화면 전환
+      document.getElementById('statusDot').style.background = '#5cba8a';
+      document.getElementById('statusText').textContent = allRows.length + '개 항목 로드 완료';
       document.getElementById('loadingScreen').style.display = 'none';
-      document.getElementById('mainContent').style.display = 'block';
+      document.getElementById('mainContent').style.display  = 'block';
 
       render();
     } catch (err) {
       document.getElementById('loadingScreen').style.display = 'none';
-      document.getElementById('errorScreen').style.display = 'flex';
-      document.getElementById('errorMsg').innerHTML = `
-        <strong>데이터를 불러오지 못했습니다.</strong><br/><br/>
-        ${err.message}<br/><br/>
-        <small>구글 시트가 "링크가 있는 모든 사용자" 공개 설정인지 확인해주세요.</small>
-      `;
-      document.getElementById('statusDot').style.background = '#f87171';
+      document.getElementById('statusDot').style.background = '#c45c5c';
       document.getElementById('statusText').textContent = '로드 실패';
+      const el = document.getElementById('errorScreen');
+      el.style.display = 'block';
+      el.innerHTML = `<div class="error-box">
+        <strong>데이터를 불러오지 못했습니다.</strong><br/><br/>
+        ${escHtml(err.message)}<br/><br/>
+        <small>구글 시트 공개 설정을 확인해주세요.</small>
+      </div>`;
     }
   }
 
-  // =============================================
-  // 탭 생성
-  // =============================================
+  /* ── 카운트업 애니메이션 ── */
+  function animateCount(id, target) {
+    const el = document.getElementById(id);
+    let start = 0;
+    const step = Math.ceil(target / 30);
+    const timer = setInterval(() => {
+      start = Math.min(start + step, target);
+      el.textContent = start.toLocaleString();
+      if (start >= target) clearInterval(timer);
+    }, 30);
+  }
+
+  /* ── 탭 생성 ── */
   function buildTabs(groupSet) {
     const container = document.getElementById('tabsContainer');
+    container.innerHTML = '';
     const groups = ['전체', ...Array.from(groupSet).sort()];
 
     groups.forEach(g => {
+      const count = g === '전체'
+        ? allRows.length
+        : allRows.filter(r => r[COL.직군] === g).length;
+
       const btn = document.createElement('button');
-      btn.className = 'tab-btn' + (g === '전체' ? ' active' : '');
-      btn.textContent = g;
+      btn.className = 'tab-btn' + (g === currentTab ? ' active' : '');
+      btn.innerHTML = `${escHtml(g)} <span class="tab-count">${count}</span>`;
       btn.addEventListener('click', () => {
         currentTab = g;
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -552,27 +735,63 @@
     });
   }
 
-  // =============================================
-  // 필터링
-  // =============================================
+  /* ── 필터 ── */
   function getFiltered() {
     return allRows.filter(r => {
-      const tabMatch = currentTab === '전체' || r[COL.직군] === currentTab;
-      if (!tabMatch) return false;
+      if (currentTab !== '전체' && r[COL.직군] !== currentTab) return false;
       if (!searchQuery) return true;
       const q = searchQuery.toLowerCase();
       return (
-        (r[COL.규정제목] || '').toLowerCase().includes(q) ||
-        (r[COL.기준제목] || '').toLowerCase().includes(q) ||
-        (r[COL.조사항목] || '').toLowerCase().includes(q) ||
-        (r[COL.직군] || '').toLowerCase().includes(q)
+        (r[COL.규정제목]  || '').toLowerCase().includes(q) ||
+        (r[COL.기준제목]  || '').toLowerCase().includes(q) ||
+        (r[COL.조사항목]  || '').toLowerCase().includes(q) ||
+        (r[COL.직군]      || '').toLowerCase().includes(q)
       );
     });
   }
 
-  // =============================================
-  // 렌더링
-  // =============================================
+  /* ── 등급 스타일 ── */
+  function gradeClass(g) {
+    if (!g) return '';
+    const up = g.toUpperCase();
+    if (up === 'A' || up === '필수') return 'chip-grade-A';
+    if (up === 'B') return 'chip-grade-B';
+    if (up === 'C') return 'chip-grade-C';
+    return '';
+  }
+
+  /* ── 개별 항목 카드 HTML (세로 필드 목록) ── */
+  function buildItemCard(row, idx) {
+    const grade = row[COL.조사항목등급] || '';
+    const gClass = gradeClass(grade);
+
+    const topHtml = `
+      <div class="item-card-top">
+        <span class="item-seq">#${String(idx + 1).padStart(2, '0')}</span>
+        ${grade ? `<span class="item-grade ${gClass}">${escHtml(grade)}</span>` : ''}
+        ${row[COL.조사항목구분] ? `<span class="item-category">${escHtml(row[COL.조사항목구분])}</span>` : ''}
+        ${row[COL.조사항목장] ? `<span class="item-chapter">${escHtml(row[COL.조사항목장])}</span>` : ''}
+      </div>`;
+
+    const fieldHtml = FIELDS.map(f => {
+      const val = row[f.key] || '';
+      return `
+        <div class="field-row">
+          <div class="field-label">${f.label}</div>
+          <div class="field-value${val ? '' : ' empty'}">${val ? escHtml(val) : '없음'}</div>
+        </div>`;
+    }).join('');
+
+    return `
+      <div class="item-card">
+        ${topHtml}
+        <div class="field-list">
+          ${fieldHtml}
+        </div>
+      </div>`;
+  }
+
+  /* ── 메인 렌더 ── */
   function render() {
     const filtered = getFiltered();
     const container = document.getElementById('regList');
@@ -583,92 +802,98 @@
       return;
     }
 
-    // 규정제목별로 그룹화
+    /* 규정제목별 그룹화 */
     const grouped = {};
+    const groupOrder = [];
     filtered.forEach(r => {
       const title = r[COL.규정제목] || '(제목 없음)';
-      if (!grouped[title]) grouped[title] = [];
+      if (!grouped[title]) { grouped[title] = []; groupOrder.push(title); }
       grouped[title].push(r);
     });
 
-    Object.entries(grouped).forEach(([title, rows]) => {
+    groupOrder.forEach((title, i) => {
+      const rows = grouped[title];
+
+      /* 등급별 칩 집계 */
+      const gradeCounts = {};
+      rows.forEach(r => {
+        const g = (r[COL.조사항목등급] || '').trim();
+        if (g) gradeCounts[g] = (gradeCounts[g] || 0) + 1;
+      });
+
+      const gradeChips = Object.entries(gradeCounts)
+        .map(([g, cnt]) => `<span class="chip ${gradeClass(g)}">${escHtml(g)} ${cnt}</span>`)
+        .join('');
+
       const card = document.createElement('div');
       card.className = 'reg-card';
-
       card.innerHTML = `
         <div class="reg-card-header">
-          <h3>${escHtml(title)}</h3>
-          <div class="reg-meta">
-            <span class="badge badge-count">${rows.length}개 항목</span>
-            <span class="toggle-icon">v</span>
+          <span class="reg-num">${String(i + 1).padStart(2, '0')}</span>
+          <div class="reg-info">
+            <h3>${escHtml(title)}</h3>
+            <div class="reg-chips">
+              <span class="chip chip-count">${rows.length}개 항목</span>
+              ${gradeChips}
+            </div>
+          </div>
+          <div class="toggle-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
           </div>
         </div>
         <div class="reg-card-body">
-          <div class="table-wrapper">
-            <table>
-              <thead>
-                <tr>
-                  <th>직군</th>
-                  <th>등급</th>
-                  <th>구분</th>
-                  <th>Chapter</th>
-                  <th>기준 제목</th>
-                  <th>조사 항목</th>
-                  <th>조사 내용</th>
-                  <th>조사 목적</th>
-                </tr>
-              </thead>
-              <tbody>
-                ${rows.map(r => `
-                  <tr>
-                    <td>${escHtml(r[COL.직군])}</td>
-                    <td>${gradeHtml(r[COL.조사항목등급])}</td>
-                    <td>${escHtml(r[COL.조사항목구분])}</td>
-                    <td>${escHtml(r[COL.조사항목장])}</td>
-                    <td>${escHtml(r[COL.기준제목])}</td>
-                    <td>${escHtml(r[COL.조사항목])}</td>
-                    <td>${escHtml(r[COL.조사내용])}</td>
-                    <td>${escHtml(r[COL.조사목적])}</td>
-                  </tr>
-                `).join('')}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      `;
+          <div class="body-inner"></div>
+        </div>`;
 
-      card.querySelector('.reg-card-header').addEventListener('click', () => {
-        card.classList.toggle('expanded');
+      const header  = card.querySelector('.reg-card-header');
+      const body    = card.querySelector('.reg-card-body');
+      const inner   = card.querySelector('.body-inner');
+      let rendered  = false;
+
+      header.addEventListener('click', () => {
+        const isOpen = card.classList.toggle('expanded');
+
+        /* 최초 클릭 시 내용 렌더링 */
+        if (isOpen && !rendered) {
+          rendered = true;
+          inner.innerHTML = rows.map((r, idx) => buildItemCard(r, idx)).join('');
+        }
+
+        /* max-height 수동 설정 (transition용) */
+        if (isOpen) {
+          body.style.maxHeight = body.scrollHeight + inner.scrollHeight + 'px';
+          /* 렌더 후 실제 높이 재적용 */
+          requestAnimationFrame(() => {
+            body.style.maxHeight = body.scrollHeight + 'px';
+          });
+        } else {
+          body.style.maxHeight = '0';
+        }
       });
 
       container.appendChild(card);
     });
   }
 
+  /* ── HTML 이스케이프 ── */
   function escHtml(str) {
-    if (!str) return '-';
-    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    if (str === undefined || str === null) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
   }
 
-  function gradeHtml(grade) {
-    if (!grade) return '-';
-    const cls = ['A','B','C'].includes(grade.toUpperCase())
-      ? `grade-${grade.toUpperCase()}`
-      : 'grade-default';
-    return `<span class="grade-badge ${cls}">${escHtml(grade)}</span>`;
-  }
-
-  // =============================================
-  // 검색
-  // =============================================
+  /* ── 검색 ── */
   document.getElementById('searchInput').addEventListener('input', e => {
-    searchQuery = e.target.value;
+    searchQuery = e.target.value.trim();
     render();
   });
 
-  // =============================================
-  // 시작
-  // =============================================
+  /* ── 시작 ── */
   loadData();
 </script>
 </body>
