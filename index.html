@@ -26,8 +26,8 @@
       --danger: #c97a6d;
       --blue: #7a9fc9;
       --blue-dim: rgba(122,159,201,0.15);
-      --teal: #6db9b0;
-      --teal-dim: rgba(109,185,176,0.15);
+      --teal: #6dbfb8;
+      --teal-dim: rgba(109,191,184,0.15);
     }
 
     body {
@@ -47,6 +47,7 @@
       opacity: 0.35;
     }
 
+    /* HEADER */
     header {
       background: var(--surface);
       border-bottom: 1px solid var(--border);
@@ -58,13 +59,11 @@
       top: 0;
       z-index: 100;
     }
-
     .logo-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 3px;
-      width: 32px;
-      height: 32px;
+      width: 32px; height: 32px;
       flex-shrink: 0;
     }
     .logo-grid span { border-radius: 2px; background: var(--gold); }
@@ -94,11 +93,13 @@
     }
     @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
+    /* CONTAINER */
     .container { max-width: 1100px; margin: 0 auto; padding: 32px; }
 
+    /* STATS */
     .stats-bar {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(5, 1fr);
       gap: 12px;
       margin-bottom: 28px;
     }
@@ -119,7 +120,6 @@
     }
     .stat-card.blue-accent::after { background: linear-gradient(90deg, var(--blue), transparent); }
     .stat-card.teal-accent::after { background: linear-gradient(90deg, var(--teal), transparent); }
-
     .stat-label {
       font-family: 'DM Mono', monospace;
       font-size: 9px;
@@ -138,6 +138,7 @@
     .stat-value.blue { color: var(--blue); }
     .stat-value.teal { color: var(--teal); }
 
+    /* TOOLBAR */
     .toolbar {
       display: flex;
       align-items: center;
@@ -145,19 +146,10 @@
       margin-bottom: 24px;
       flex-wrap: wrap;
     }
-    .search-wrap {
-      position: relative;
-      flex: 1;
-      min-width: 200px;
-    }
+    .search-wrap { position: relative; flex: 1; min-width: 200px; }
     .search-icon {
-      position: absolute;
-      left: 14px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--text-muted);
-      font-size: 13px;
-      pointer-events: none;
+      position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+      color: var(--text-muted); font-size: 13px; pointer-events: none;
     }
     .search-wrap input {
       width: 100%;
@@ -177,15 +169,12 @@
     .grade-filter { display: flex; gap: 6px; align-items: center; }
     .grade-filter-label {
       font-family: 'DM Mono', monospace;
-      font-size: 9px;
-      letter-spacing: 1.5px;
-      color: var(--text-muted);
-      text-transform: uppercase;
+      font-size: 9px; letter-spacing: 1.5px;
+      color: var(--text-muted); text-transform: uppercase;
     }
     .grade-btn {
       font-family: 'DM Mono', monospace;
-      font-size: 11px;
-      font-weight: 500;
+      font-size: 11px; font-weight: 500;
       padding: 5px 12px;
       border-radius: 6px;
       border: 1px solid var(--border);
@@ -199,6 +188,7 @@
     .grade-btn.active-B { background: rgba(201,168,76,0.15); color: var(--warning); border-color: rgba(201,168,76,0.5); }
     .grade-btn.active-C { background: rgba(201,122,109,0.15); color: var(--danger); border-color: rgba(201,122,109,0.5); }
 
+    /* TABS ROW */
     .tabs-row {
       display: flex;
       align-items: center;
@@ -235,14 +225,10 @@
       border-radius: 20px;
       padding: 1px 7px;
     }
-    .tab-count-badge.blue { background: rgba(122,159,201,0.2); color: var(--blue); }
-    .tab-count-badge.teal { background: rgba(109,185,176,0.2); color: var(--teal); }
-    .main-tab-btn.active .tab-count-badge { background: rgba(201,168,76,0.3); }
-    .main-tab-btn.active.blue-tab .tab-count-badge { background: rgba(122,159,201,0.3); color: var(--blue); }
-    .main-tab-btn.active.teal-tab .tab-count-badge { background: rgba(109,185,176,0.3); color: var(--teal); }
+    .blue-tab .tab-count-badge { background: rgba(122,159,201,0.2); color: var(--blue); }
+    .teal-tab .tab-count-badge { background: rgba(109,191,184,0.2); color: var(--teal); }
 
     .spacer { flex: 1; }
-
     .result-info {
       font-family: 'DM Mono', monospace;
       font-size: 11px;
@@ -252,8 +238,7 @@
 
     .expand-all-btn {
       font-family: 'DM Mono', monospace;
-      font-size: 10px;
-      letter-spacing: 1px;
+      font-size: 10px; letter-spacing: 1px;
       text-transform: uppercase;
       background: var(--surface);
       border: 1px solid var(--border);
@@ -265,35 +250,7 @@
     }
     .expand-all-btn:hover { border-color: var(--border2); color: var(--text); }
 
-    /* 탭 안내 배너 */
-    .tab-info-banner {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 16px;
-      border-radius: 8px;
-      margin-bottom: 16px;
-      font-size: 12px;
-      font-family: 'DM Mono', monospace;
-    }
-    .tab-info-banner.blue {
-      background: rgba(122,159,201,0.08);
-      border: 1px solid rgba(122,159,201,0.25);
-      color: var(--blue);
-    }
-    .tab-info-banner.teal {
-      background: rgba(109,185,176,0.08);
-      border: 1px solid rgba(109,185,176,0.25);
-      color: var(--teal);
-    }
-    .tab-info-dot {
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-    .tab-info-dot.blue { background: var(--blue); }
-    .tab-info-dot.teal { background: var(--teal); }
-
+    /* REG CARDS (전체 / 규정검토 공통) */
     .reg-list { display: flex; flex-direction: column; gap: 10px; }
 
     .reg-card {
@@ -305,7 +262,6 @@
     }
     .reg-card:hover { border-color: var(--border2); }
     .reg-card.expanded { border-color: var(--gold); }
-    .reg-card.blue-card.expanded { border-color: var(--blue); }
     .reg-card.teal-card.expanded { border-color: var(--teal); }
 
     .reg-card-header {
@@ -318,17 +274,13 @@
     }
     .reg-num {
       font-family: 'DM Mono', monospace;
-      font-size: 11px;
-      color: var(--text-muted);
-      width: 24px;
-      flex-shrink: 0;
+      font-size: 11px; color: var(--text-muted);
+      width: 24px; flex-shrink: 0;
     }
     .reg-title {
       font-family: 'Noto Serif KR', serif;
-      font-size: 15px;
-      font-weight: 700;
-      color: var(--text);
-      flex: 1;
+      font-size: 15px; font-weight: 700;
+      color: var(--text); flex: 1;
     }
     .reg-count-badge {
       font-family: 'DM Mono', monospace;
@@ -338,46 +290,32 @@
       color: var(--text-muted);
       border-radius: 6px;
       padding: 3px 10px;
-      white-space: nowrap;
-      flex-shrink: 0;
+      white-space: nowrap; flex-shrink: 0;
     }
     .reg-card.expanded .reg-count-badge {
-      border-color: var(--gold);
-      color: var(--gold);
-      background: var(--gold-dim);
-    }
-    .reg-card.blue-card.expanded .reg-count-badge {
-      border-color: var(--blue);
-      color: var(--blue);
-      background: var(--blue-dim);
+      border-color: var(--gold); color: var(--gold); background: var(--gold-dim);
     }
     .reg-card.teal-card.expanded .reg-count-badge {
-      border-color: var(--teal);
-      color: var(--teal);
-      background: var(--teal-dim);
+      border-color: var(--teal); color: var(--teal); background: var(--teal-dim);
     }
 
-    /* 규정검토 배지 */
-    .review-badge {
+    /* teal 라벨 배지 */
+    .teal-label-badge {
       font-family: 'DM Mono', monospace;
       font-size: 10px;
-      font-weight: 500;
-      padding: 3px 10px;
-      border-radius: 6px;
       background: var(--teal-dim);
-      border: 1px solid rgba(109,185,176,0.4);
       color: var(--teal);
+      border: 1px solid rgba(109,191,184,0.4);
+      border-radius: 5px;
+      padding: 2px 8px;
       white-space: nowrap;
       flex-shrink: 0;
     }
 
     .toggle-arrow {
       width: 20px; height: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      transition: transform 0.25s;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; transition: transform 0.25s;
     }
     .reg-card.expanded .toggle-arrow { transform: rotate(180deg); }
     .toggle-arrow svg {
@@ -387,8 +325,7 @@
     }
 
     .reg-card-body {
-      max-height: 0;
-      overflow: hidden;
+      max-height: 0; overflow: hidden;
       transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .reg-card-body-inner {
@@ -396,8 +333,8 @@
       border-top: 1px solid var(--border);
     }
 
+    /* ITEM CARDS */
     .item-list { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
-
     .item-card {
       background: var(--surface2);
       border: 1px solid var(--border);
@@ -405,63 +342,47 @@
       overflow: hidden;
     }
     .item-card-header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      display: flex; align-items: center; gap: 10px;
       padding: 10px 14px;
       background: var(--surface3);
       border-bottom: 1px solid var(--border);
     }
-    .item-idx {
-      font-family: 'DM Mono', monospace;
-      font-size: 10px;
-      color: var(--text-muted);
-    }
+    .item-idx { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-muted); }
     .grade-badge {
       font-family: 'DM Mono', monospace;
-      font-size: 10px;
-      font-weight: 500;
-      padding: 2px 8px;
-      border-radius: 4px;
+      font-size: 10px; font-weight: 500;
+      padding: 2px 8px; border-radius: 4px;
     }
     .grade-A { background: rgba(109,185,138,0.15); color: var(--success); border: 1px solid rgba(109,185,138,0.3); }
     .grade-B { background: rgba(201,168,76,0.15);  color: var(--warning); border: 1px solid rgba(201,168,76,0.3); }
     .grade-C { background: rgba(201,122,109,0.15); color: var(--danger);  border: 1px solid rgba(201,122,109,0.3); }
     .grade-default { background: var(--surface2); color: var(--text-muted); border: 1px solid var(--border); }
-
     .item-division { font-size: 11px; color: var(--text-muted); font-weight: 400; }
 
     .field-rows { padding: 14px; display: flex; flex-direction: column; gap: 0; }
     .field-row {
-      display: grid;
-      grid-template-columns: 100px 1fr;
-      gap: 0;
-      border-bottom: 1px solid var(--border);
-      min-height: 36px;
+      display: grid; grid-template-columns: 100px 1fr;
+      gap: 0; border-bottom: 1px solid var(--border); min-height: 36px;
     }
     .field-row:last-child { border-bottom: none; }
     .field-label {
       font-family: 'DM Mono', monospace;
-      font-size: 10px;
-      color: var(--text-muted);
+      font-size: 10px; color: var(--text-muted);
       letter-spacing: 0.5px;
       padding: 10px 12px 10px 0;
       border-right: 1px solid var(--border);
-      display: flex;
-      align-items: flex-start;
+      display: flex; align-items: flex-start;
       text-transform: uppercase;
     }
     .field-value {
-      font-size: 13px;
-      color: var(--text);
+      font-size: 13px; color: var(--text);
       padding: 10px 0 10px 14px;
-      line-height: 1.6;
-      word-break: break-word;
+      line-height: 1.6; word-break: break-word;
     }
     .field-value.empty { color: var(--text-muted); font-style: italic; }
 
+    /* JOB GROUP */
     .jobgroup-list { display: flex; flex-direction: column; gap: 10px; }
-
     .jg-card {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -471,14 +392,9 @@
     }
     .jg-card:hover { border-color: var(--border2); }
     .jg-card.expanded { border-color: var(--gold); }
-
     .jg-card-header {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 16px 20px;
-      cursor: pointer;
-      user-select: none;
+      display: flex; align-items: center; gap: 14px;
+      padding: 16px 20px; cursor: pointer; user-select: none;
     }
     .jg-num { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-muted); width: 24px; flex-shrink: 0; }
     .jg-name { font-family: 'Noto Serif KR', serif; font-size: 15px; font-weight: 700; color: var(--text); flex: 1; }
@@ -489,17 +405,8 @@
       padding: 3px 10px; white-space: nowrap; flex-shrink: 0;
     }
     .jg-card.expanded .jg-count { border-color: var(--gold); color: var(--gold); background: var(--gold-dim); }
-
-    .jg-card-body {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .jg-card-body-inner {
-      padding: 0 20px 20px;
-      border-top: 1px solid var(--border);
-    }
-
+    .jg-card-body { max-height: 0; overflow: hidden; transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+    .jg-card-body-inner { padding: 0 20px 20px; border-top: 1px solid var(--border); }
     .jg-reg-group { margin-top: 14px; }
     .jg-reg-title {
       font-size: 12px; font-weight: 700; color: var(--gold);
@@ -508,6 +415,53 @@
       font-family: 'Noto Serif KR', serif;
     }
 
+    /* 질문 탭 */
+    .question-list { display: flex; flex-direction: column; gap: 10px; }
+    .q-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+    .q-card:hover { border-color: var(--border2); }
+    .q-card.expanded { border-color: var(--blue); }
+    .q-card-header {
+      display: flex; align-items: center; gap: 16px;
+      padding: 16px 20px; cursor: pointer; user-select: none;
+    }
+    .q-num { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-muted); width: 24px; flex-shrink: 0; }
+    .q-title { font-family: 'Noto Serif KR', serif; font-size: 15px; font-weight: 700; color: var(--text); flex: 1; }
+    .q-count-badge {
+      font-family: 'DM Mono', monospace; font-size: 11px;
+      background: var(--surface2); border: 1px solid var(--border);
+      color: var(--text-muted); border-radius: 6px;
+      padding: 3px 10px; white-space: nowrap; flex-shrink: 0;
+    }
+    .q-card.expanded .q-count-badge { border-color: var(--blue); color: var(--blue); background: var(--blue-dim); }
+    .q-card-body { max-height: 0; overflow: hidden; transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+    .q-card-body-inner { padding: 0 20px 20px; border-top: 1px solid var(--border); }
+
+    /* 안내 배너 */
+    .info-banner {
+      display: flex; align-items: center; gap: 10px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left-width: 3px;
+      border-radius: 8px;
+      padding: 10px 16px;
+      margin-bottom: 16px;
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .info-banner.blue  { border-left-color: var(--blue); }
+    .info-banner.teal  { border-left-color: var(--teal); }
+    .info-banner-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+    .info-banner.blue  .info-banner-dot { background: var(--blue); }
+    .info-banner.teal  .info-banner-dot { background: var(--teal); }
+
+    /* LOADING / ERROR */
     .loading-screen, .error-screen {
       display: flex; flex-direction: column;
       align-items: center; justify-content: center;
@@ -528,21 +482,20 @@
       border: 1px solid rgba(201,122,109,0.3);
       border-radius: 12px;
       padding: 24px 32px;
-      color: var(--danger);
-      font-size: 13px;
-      max-width: 480px;
-      line-height: 1.7;
+      color: var(--danger); font-size: 13px;
+      max-width: 480px; line-height: 1.7;
     }
 
     .empty-state {
-      text-align: center;
-      padding: 48px;
-      color: var(--text-muted);
-      font-size: 13px;
+      text-align: center; padding: 48px;
+      color: var(--text-muted); font-size: 13px;
       font-family: 'DM Mono', monospace;
     }
     .empty-state span { display: block; font-size: 22px; margin-bottom: 10px; color: var(--border2); }
 
+    @media (max-width: 900px) {
+      .stats-bar { grid-template-columns: repeat(3, 1fr); }
+    }
     @media (max-width: 768px) {
       .container { padding: 16px; }
       header { padding: 14px 16px; }
@@ -572,7 +525,6 @@
 </header>
 
 <div class="container">
-
   <div class="loading-screen" id="loadingScreen">
     <div class="spinner"></div>
     <div class="loading-text">loading data...</div>
@@ -584,6 +536,7 @@
 
   <div id="mainContent" style="display:none;">
 
+    <!-- STATS -->
     <div class="stats-bar">
       <div class="stat-card">
         <div class="stat-label">Total Items</div>
@@ -607,6 +560,7 @@
       </div>
     </div>
 
+    <!-- TOOLBAR -->
     <div class="toolbar">
       <div class="search-wrap">
         <span class="search-icon">
@@ -625,6 +579,7 @@
       </div>
     </div>
 
+    <!-- TABS ROW -->
     <div class="tabs-row">
       <div class="main-tabs">
         <button class="main-tab-btn active" id="tabAll" onclick="switchTab('all')">
@@ -637,44 +592,42 @@
         </button>
         <button class="main-tab-btn blue-tab" id="tabQuestion" onclick="switchTab('question')">
           질문
-          <span class="tab-count-badge blue" id="badgeQuestion">0</span>
+          <span class="tab-count-badge" id="badgeQuestion">0</span>
         </button>
         <button class="main-tab-btn teal-tab" id="tabReview" onclick="switchTab('review')">
           규정 검토
-          <span class="tab-count-badge teal" id="badgeReview">0</span>
+          <span class="tab-count-badge" id="badgeReview">0</span>
         </button>
       </div>
       <div class="spacer"></div>
       <span class="result-info" id="resultInfo"></span>
-      <button class="expand-all-btn" id="expandAllBtn" onclick="toggleExpandAll()">
-        모두 펼치기
-      </button>
+      <button class="expand-all-btn" id="expandAllBtn" onclick="toggleExpandAll()">모두 펼치기</button>
     </div>
 
-    <!-- 전체 뷰 -->
+    <!-- VIEW: 전체 -->
     <div id="view-all">
       <div class="reg-list" id="regList"></div>
     </div>
 
-    <!-- 직군 뷰 -->
+    <!-- VIEW: 직군 -->
     <div id="view-jobgroup" style="display:none;">
       <div class="jobgroup-list" id="jobgroupList"></div>
     </div>
 
-    <!-- 질문 뷰 -->
+    <!-- VIEW: 질문 -->
     <div id="view-question" style="display:none;">
-      <div class="tab-info-banner blue">
-        <div class="tab-info-dot blue"></div>
-        <span>조사항목구분에 "질문"이 포함된 항목들만 표시됩니다.</span>
+      <div class="info-banner blue">
+        <div class="info-banner-dot"></div>
+        조사항목구분에 "질문"이 포함된 항목들만 표시됩니다.
       </div>
-      <div class="reg-list" id="questionList"></div>
+      <div class="question-list" id="questionList"></div>
     </div>
 
-    <!-- 규정 검토 뷰 -->
+    <!-- VIEW: 규정 검토 -->
     <div id="view-review" style="display:none;">
-      <div class="tab-info-banner teal">
-        <div class="tab-info-dot teal"></div>
-        <span>직군(B열) 값이 "규정검토"인 항목들만 표시됩니다.</span>
+      <div class="info-banner teal">
+        <div class="info-banner-dot"></div>
+        직군(B열) 값이 "규정검토"인 항목들만 표시됩니다.
       </div>
       <div class="reg-list" id="reviewList"></div>
     </div>
@@ -692,12 +645,17 @@
     기준이해: 8, 조사내용: 9, 조사목적: 10, 참고자료: 11,
   };
 
-  let allRows = [];
-  let currentView = 'all';
-  let searchQuery = '';
-  let gradeFilter = '';
-  let allExpanded = false;
+  let allRows       = [];
+  let baseRows      = [];   // 전체+직군+질문용 (규정검토 제외)
+  let reviewRows    = [];   // 규정검토 전용
+  let questionRows  = [];   // 질문 전용
 
+  let currentView  = 'all';
+  let searchQuery  = '';
+  let gradeFilter  = '';
+  let allExpanded  = false;
+
+  /* ---- CSV 파싱 ---- */
   function parseCSV(text) {
     const lines = [];
     let cur = '', inQ = false, row = [];
@@ -718,21 +676,7 @@
     return lines;
   }
 
-  /* ── 행 분류 함수 ──────────────────────────────────────────
-     질문 탭 : 조사항목구분(COL 3) 에 "질문" 포함
-     규정검토 탭 : 직군(COL 1) 이 "규정검토" 와 정확히 일치
-     전체/직군 탭 : 위 두 조건에 해당하지 않는 나머지
-  ─────────────────────────────────────────────────────────── */
-  function isQuestion(r) {
-    return (r[COL.조사항목구분] || '').includes('질문');
-  }
-  function isReview(r) {
-    return (r[COL.직군] || '').trim() === '규정검토';
-  }
-  function isGeneral(r) {
-    return !isQuestion(r) && !isReview(r);
-  }
-
+  /* ---- 데이터 로드 ---- */
   async function loadData() {
     try {
       const res = await fetch(CSV_URL);
@@ -743,14 +687,16 @@
 
       allRows = rows.slice(1).filter(r => r.some(c => c !== ''));
 
-      const generalRows  = allRows.filter(isGeneral);
-      const questionRows = allRows.filter(isQuestion);
-      const reviewRows   = allRows.filter(isReview);
+      // 규정검토 분리
+      reviewRows   = allRows.filter(r => (r[COL.직군]||'').replace(/\s/g,'') === '규정검토');
+      // 질문 분리 (규정검토 제외된 행 중 조사항목구분에 "질문" 포함)
+      baseRows     = allRows.filter(r => (r[COL.직군]||'').replace(/\s/g,'') !== '규정검토');
+      questionRows = baseRows.filter(r => (r[COL.조사항목구분]||'').includes('질문'));
 
-      const regSet   = new Set(generalRows.map(r => r[COL.규정제목]).filter(Boolean));
-      const groupSet = new Set(generalRows.map(r => r[COL.직군]).filter(Boolean));
-      const qRegSet  = new Set(questionRows.map(r => r[COL.규정제목]).filter(Boolean));
-      const rvRegSet = new Set(reviewRows.map(r => r[COL.규정제목]).filter(Boolean));
+      const regSet      = new Set(baseRows.filter(r => !questionRows.includes(r)).map(r => r[COL.규정제목]).filter(Boolean));
+      const groupSet    = new Set(baseRows.map(r => r[COL.직군]).filter(Boolean));
+      const qRegSet     = new Set(questionRows.map(r => r[COL.규정제목]).filter(Boolean));
+      const reviewRegSet= new Set(reviewRows.map(r => r[COL.규정제목]).filter(Boolean));
 
       document.getElementById('statTotal').textContent     = allRows.length.toLocaleString();
       document.getElementById('statRegs').textContent      = regSet.size.toLocaleString();
@@ -761,12 +707,12 @@
       document.getElementById('badgeAll').textContent      = regSet.size;
       document.getElementById('badgeJobGroup').textContent = groupSet.size;
       document.getElementById('badgeQuestion').textContent = qRegSet.size;
-      document.getElementById('badgeReview').textContent   = rvRegSet.size;
+      document.getElementById('badgeReview').textContent   = reviewRegSet.size;
 
-      document.getElementById('statusDot').style.background   = '#6db98a';
-      document.getElementById('statusText').textContent       = `${allRows.length}개 항목 로드 완료`;
-      document.getElementById('loadingScreen').style.display  = 'none';
-      document.getElementById('mainContent').style.display    = 'block';
+      document.getElementById('statusDot').style.background = '#6db98a';
+      document.getElementById('statusText').textContent = `${allRows.length}개 항목 로드 완료`;
+      document.getElementById('loadingScreen').style.display = 'none';
+      document.getElementById('mainContent').style.display  = 'block';
 
       rerender();
     } catch (err) {
@@ -780,23 +726,28 @@
     }
   }
 
+  /* ---- 탭 전환 ---- */
   function switchTab(tab) {
     currentView = tab;
     ['all','jobgroup','question','review'].forEach(t => {
-      document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1))
-        ?.classList.toggle('active', t === tab);
-      document.getElementById('view-' + t).style.display = t === tab ? 'block' : 'none';
+      const btn = document.getElementById('tab' + capitalize(t));
+      if (btn) btn.classList.toggle('active', t === tab);
+      const view = document.getElementById('view-' + t);
+      if (view) view.style.display = t === tab ? 'block' : 'none';
     });
-    // 탭 id 예외 처리
-    document.getElementById('tabAll').classList.toggle('active', tab === 'all');
-    document.getElementById('tabJobGroup').classList.toggle('active', tab === 'jobgroup');
-    document.getElementById('tabQuestion').classList.toggle('active', tab === 'question');
-    document.getElementById('tabReview').classList.toggle('active', tab === 'review');
-
     allExpanded = false;
     document.getElementById('expandAllBtn').textContent = '모두 펼치기';
   }
 
+  function capitalize(s) {
+    if (s === 'all') return 'All';
+    if (s === 'jobgroup') return 'JobGroup';
+    if (s === 'question') return 'Question';
+    if (s === 'review') return 'Review';
+    return s;
+  }
+
+  /* ---- 등급 필터 ---- */
   function setGradeFilter(g) {
     gradeFilter = g;
     ['gradeAll','gradeA','gradeB','gradeC'].forEach(id => {
@@ -806,15 +757,16 @@
     });
     if (!g) {
       const btn = document.getElementById('gradeAll');
-      btn.style.background   = 'var(--gold-dim)';
-      btn.style.color        = 'var(--gold)';
-      btn.style.borderColor  = 'rgba(201,168,76,0.5)';
+      btn.style.background = 'var(--gold-dim)';
+      btn.style.color = 'var(--gold)';
+      btn.style.borderColor = 'rgba(201,168,76,0.5)';
     } else {
       document.getElementById('grade' + g).classList.add('active-' + g);
     }
     rerender();
   }
 
+  /* ---- 전체 펼치기/접기 ---- */
   function toggleExpandAll() {
     allExpanded = !allExpanded;
     document.getElementById('expandAllBtn').textContent = allExpanded ? '모두 접기' : '모두 펼치기';
@@ -823,9 +775,10 @@
       question: 'questionList', review: 'reviewList'
     };
     const container = document.getElementById(viewMap[currentView]);
-    container.querySelectorAll('.reg-card, .jg-card').forEach(card => {
-      const body  = card.querySelector('.reg-card-body, .jg-card-body');
-      const inner = card.querySelector('.reg-card-body-inner, .jg-card-body-inner');
+    container.querySelectorAll('.reg-card, .jg-card, .q-card').forEach(card => {
+      const body  = card.querySelector('.reg-card-body, .jg-card-body, .q-card-body');
+      const inner = card.querySelector('.reg-card-body-inner, .jg-card-body-inner, .q-card-body-inner');
+      if (!body || !inner) return;
       if (allExpanded) {
         card.classList.add('expanded');
         body.style.maxHeight = inner.scrollHeight + 200000 + 'px';
@@ -836,22 +789,22 @@
     });
   }
 
-  /* 검색 + 등급 필터 적용 후 각 탭용 행 반환 */
-  function getFilteredBy(filterFn) {
-    let rows = allRows.filter(filterFn);
+  /* ---- 필터링 헬퍼 ---- */
+  function applyFilters(rows) {
+    let r = rows;
     if (gradeFilter) {
-      rows = rows.filter(r => (r[COL.조사항목등급] || '').toUpperCase() === gradeFilter);
+      r = r.filter(row => (row[COL.조사항목등급]||'').toUpperCase() === gradeFilter);
     }
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
-      rows = rows.filter(r =>
-        (r[COL.규정제목]  || '').toLowerCase().includes(q) ||
-        (r[COL.기준제목]  || '').toLowerCase().includes(q) ||
-        (r[COL.조사항목]  || '').toLowerCase().includes(q) ||
-        (r[COL.직군]      || '').toLowerCase().includes(q)
+      r = r.filter(row =>
+        (row[COL.규정제목]||'').toLowerCase().includes(q) ||
+        (row[COL.기준제목]||'').toLowerCase().includes(q) ||
+        (row[COL.조사항목]||'').toLowerCase().includes(q) ||
+        (row[COL.직군]||'').toLowerCase().includes(q)
       );
     }
-    return rows;
+    return r;
   }
 
   function updateResultInfo(count, label) {
@@ -863,101 +816,44 @@
     }
   }
 
-  /* ── 공통 아코디언 렌더러 ── */
-  function renderAccordion(containerId, rows, cardClass) {
-    const container = document.getElementById(containerId);
+  /* ---- 전체 뷰 렌더링 (질문 제외) ---- */
+  function renderAll() {
+    const container = document.getElementById('regList');
     container.innerHTML = '';
+    // 전체 탭: 규정검토 제외 + 질문 제외
+    const nonQuestion = baseRows.filter(r => !(r[COL.조사항목구분]||'').includes('질문'));
+    const filtered = applyFilters(nonQuestion);
 
-    if (!rows.length) {
+    if (!filtered.length) {
       container.innerHTML = '<div class="empty-state"><span>/ /</span>표시할 데이터가 없습니다.</div>';
       updateResultInfo(0, '규정');
       return;
     }
-
-    const grouped = {};
-    rows.forEach(r => {
-      const t = r[COL.규정제목] || '(제목 없음)';
-      if (!grouped[t]) grouped[t] = [];
-      grouped[t].push(r);
-    });
-
+    const grouped = groupBy(filtered, COL.규정제목);
     updateResultInfo(Object.keys(grouped).length, '규정');
-
-    Object.entries(grouped).forEach(([title, rowSet], idx) => {
-      const card = document.createElement('div');
-      card.className = 'reg-card' + (cardClass ? ' ' + cardClass : '');
-
-      const reviewBadge = cardClass === 'teal-card'
-        ? `<span class="review-badge">규정검토</span>` : '';
-
-      card.innerHTML = `
-        <div class="reg-card-header">
-          <span class="reg-num">${String(idx + 1).padStart(2, '0')}</span>
-          <span class="reg-title">${esc(title)}</span>
-          <span class="reg-count-badge">${rowSet.length} 항목</span>
-          ${reviewBadge}
-          <span class="toggle-arrow">
-            <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
-          </span>
-        </div>
-        <div class="reg-card-body">
-          <div class="reg-card-body-inner">
-            <div class="item-list">
-              ${rowSet.map((r, i) => itemCardHtml(r, i)).join('')}
-            </div>
-          </div>
-        </div>
-      `;
-      card.querySelector('.reg-card-header').addEventListener('click', () => toggleCard(card));
-      container.appendChild(card);
+    Object.entries(grouped).forEach(([title, rows], idx) => {
+      container.appendChild(buildRegCard(title, rows, idx, false));
     });
   }
 
-  function renderAll() {
-    const rows = getFilteredBy(isGeneral);
-    renderAccordion('regList', rows, '');
-  }
-
-  function renderQuestion() {
-    const rows = getFilteredBy(isQuestion);
-    renderAccordion('questionList', rows, 'blue-card');
-  }
-
-  function renderReview() {
-    const rows = getFilteredBy(isReview);
-    renderAccordion('reviewList', rows, 'teal-card');
-  }
-
+  /* ---- 직군 뷰 렌더링 ---- */
   function renderJobGroup() {
     const container = document.getElementById('jobgroupList');
     container.innerHTML = '';
-    const filtered = getFilteredBy(isGeneral);
+    const filtered = applyFilters(baseRows);
 
     if (!filtered.length) {
       container.innerHTML = '<div class="empty-state"><span>/ /</span>표시할 데이터가 없습니다.</div>';
       return;
     }
-
-    const byGroup = {};
-    filtered.forEach(r => {
-      const g = r[COL.직군] || '(직군 없음)';
-      if (!byGroup[g]) byGroup[g] = [];
-      byGroup[g].push(r);
-    });
-
-    Object.entries(byGroup).sort((a, b) => a[0].localeCompare(b[0])).forEach(([group, rows], idx) => {
-      const byReg = {};
-      rows.forEach(r => {
-        const t = r[COL.규정제목] || '(제목 없음)';
-        if (!byReg[t]) byReg[t] = [];
-        byReg[t].push(r);
-      });
-
+    const byGroup = groupBy(filtered, COL.직군);
+    Object.entries(byGroup).sort((a,b) => a[0].localeCompare(b[0])).forEach(([group, rows], idx) => {
+      const byReg = groupBy(rows, COL.규정제목);
       const card = document.createElement('div');
       card.className = 'jg-card';
       card.innerHTML = `
         <div class="jg-card-header">
-          <span class="jg-num">${String(idx + 1).padStart(2, '0')}</span>
+          <span class="jg-num">${String(idx+1).padStart(2,'0')}</span>
           <span class="jg-name">${esc(group)}</span>
           <span class="jg-count">${rows.length} 항목</span>
           <span class="toggle-arrow">
@@ -979,11 +875,91 @@
           </div>
         </div>
       `;
-      card.querySelector('.jg-card-header').addEventListener('click', () => toggleCard(card));
+      card.querySelector('.jg-card-header').addEventListener('click', () => toggleCard(card, 'jg'));
       container.appendChild(card);
     });
   }
 
+  /* ---- 질문 뷰 렌더링 (아코디언, 규정 제목별) ---- */
+  function renderQuestion() {
+    const container = document.getElementById('questionList');
+    container.innerHTML = '';
+    const filtered = applyFilters(questionRows);
+
+    if (!filtered.length) {
+      container.innerHTML = '<div class="empty-state"><span>/ /</span>표시할 데이터가 없습니다.</div>';
+      return;
+    }
+    const grouped = groupBy(filtered, COL.규정제목);
+    Object.entries(grouped).forEach(([title, rows], idx) => {
+      const card = document.createElement('div');
+      card.className = 'q-card';
+      card.innerHTML = `
+        <div class="q-card-header">
+          <span class="q-num">${String(idx+1).padStart(2,'0')}</span>
+          <span class="q-title">${esc(title)}</span>
+          <span class="q-count-badge">${rows.length} 항목</span>
+          <span class="toggle-arrow">
+            <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+          </span>
+        </div>
+        <div class="q-card-body">
+          <div class="q-card-body-inner">
+            <div class="item-list">
+              ${rows.map((r,i) => itemCardHtml(r,i)).join('')}
+            </div>
+          </div>
+        </div>
+      `;
+      card.querySelector('.q-card-header').addEventListener('click', () => toggleCard(card, 'q'));
+      container.appendChild(card);
+    });
+  }
+
+  /* ---- 규정 검토 뷰 렌더링 (아코디언, 규정 제목별) ---- */
+  function renderReview() {
+    const container = document.getElementById('reviewList');
+    container.innerHTML = '';
+    const filtered = applyFilters(reviewRows);
+
+    if (!filtered.length) {
+      container.innerHTML = '<div class="empty-state"><span>/ /</span>표시할 데이터가 없습니다.</div>';
+      return;
+    }
+    const grouped = groupBy(filtered, COL.규정제목);
+    updateResultInfo(Object.keys(grouped).length, '규정');
+    Object.entries(grouped).forEach(([title, rows], idx) => {
+      container.appendChild(buildRegCard(title, rows, idx, true));
+    });
+  }
+
+  /* ---- 아코디언 reg-card 생성 (전체 / 규정검토 공용) ---- */
+  function buildRegCard(title, rows, idx, isTeal) {
+    const card = document.createElement('div');
+    card.className = 'reg-card' + (isTeal ? ' teal-card' : '');
+    card.innerHTML = `
+      <div class="reg-card-header">
+        <span class="reg-num">${String(idx+1).padStart(2,'0')}</span>
+        <span class="reg-title">${esc(title)}</span>
+        <span class="reg-count-badge">${rows.length} 항목</span>
+        ${isTeal ? '<span class="teal-label-badge">규정검토</span>' : ''}
+        <span class="toggle-arrow">
+          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </span>
+      </div>
+      <div class="reg-card-body">
+        <div class="reg-card-body-inner">
+          <div class="item-list">
+            ${rows.map((r,i) => itemCardHtml(r,i)).join('')}
+          </div>
+        </div>
+      </div>
+    `;
+    card.querySelector('.reg-card-header').addEventListener('click', () => toggleCard(card, 'reg'));
+    return card;
+  }
+
+  /* ---- 항목 카드 HTML ---- */
   function itemCardHtml(r, i) {
     const grade = r[COL.조사항목등급] || '';
     const gradeClass = ['A','B','C'].includes(grade.toUpperCase())
@@ -1005,7 +981,7 @@
     return `
       <div class="item-card">
         <div class="item-card-header">
-          <span class="item-idx">#${String(i + 1).padStart(2, '0')}</span>
+          <span class="item-idx">#${String(i+1).padStart(2,'0')}</span>
           <span class="grade-badge ${gradeClass}">${esc(grade) || '-'}</span>
           <span class="item-division">${esc(r[COL.조사항목구분])}</span>
         </div>
@@ -1021,9 +997,12 @@
     `;
   }
 
-  function toggleCard(card) {
-    const body  = card.querySelector('.reg-card-body, .jg-card-body');
-    const inner = card.querySelector('.reg-card-body-inner, .jg-card-body-inner');
+  /* ---- 아코디언 토글 ---- */
+  function toggleCard(card, type) {
+    const bodyClass  = type === 'jg' ? '.jg-card-body'  : type === 'q' ? '.q-card-body'  : '.reg-card-body';
+    const innerClass = type === 'jg' ? '.jg-card-body-inner' : type === 'q' ? '.q-card-body-inner' : '.reg-card-body-inner';
+    const body  = card.querySelector(bodyClass);
+    const inner = card.querySelector(innerClass);
     if (card.classList.contains('expanded')) {
       body.style.maxHeight = '0';
       card.classList.remove('expanded');
@@ -1033,6 +1012,18 @@
     }
   }
 
+  /* ---- 그룹핑 유틸 ---- */
+  function groupBy(rows, colIdx) {
+    const result = {};
+    rows.forEach(r => {
+      const key = r[colIdx] || '(없음)';
+      if (!result[key]) result[key] = [];
+      result[key].push(r);
+    });
+    return result;
+  }
+
+  /* ---- 전체 재렌더링 ---- */
   function rerender() {
     allExpanded = false;
     document.getElementById('expandAllBtn').textContent = '모두 펼치기';
@@ -1042,36 +1033,24 @@
     renderReview();
   }
 
+  /* ---- HTML 이스케이프 ---- */
   function esc(str) {
     if (!str) return '-';
-    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   }
 
+  /* ---- 검색 ---- */
   document.getElementById('searchInput').addEventListener('input', e => {
     searchQuery = e.target.value;
     rerender();
   });
 
-  // switchTab 헬퍼: 초기화
-  function switchTab(tab) {
-    currentView = tab;
-    const tabMap = { all: 'tabAll', jobgroup: 'tabJobGroup', question: 'tabQuestion', review: 'tabReview' };
-    const viewMap = { all: 'view-all', jobgroup: 'view-jobgroup', question: 'view-question', review: 'view-review' };
-    Object.entries(tabMap).forEach(([k, id]) => {
-      document.getElementById(id).classList.toggle('active', k === tab);
-    });
-    Object.entries(viewMap).forEach(([k, id]) => {
-      document.getElementById(id).style.display = k === tab ? 'block' : 'none';
-    });
-    allExpanded = false;
-    document.getElementById('expandAllBtn').textContent = '모두 펼치기';
-  }
-
-  (function () {
+  /* ---- ALL 버튼 초기 스타일 ---- */
+  (function() {
     const btn = document.getElementById('gradeAll');
-    btn.style.background  = 'var(--gold-dim)';
-    btn.style.color       = 'var(--gold)';
-    btn.style.borderColor = 'rgba(201,168,76,0.5)';
+    btn.style.background   = 'var(--gold-dim)';
+    btn.style.color        = 'var(--gold)';
+    btn.style.borderColor  = 'rgba(201,168,76,0.5)';
   })();
 
   loadData();
